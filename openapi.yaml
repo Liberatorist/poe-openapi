@@ -1,0 +1,2827 @@
+openapi: 3.0.0
+info:
+  title: Path of Exile API
+  version: 3.26.0
+paths:
+  /profile:
+    get:
+      summary: Get Profile
+      operationId: GetProfile
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  uuid:
+                    type: string
+                    description: UUIDv4 in canonical format
+                  name:
+                    type: string
+                  locale:
+                    type: string
+                  twitch:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                    required:
+                    - name
+                    description: present if the account is Twitch-linked
+                required:
+                - name
+                - uuid
+      security:
+      - bearerAuth: []
+      - account:
+        - account:profile
+      tags:
+      - Account Profile
+      parameters:
+      - name: User-Agent
+        in: header
+        required: true
+        schema:
+          type: string
+        description: 'format: OAuth {$clientId}/{$version} (contact: {$contact})'
+  /item-filter:
+    get:
+      summary: Get Item Filters
+      operationId: GetItemFilters
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  filters:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ItemFilter'
+                required:
+                - filters
+      security:
+      - bearerAuth: []
+      - account:
+        - account:item_filter
+      tags:
+      - Account Item Filters
+      parameters:
+      - name: User-Agent
+        in: header
+        required: true
+        schema:
+          type: string
+        description: 'format: OAuth {$clientId}/{$version} (contact: {$contact})'
+    post:
+      summary: Create Item Filter
+      operationId: CreateItemFilter
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  filter:
+                    $ref: '#/components/schemas/ItemFilter'
+                required:
+                - filter
+      security:
+      - bearerAuth: []
+      - account:
+        - account:item_filter
+      tags:
+      - Account Item Filters
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                filter_name:
+                  type: string
+                realm:
+                  type: string
+                  enum:
+                  - pc
+                  - xbox
+                  - sony
+                  - poe2
+                  description: pc, xbox, sony, or poe2
+                description:
+                  type: string
+                version:
+                  type: string
+                type:
+                  type: string
+                  enum:
+                  - Normal
+                  - Ruthless
+                  description: either Normal or Ruthless
+                public:
+                  type: boolean
+                  enum:
+                  - false
+                  description: defaults to false
+                filter:
+                  type: string
+              required:
+              - filter
+              - filter_name
+              - realm
+      parameters:
+      - name: User-Agent
+        in: header
+        required: true
+        schema:
+          type: string
+        description: 'format: OAuth {$clientId}/{$version} (contact: {$contact})'
+      - description: set to true to validate the filter against the current game version
+        name: validate
+        in: query
+        required: false
+        schema:
+          type: string
+  /item-filter/{id}:
+    get:
+      summary: Get Item Filter
+      operationId: GetItemFilter
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  filter:
+                    $ref: '#/components/schemas/ItemFilter'
+                required:
+                - filter
+      security:
+      - bearerAuth: []
+      - account:
+        - account:item_filter
+      tags:
+      - Account Item Filters
+      parameters:
+      - name: User-Agent
+        in: header
+        required: true
+        schema:
+          type: string
+        description: 'format: OAuth {$clientId}/{$version} (contact: {$contact})'
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    post:
+      summary: Update Item Filter
+      operationId: UpdateItemFilter
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  filter:
+                    $ref: '#/components/schemas/ItemFilter'
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: integer
+                        enum:
+                        - 200
+                        - 202
+                        - 400
+                        - 404
+                        - 429
+                        - 500
+                      message:
+                        type: string
+                    description: an "Accepted" error object
+                required:
+                - filter
+      security:
+      - bearerAuth: []
+      - account:
+        - account:item_filter
+      tags:
+      - Account Item Filters
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                filter_name:
+                  type: string
+                realm:
+                  type: string
+                  enum:
+                  - pc
+                  - xbox
+                  - sony
+                  - poe2
+                  description: pc, xbox, sony, or poe2
+                description:
+                  type: string
+                version:
+                  type: string
+                type:
+                  type: string
+                  enum:
+                  - Normal
+                  - Ruthless
+                  description: either Normal or Ruthless
+                public:
+                  type: boolean
+                  enum:
+                  - true
+                  description: must be true if present
+                filter:
+                  type: string
+      parameters:
+      - name: User-Agent
+        in: header
+        required: true
+        schema:
+          type: string
+        description: 'format: OAuth {$clientId}/{$version} (contact: {$contact})'
+      - description: set to true to validate the filter against the current game version
+        name: validate
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+  /league:
+    get:
+      summary: List Leagues
+      operationId: ListLeagues
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  leagues:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/League'
+                required:
+                - leagues
+      security:
+      - bearerAuth: []
+      - service:
+        - service:leagues
+      tags:
+      - Leagues
+      parameters:
+      - name: User-Agent
+        in: header
+        required: true
+        schema:
+          type: string
+        description: 'format: OAuth {$clientId}/{$version} (contact: {$contact})'
+      - description: can be pc (default), xbox , sony , or poe2
+        name: realm
+        in: query
+        required: false
+        schema:
+          type: string
+      - description: 'type can be one of the following: main retrieves permanent and
+          current challenge leagues (default)
+
+          event retrieves current event leagues
+
+          season (PoE1 only) retrieves leagues in a particular season. Use season
+          to set the season to query'
+        name: type
+        in: query
+        required: false
+        schema:
+          type: string
+      - description: restricts the amount of results returned. Maximum is 50 (default)
+        name: limit
+        in: query
+        required: false
+        schema:
+          type: string
+      - description: can be used with limit above to scroll through the list
+        name: offset
+        in: query
+        required: false
+        schema:
+          type: string
+  /league/{league}:
+    get:
+      summary: Get League
+      operationId: GetLeague
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  league:
+                    $ref: '#/components/schemas/League'
+      security:
+      - bearerAuth: []
+      - service:
+        - service:leagues
+      tags:
+      - Leagues
+      parameters:
+      - name: User-Agent
+        in: header
+        required: true
+        schema:
+          type: string
+        description: 'format: OAuth {$clientId}/{$version} (contact: {$contact})'
+      - description: can be pc (default), xbox , sony , or poe2
+        name: realm
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: league
+        in: path
+        required: true
+        schema:
+          type: string
+  /league/{league}/ladder:
+    get:
+      summary: Get League Ladder
+      operationId: GetLeagueLadder
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  league:
+                    $ref: '#/components/schemas/League'
+                  ladder:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        format: uint32
+                      cached_since:
+                        type: string
+                        format: date time (ISO8601)
+                      entries:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/LadderEntry'
+                    required:
+                    - entries
+                    - total
+                required:
+                - ladder
+                - league
+      security:
+      - bearerAuth: []
+      - service:
+        - service:leagues
+      tags:
+      - Leagues
+      parameters:
+      - name: User-Agent
+        in: header
+        required: true
+        schema:
+          type: string
+        description: 'format: OAuth {$clientId}/{$version} (contact: {$contact})'
+      - description: can be pc (default), xbox , or sony
+        name: realm
+        in: query
+        required: false
+        schema:
+          type: string
+      - description: "sort can be one of the following: xp sorts the ladder by experience\n\
+          depth sorts the ladder by Delve depth\ndepthsolo sorts the ladder by Delve\
+          \ (Solo) depth\nancestor sorts the ladder by Ancestor rank\ntime sorts the\
+          \ ladder by objective finish time\nscore sorts the ladder by objective score\n\
+          \nclass returns characters of a specific class sorted by experience. Use\
+          \ class to set the class. Options are:\n                \nscion\nmarauder\n\
+          ranger\nwitch\nduelist\ntemplar\nshadow  The default sort type will either\
+          \ be xp or time depending on the league."
+        name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+      - description: restricts the amount of results returned. Default is 20. Maximum
+          is 500
+        name: limit
+        in: query
+        required: false
+        schema:
+          type: string
+      - description: can be used with limit above to scroll through the list
+        name: offset
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: league
+        in: path
+        required: true
+        schema:
+          type: string
+  /league/{league}/event-ladder:
+    get:
+      summary: Get League Event Ladder
+      operationId: GetLeagueEventLadder
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  league:
+                    $ref: '#/components/schemas/League'
+                  ladder:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        format: uint32
+                      entries:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/EventLadderEntry'
+                    required:
+                    - entries
+                    - total
+                required:
+                - ladder
+                - league
+      security:
+      - bearerAuth: []
+      - service:
+        - service:leagues
+      tags:
+      - Leagues
+      parameters:
+      - name: User-Agent
+        in: header
+        required: true
+        schema:
+          type: string
+        description: 'format: OAuth {$clientId}/{$version} (contact: {$contact})'
+      - description: can be pc (default), xbox , or sony
+        name: realm
+        in: query
+        required: false
+        schema:
+          type: string
+      - description: restricts the amount of results returned. Default is 20. Maximum
+          is 500
+        name: limit
+        in: query
+        required: false
+        schema:
+          type: string
+      - description: can be used with limit above to scroll through the list
+        name: offset
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: league
+        in: path
+        required: true
+        schema:
+          type: string
+  /pvp-match:
+    get:
+      summary: List PvP Matches
+      operationId: ListPvpMatches
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  matches:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PvPMatch'
+                required:
+                - matches
+      security:
+      - bearerAuth: []
+      - service:
+        - service:pvp_matches
+      tags:
+      - PvP Matches (PoE1 only)
+      parameters:
+      - name: User-Agent
+        in: header
+        required: true
+        schema:
+          type: string
+        description: 'format: OAuth {$clientId}/{$version} (contact: {$contact})'
+      - description: can be pc (default), xbox , or sony
+        name: realm
+        in: query
+        required: false
+        schema:
+          type: string
+      - description: 'type can be one of the following: upcoming retrieves upcoming
+          matches (default)
+
+          season retrieves matches in a particular season. Use season to set the season
+          to query
+
+          league retrieves matches in a particular league. Use league to set the league
+          to query'
+        name: type
+        in: query
+        required: false
+        schema:
+          type: string
+  /pvp-match/{match}:
+    get:
+      summary: Get PvP Match
+      operationId: GetPvpMatch
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  match:
+                    $ref: '#/components/schemas/PvPMatch'
+      security:
+      - bearerAuth: []
+      - service:
+        - service:pvp_matches
+      tags:
+      - PvP Matches (PoE1 only)
+      parameters:
+      - name: User-Agent
+        in: header
+        required: true
+        schema:
+          type: string
+        description: 'format: OAuth {$clientId}/{$version} (contact: {$contact})'
+      - description: can be pc (default), xbox , or sony
+        name: realm
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: match
+        in: path
+        required: true
+        schema:
+          type: string
+  /pvp-match/{match}/ladder:
+    get:
+      summary: Get PvP Match Ladder
+      operationId: GetPvpMatchLadder
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  match:
+                    $ref: '#/components/schemas/PvPMatch'
+                  ladder:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        format: uint32
+                      entries:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/PvPLadderTeamEntry'
+                    required:
+                    - entries
+                    - total
+                required:
+                - ladder
+                - match
+      security:
+      - bearerAuth: []
+      - service:
+        - service:pvp_matches
+      tags:
+      - PvP Matches (PoE1 only)
+      parameters:
+      - name: User-Agent
+        in: header
+        required: true
+        schema:
+          type: string
+        description: 'format: OAuth {$clientId}/{$version} (contact: {$contact})'
+      - description: can be pc (default), xbox , or sony
+        name: realm
+        in: query
+        required: false
+        schema:
+          type: string
+      - description: restricts the amount of results returned. Default is 20. Maximum
+          is 200
+        name: limit
+        in: query
+        required: false
+        schema:
+          type: string
+      - description: can be used with limit above to scroll through the list
+        name: offset
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: match
+        in: path
+        required: true
+        schema:
+          type: string
+  /account/leagues:
+    get:
+      summary: Get Leagues
+      operationId: GetLeagues
+      responses: &id001
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  leagues:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/League'
+                required:
+                - leagues
+      security: &id002
+      - bearerAuth: []
+      - account:
+        - account:leagues
+      tags: &id003
+      - Account Leagues (PoE1 only)
+  /account/leagues/{realm}:
+    get:
+      summary: 'Get Leagues (with optional: realm)'
+      operationId: GetLeaguesRealm
+      responses: *id001
+      security: *id002
+      tags: *id003
+      parameters:
+      - name: realm
+        in: path
+        required: true
+        schema:
+          type: string
+  /character:
+    get:
+      summary: List Characters
+      operationId: ListCharacters
+      responses: &id004
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  characters:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Character'
+                required:
+                - characters
+      security: &id005
+      - bearerAuth: []
+      - account:
+        - account:characters
+      tags: &id006
+      - Account Characters
+  /character/{realm}:
+    get:
+      summary: 'List Characters (with optional: realm)'
+      operationId: ListCharactersRealm
+      responses: *id004
+      security: *id005
+      tags: *id006
+      parameters:
+      - name: realm
+        in: path
+        required: true
+        schema:
+          type: string
+  /character/{name}:
+    get:
+      summary: Get Character
+      operationId: GetCharacter
+      responses: &id007
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  character:
+                    $ref: '#/components/schemas/Character'
+      security: &id008
+      - bearerAuth: []
+      - account:
+        - account:characters
+      tags: &id009
+      - Account Characters
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+  /character/{realm}/{name}:
+    get:
+      summary: 'Get Character (with optional: realm)'
+      operationId: GetCharacterRealm
+      responses: *id007
+      security: *id008
+      tags: *id009
+      parameters:
+      - name: realm
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+  /stash/{league}:
+    get:
+      summary: List Stashes
+      operationId: ListStashes
+      responses: &id010
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  stashes:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/StashTab'
+                required:
+                - stashes
+      security: &id011
+      - bearerAuth: []
+      - account:
+        - account:stashes
+      tags: &id012
+      - Account Stashes (PoE1 only)
+      parameters:
+      - name: league
+        in: path
+        required: true
+        schema:
+          type: string
+  /stash/{realm}/{league}:
+    get:
+      summary: 'List Stashes (with optional: realm)'
+      operationId: ListStashesRealm
+      responses: *id010
+      security: *id011
+      tags: *id012
+      parameters:
+      - name: realm
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: league
+        in: path
+        required: true
+        schema:
+          type: string
+  /stash/{league}/{stash_id}:
+    get:
+      summary: Get Stash
+      operationId: GetStash
+      responses: &id013
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  stash:
+                    $ref: '#/components/schemas/StashTab'
+      security: &id014
+      - bearerAuth: []
+      - account:
+        - account:stashes
+      tags: &id015
+      - Account Stashes (PoE1 only)
+      parameters:
+      - name: league
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: stash_id
+        in: path
+        required: true
+        schema:
+          type: string
+  /stash/{league}/{stash_id}/{substash_id}:
+    get:
+      summary: 'Get Stash (with optional: substash_id)'
+      operationId: GetStashSubstash_id
+      responses: *id013
+      security: *id014
+      tags: *id015
+      parameters:
+      - name: league
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: stash_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: substash_id
+        in: path
+        required: true
+        schema:
+          type: string
+  /stash/{realm}/{league}/{stash_id}:
+    get:
+      summary: 'Get Stash (with optional: realm)'
+      operationId: GetStashRealm
+      responses: *id013
+      security: *id014
+      tags: *id015
+      parameters:
+      - name: realm
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: league
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: stash_id
+        in: path
+        required: true
+        schema:
+          type: string
+  /stash/{realm}/{league}/{stash_id}/{substash_id}:
+    get:
+      summary: 'Get Stash (with optional: realm, substash_id)'
+      operationId: GetStashRealmSubstash_id
+      responses: *id013
+      security: *id014
+      tags: *id015
+      parameters:
+      - name: realm
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: league
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: stash_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: substash_id
+        in: path
+        required: true
+        schema:
+          type: string
+  /league-account/{league}:
+    get:
+      summary: Get League Account
+      operationId: GetLeagueAccount
+      responses: &id016
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  league_account:
+                    $ref: '#/components/schemas/LeagueAccount'
+                required:
+                - league_account
+      security: &id017
+      - bearerAuth: []
+      - account:
+        - account:league_accounts
+      tags: &id018
+      - League Accounts (PoE1 only)
+      parameters:
+      - name: league
+        in: path
+        required: true
+        schema:
+          type: string
+  /league-account/{realm}/{league}:
+    get:
+      summary: 'Get League Account (with optional: realm)'
+      operationId: GetLeagueAccountRealm
+      responses: *id016
+      security: *id017
+      tags: *id018
+      parameters:
+      - name: realm
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: league
+        in: path
+        required: true
+        schema:
+          type: string
+  /guild/stash/{league}:
+    get:
+      summary: List Guild Stashes
+      operationId: ListGuildStashes
+      responses: &id019
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  stashes:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/StashTab'
+                required:
+                - stashes
+      security: &id020
+      - bearerAuth: []
+      - account:
+        - account:guild:stashes
+      tags: &id021
+      - Guild Stashes (PoE1 only)
+      parameters:
+      - name: league
+        in: path
+        required: true
+        schema:
+          type: string
+  /guild/{realm}/stash/{league}:
+    get:
+      summary: 'List Guild Stashes (with optional: realm)'
+      operationId: ListGuildStashesRealm
+      responses: *id019
+      security: *id020
+      tags: *id021
+      parameters:
+      - name: realm
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: league
+        in: path
+        required: true
+        schema:
+          type: string
+  /guild/stash/{league}/{stash_id}:
+    get:
+      summary: Get Guild Stash
+      operationId: GetGuildStash
+      responses: &id022
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  stash:
+                    $ref: '#/components/schemas/StashTab'
+      security: &id023
+      - bearerAuth: []
+      - account:
+        - account:guild:stashes
+      tags: &id024
+      - Guild Stashes (PoE1 only)
+      parameters:
+      - name: league
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: stash_id
+        in: path
+        required: true
+        schema:
+          type: string
+  /guild/stash/{league}/{stash_id}/{substash_id}:
+    get:
+      summary: 'Get Guild Stash (with optional: substash_id)'
+      operationId: GetGuildStashSubstash_id
+      responses: *id022
+      security: *id023
+      tags: *id024
+      parameters:
+      - name: league
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: stash_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: substash_id
+        in: path
+        required: true
+        schema:
+          type: string
+  /guild/{realm}/stash/{league}/{stash_id}:
+    get:
+      summary: 'Get Guild Stash (with optional: realm)'
+      operationId: GetGuildStashRealm
+      responses: *id022
+      security: *id023
+      tags: *id024
+      parameters:
+      - name: realm
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: league
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: stash_id
+        in: path
+        required: true
+        schema:
+          type: string
+  /guild/{realm}/stash/{league}/{stash_id}/{substash_id}:
+    get:
+      summary: 'Get Guild Stash (with optional: realm, substash_id)'
+      operationId: GetGuildStashRealmSubstash_id
+      responses: *id022
+      security: *id023
+      tags: *id024
+      parameters:
+      - name: realm
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: league
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: stash_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: substash_id
+        in: path
+        required: true
+        schema:
+          type: string
+  /public-stash-tabs:
+    get:
+      summary: Get Public Stashes
+      operationId: GetPublicStashes
+      responses: &id025
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  next_change_id:
+                    type: string
+                    description: pagination code
+                  stashes:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PublicStashChange'
+                required:
+                - next_change_id
+                - stashes
+      security: &id026
+      - bearerAuth: []
+      - service:
+        - service:psapi
+      tags: &id027
+      - Public Stashes (PoE1 only)
+  /public-stash-tabs/{realm}:
+    get:
+      summary: 'Get Public Stashes (with optional: realm)'
+      operationId: GetPublicStashesRealm
+      responses: *id025
+      security: *id026
+      tags: *id027
+      parameters:
+      - name: realm
+        in: path
+        required: true
+        schema:
+          type: string
+servers:
+- url: https://api.pathofexile.com
+components:
+  schemas:
+    League:
+      type: object
+      properties:
+        id:
+          type: string
+          description: the league's name
+        realm:
+          type: string
+          enum:
+          - pc
+          - xbox
+          - sony
+          description: pc, xbox, or sony
+        description:
+          type: string
+        category:
+          type: object
+          properties:
+            id:
+              type: string
+              description: the league category, e.g. Affliction
+            current:
+              type: boolean
+              enum:
+              - true
+              description: set for the active challenge leagues; always true if present
+          required:
+          - id
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/LeagueRule'
+        registerAt:
+          type: string
+          format: date-time
+          description: date time (ISO8601)
+        event:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        url:
+          type: string
+          description: a url link to a Path of Exile forum thread
+        startAt:
+          type: string
+          format: date-time
+          description: date time (ISO8601)
+        endAt:
+          type: string
+          format: date-time
+          description: date time (ISO8601)
+        timedEvent:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        scoreEvent:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        delveEvent:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        ancestorEvent:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        leagueEvent:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+      required:
+      - id
+    LeagueRule:
+      type: object
+      properties:
+        id:
+          type: string
+          enum:
+          - Hardcore
+          - NoParties
+          description: 'examples: Hardcore, NoParties (SSF)'
+        name:
+          type: string
+        description:
+          type: string
+      required:
+      - id
+      - name
+    LadderEntry:
+      type: object
+      properties:
+        rank:
+          type: integer
+          format: uint32
+        dead:
+          type: boolean
+        retired:
+          type: boolean
+        ineligible:
+          type: boolean
+        public:
+          type: boolean
+        character:
+          type: object
+          properties:
+            id:
+              type: string
+              description: a unique 64 digit hexadecimal string
+            name:
+              type: string
+            level:
+              type: integer
+              format: uint32
+            class:
+              type: string
+            time:
+              type: integer
+              format: uint32
+              description: time taken to complete the league objective in seconds
+            score:
+              type: integer
+              format: uint32
+              description: count of league objective completions
+            progress:
+              type: object
+              properties: {}
+              description: the values of this depend on the league objective
+            experience:
+              type: integer
+              format: uint32
+            depth:
+              type: object
+              properties:
+                default:
+                  type: integer
+                  format: uint32
+                solo:
+                  type: integer
+                  format: uint32
+              description: deepest Delve depth completed
+          required:
+          - class
+          - id
+          - level
+          - name
+        account:
+          $ref: '#/components/schemas/Account'
+      required:
+      - character
+      - rank
+    EventLadderEntry:
+      type: object
+      properties:
+        rank:
+          type: integer
+          format: uint32
+        ineligible:
+          type: boolean
+        time:
+          type: integer
+          format: uint32
+          description: time taken to complete the league objective in seconds
+        private_league:
+          type: object
+          properties:
+            name:
+              type: string
+            url:
+              type: string
+              description: a url link to a Path of Exile Private League
+          required:
+          - name
+          - url
+      required:
+      - private_league
+      - rank
+    Account:
+      type: object
+      properties:
+        name:
+          type: string
+        realm:
+          type: string
+          enum:
+          - pc
+          - xbox
+          - sony
+          description: pc, xbox, or sony
+        guild:
+          $ref: '#/components/schemas/Guild'
+        challenges:
+          type: object
+          properties:
+            set:
+              type: string
+              description: the challenge set
+            completed:
+              type: integer
+              format: uint32
+            max:
+              type: integer
+              format: uint32
+          required:
+          - completed
+          - max
+          - set
+        twitch:
+          type: object
+          properties:
+            name:
+              type: string
+            stream:
+              type: object
+              properties:
+                name:
+                  type: string
+                image:
+                  type: string
+                status:
+                  type: string
+              required:
+              - image
+              - name
+              - status
+          required:
+          - name
+      required:
+      - name
+    Guild:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: uint32
+        name:
+          type: string
+        tag:
+          type: string
+      required:
+      - id
+      - name
+      - tag
+    PvPMatch:
+      type: object
+      properties:
+        id:
+          type: string
+          description: the match's name
+        realm:
+          type: string
+          enum:
+          - pc
+          - xbox
+          - sony
+          description: pc, xbox, or sony
+        startAt:
+          type: string
+          format: date-time
+          description: date time (ISO8601)
+        endAt:
+          type: string
+          format: date-time
+          description: date time (ISO8601)
+        url:
+          type: string
+          description: a url link to a Path of Exile forum thread
+        description:
+          type: string
+        glickoRatings:
+          type: boolean
+        pvp:
+          type: boolean
+          enum:
+          - true
+          description: always true
+        style:
+          type: string
+          enum:
+          - Blitz
+          - Swiss
+          - Arena
+          description: Blitz, Swiss, or Arena
+        registerAt:
+          type: string
+          format: date-time
+          description: date time (ISO8601)
+        complete:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        upcoming:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        inProgress:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+      required:
+      - description
+      - glickoRatings
+      - id
+      - pvp
+      - style
+    PvPLadderTeamEntry:
+      type: object
+      properties:
+        rank:
+          type: integer
+          format: uint32
+        rating:
+          type: integer
+          format: uint32
+          description: only present if the PvP Match uses Glicko ratings
+        points:
+          type: integer
+          format: uint32
+        games_played:
+          type: integer
+          format: uint32
+        cumulative_opponent_points:
+          type: integer
+          format: uint32
+        last_game_time:
+          type: string
+          format: date-time
+          description: date time (ISO8601)
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/PvPLadderTeamMember'
+      required:
+      - members
+      - rank
+    PvPLadderTeamMember:
+      type: object
+      properties:
+        account:
+          $ref: '#/components/schemas/Account'
+        character:
+          type: object
+          properties:
+            id:
+              type: string
+              description: a unique 64 digit hexadecimal string
+            name:
+              type: string
+            level:
+              type: integer
+              format: uint32
+            class:
+              type: string
+            league:
+              type: string
+            score:
+              type: integer
+              format: uint32
+              description: count of league objective completions
+          required:
+          - class
+          - id
+          - level
+          - name
+        public:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+      required:
+      - account
+      - character
+    PublicStashChange:
+      type: object
+      properties:
+        id:
+          type: string
+          description: a unique 64 digit hexadecimal string
+        public:
+          type: boolean
+          enum:
+          - false
+          description: if false then optional properties will be null
+        accountName:
+          type: string
+        stash:
+          type: string
+          description: the name of the stash
+        stashType:
+          type: string
+        league:
+          type: string
+          description: the league's name
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item'
+      required:
+      - id
+      - items
+      - public
+      - stashType
+    Item:
+      type: object
+      properties:
+        realm:
+          type: string
+          enum:
+          - poe2
+          description: always poe2 if present
+        verified:
+          type: boolean
+        w:
+          type: integer
+          format: uint32
+        h:
+          type: integer
+          format: uint32
+        icon:
+          type: string
+        support:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        stackSize:
+          type: integer
+          format: int32
+        maxStackSize:
+          type: integer
+          format: int32
+        stackSizeText:
+          type: string
+        league:
+          type: string
+        id:
+          type: string
+          description: a unique 64 digit hexadecimal string
+        gemSockets:
+          type: array
+          items:
+            type: string
+          description: PoE2 only; string is always W
+        influences:
+          type: object
+          properties: {}
+        elder:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        shaper:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        searing:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        tangled:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        memoryItem:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        abyssJewel:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        delve:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        fractured:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        synthesised:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        sockets:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemSocket'
+        socketedItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item'
+        name:
+          type: string
+        typeLine:
+          type: string
+        baseType:
+          type: string
+        rarity:
+          type: string
+          enum:
+          - Normal
+          - Magic
+          - Rare
+          - Unique
+          description: Normal, Magic, Rare, or Unique
+        identified:
+          type: boolean
+        itemLevel:
+          type: integer
+          format: int32
+          description: used for items that always display their item level
+        unidentifiedTier:
+          type: integer
+          format: int32
+          description: PoE2 only
+        ilvl:
+          type: integer
+          format: int32
+        note:
+          type: string
+          description: user-generated text
+        forum_note:
+          type: string
+          description: user-generated text
+        lockedToCharacter:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        lockedToAccount:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        duplicated:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        split:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        corrupted:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        unmodifiable:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        cisRaceReward:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        seaRaceReward:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        thRaceReward:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        properties:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemProperty'
+        notableProperties:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemProperty'
+        requirements:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemProperty'
+        weaponRequirements:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemProperty'
+          description: PoE2 only
+        supportGemRequirements:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemProperty'
+          description: PoE2 only
+        additionalProperties:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemProperty'
+        nextLevelRequirements:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemProperty'
+        grantedSkills:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemProperty'
+          description: PoE2 only
+        talismanTier:
+          type: integer
+          format: int32
+        rewards:
+          type: array
+          items:
+            type: object
+            properties:
+              label:
+                type: string
+              rewards:
+                type: object
+                additionalProperties:
+                  type: integer
+                  format: int32
+                description: the key is a string representing the type of reward.
+                  The value is the amount
+            required:
+            - label
+            - rewards
+        secDescrText:
+          type: string
+        utilityMods:
+          type: array
+          items:
+            type: string
+        logbookMods:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                description: area name
+              faction:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    enum:
+                    - Faction1
+                    - Faction2
+                    - Faction3
+                    - Faction4
+                    description: Faction1, Faction2, Faction3, or Faction4
+                  name:
+                    type: string
+                required:
+                - id
+                - name
+            required:
+            - faction
+            - name
+        enchantMods:
+          type: array
+          items:
+            type: string
+        runeMods:
+          type: array
+          items:
+            type: string
+          description: PoE2 only
+        scourgeMods:
+          type: array
+          items:
+            type: string
+        implicitMods:
+          type: array
+          items:
+            type: string
+        ultimatumMods:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                description: text used to display ultimatum icons
+              tier:
+                type: integer
+                format: uint32
+            required:
+            - tier
+            - type
+        explicitMods:
+          type: array
+          items:
+            type: string
+        craftedMods:
+          type: array
+          items:
+            type: string
+        fracturedMods:
+          type: array
+          items:
+            type: string
+        crucibleMods:
+          type: array
+          items:
+            type: string
+          description: only allocated mods are included
+        cosmeticMods:
+          type: array
+          items:
+            type: string
+        veiledMods:
+          type: array
+          items:
+            type: string
+          description: random video identifier
+        veiled:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        gemTabs:
+          type: array
+          items:
+            $ref: '#/components/schemas/GemTab'
+          description: PoE2 only
+        gemBackground:
+          type: string
+          description: PoE2 only
+        gemSkill:
+          type: string
+          description: PoE2 only
+        descrText:
+          type: string
+        flavourText:
+          type: array
+          items:
+            type: string
+        flavourTextParsed:
+          oneOf:
+          - type: array
+            items:
+              type: string
+          - type: object
+            properties: {}
+        flavourTextNote:
+          type: string
+          description: user-generated text
+        prophecyText:
+          type: string
+        isRelic:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        foilVariation:
+          type: integer
+          format: int32
+        replica:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        foreseeing:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        incubatedItem:
+          type: object
+          properties:
+            name:
+              type: string
+            level:
+              type: integer
+              format: uint32
+              description: monster level required to progress
+            progress:
+              type: integer
+              format: uint32
+            total:
+              type: integer
+              format: uint32
+          required:
+          - level
+          - name
+          - progress
+          - total
+        scourged:
+          type: object
+          properties:
+            tier:
+              type: integer
+              format: uint32
+              description: 1-3 for items, 1-10 for maps
+            level:
+              type: integer
+              format: uint32
+              description: monster level required to progress
+            progress:
+              type: integer
+              format: uint32
+            total:
+              type: integer
+              format: uint32
+          required:
+          - tier
+        crucible:
+          type: object
+          properties:
+            layout:
+              type: string
+              description: URL to an image of the tree layout
+            nodes:
+              type: object
+              additionalProperties:
+                $ref: '#/components/schemas/CrucibleNode'
+              description: the key is the string value of the node index
+          required:
+          - layout
+          - nodes
+        ruthless:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        frameType:
+          type: integer
+          format: uint32
+        artFilename:
+          type: string
+        hybrid:
+          type: object
+          properties:
+            isVaalGem:
+              type: boolean
+            baseTypeName:
+              type: string
+            properties:
+              type: array
+              items:
+                $ref: '#/components/schemas/ItemProperty'
+            explicitMods:
+              type: array
+              items:
+                type: string
+            secDescrText:
+              type: string
+          required:
+          - baseTypeName
+        extended:
+          type: object
+          properties:
+            prefixes:
+              type: integer
+              format: uint32
+            suffixes:
+              type: integer
+              format: uint32
+          description: only present in the Public Stash API
+        x:
+          type: integer
+          format: uint32
+        y:
+          type: integer
+          format: uint32
+        inventoryId:
+          type: string
+        socket:
+          type: integer
+          format: uint32
+        colour:
+          type: string
+          enum:
+          - S
+          - D
+          - I
+          - G
+          description: S, D, I, or G
+      required:
+      - baseType
+      - flavourTextParsed
+      - h
+      - icon
+      - identified
+      - ilvl
+      - name
+      - typeLine
+      - verified
+      - w
+    ItemSocket:
+      type: object
+      properties:
+        group:
+          type: integer
+          format: uint32
+        attr:
+          type: string
+          enum:
+          - S
+          - D
+          - I
+          - G
+          - A
+          - DV
+          description: PoE1 only; S, D, I, G, A, or DV
+        sColour:
+          type: string
+          enum:
+          - R
+          - G
+          - B
+          - W
+          - A
+          - DV
+          description: PoE1 only; R, G, B, W, A, or DV
+        type:
+          type: string
+          enum:
+          - gem
+          - jewel
+          - rune
+          description: PoE2 only; gem, jewel, or rune
+        item:
+          type: string
+          enum:
+          - emerald
+          - sapphire
+          - ruby
+          - rune
+          - soulcore
+          - primaltalisman
+          - vividtalisman
+          - wildtalisman
+          - sacredtalisman
+          - activegem
+          - supportgem
+          description: PoE2 only; emerald, sapphire, ruby, rune, soulcore, primaltalisman,
+            vividtalisman, wildtalisman, sacredtalisman, activegem, or supportgem
+      required:
+      - group
+    ItemProperty:
+      type: object
+      properties:
+        name:
+          type: string
+        values:
+          type: array
+          items:
+            type: array
+            items:
+              oneOf:
+              - type: string
+              - type: integer
+                format: uint32
+            minItems: 2
+            maxItems: 2
+        displayMode:
+          type: integer
+          format: uint32
+        progress:
+          type: number
+          format: double
+          description: rounded to 2 decimal places
+        type:
+          type: integer
+          format: uint32
+        suffix:
+          type: string
+        icon:
+          type: string
+      required:
+      - name
+      - values
+    Character:
+      type: object
+      properties:
+        id:
+          type: string
+          description: a unique 64 digit hexadecimal string
+        name:
+          type: string
+        realm:
+          type: string
+          enum:
+          - pc
+          - xbox
+          - sony
+          description: pc, xbox, or sony
+        class:
+          type: string
+        league:
+          type: string
+        level:
+          type: integer
+          format: uint32
+        experience:
+          type: integer
+          format: uint32
+        ruthless:
+          type: boolean
+          enum:
+          - true
+          description: PoE1 only; always true if present
+        expired:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        deleted:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        current:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        equipment:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item'
+        skills:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item'
+          description: PoE2 only
+        inventory:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item'
+        rucksack:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item'
+        jewels:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item'
+        passives:
+          type: object
+          properties:
+            hashes:
+              type: array
+              items:
+                type: integer
+                format: uint32
+            hashes_ex:
+              type: array
+              items:
+                type: integer
+                format: uint32
+              description: PoE1 only
+            mastery_effects:
+              type: object
+              additionalProperties:
+                type: integer
+                format: int32
+              description: PoE1 only; the key is the string value of the mastery node
+                skill hash and the value is the selected effect hash
+            specialisations:
+              type: object
+              additionalProperties:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+              description: PoE2 only; the keys are set1, set2, and shapeshift
+            skill_overrides:
+              type: object
+              additionalProperties:
+                $ref: '#/components/schemas/PassiveNode'
+              description: the key is the string value of the node identifier being
+                replaced
+            bandit_choice:
+              type: string
+              enum:
+              - Kraityn
+              - Alira
+              - Oak
+              - Eramir
+              description: PoE1 only; one of Kraityn, Alira, Oak, or Eramir
+            pantheon_major:
+              type: string
+              enum:
+              - TheBrineKing
+              - Arakaali
+              - Solaris
+              - Lunaris
+              description: PoE1 only; one of TheBrineKing, Arakaali, Solaris, or Lunaris
+            pantheon_minor:
+              type: string
+              enum:
+              - Abberath
+              - Gruthkul
+              - Yugul
+              - Shakari
+              - Tukohama
+              - Ralakesh
+              - Garukhan
+              - Ryslatha
+              description: PoE1 only; one of Abberath, Gruthkul, Yugul, Shakari, Tukohama,
+                Ralakesh, Garukhan, or Ryslatha
+            jewel_data:
+              type: object
+              additionalProperties:
+                $ref: '#/components/schemas/ItemJewelData'
+              description: the key is the string value of the x property of an item
+                from the jewels array in this request
+            alternate_ascendancy:
+              type: string
+              enum:
+              - Warden
+              - Warlock
+              - Primalist
+              description: PoE1 only; Warden, Warlock, or Primalist
+          required:
+          - hashes
+          - hashes_ex
+          - jewel_data
+          - mastery_effects
+          - skill_overrides
+          - specialisations
+        metadata:
+          type: object
+          properties:
+            version:
+              type: string
+              description: game version for the character's realm
+      required:
+      - class
+      - experience
+      - id
+      - level
+      - name
+      - realm
+    ItemJewelData:
+      type: object
+      properties:
+        type:
+          type: string
+        radius:
+          type: integer
+          format: uint32
+        radiusMin:
+          type: integer
+          format: uint32
+        radiusVisual:
+          type: string
+        subgraph:
+          type: object
+          properties:
+            groups:
+              type: object
+              additionalProperties:
+                $ref: '#/components/schemas/PassiveGroup'
+              description: the key is the string value of the group id
+            nodes:
+              type: object
+              additionalProperties:
+                $ref: '#/components/schemas/PassiveNode'
+              description: the key is the string value of the node identifier
+          required:
+          - groups
+          - nodes
+          description: only present on cluster jewels
+      required:
+      - type
+    StashTab:
+      type: object
+      properties:
+        id:
+          type: string
+          description: a 10 digit hexadecimal string
+        parent:
+          type: string
+          description: a 10 digit hexadecimal string
+        name:
+          type: string
+        type:
+          type: string
+        index:
+          type: integer
+          format: uint32
+        metadata:
+          type: object
+          properties:
+            public:
+              type: boolean
+              enum:
+              - true
+              description: always true if present
+            folder:
+              type: boolean
+              enum:
+              - true
+              description: always true if present
+            colour:
+              type: string
+              description: 6 digit hex colour
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/StashTab'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item'
+      required:
+      - id
+      - metadata
+      - name
+      - type
+    LeagueAccount:
+      type: object
+      properties:
+        atlas_passives:
+          type: object
+          properties:
+            hashes:
+              type: array
+              items:
+                type: integer
+                format: uint32
+          required:
+          - hashes
+        atlas_passive_trees:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              hashes:
+                type: array
+                items:
+                  type: integer
+                  format: uint32
+            required:
+            - hashes
+            - name
+      required:
+      - atlas_passive_trees
+    ItemFilter:
+      type: object
+      properties:
+        id:
+          type: string
+        filter_name:
+          type: string
+        realm:
+          type: string
+        description:
+          type: string
+        version:
+          type: string
+        type:
+          type: string
+          enum:
+          - Normal
+          - Ruthless
+          description: either Normal or Ruthless
+        public:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        filter:
+          type: string
+          description: not present when listing all filters
+        validation:
+          type: object
+          properties:
+            valid:
+              type: boolean
+            version:
+              type: string
+              description: game version
+            validated:
+              type: string
+              format: date time (ISO8601)
+          required:
+          - valid
+          description: not present when listing all filters
+      required:
+      - description
+      - filter_name
+      - id
+      - realm
+      - type
+      - version
+    PassiveGroup:
+      type: object
+      properties:
+        x:
+          type: number
+        y:
+          type: number
+        orbits:
+          type: array
+          items:
+            type: integer
+            format: uint32
+        isProxy:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        proxy:
+          type: string
+          description: identifier of the placeholder node
+        nodes:
+          type: array
+          items:
+            type: string
+          description: the node identifiers associated with this group
+      required:
+      - nodes
+      - orbits
+      - x
+      - y
+    PassiveNode:
+      type: object
+      properties:
+        skill:
+          type: integer
+          format: uint32
+          description: skill hash
+        name:
+          type: string
+        icon:
+          type: string
+        isKeystone:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        isNotable:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        isMastery:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        inactiveIcon:
+          type: string
+          description: inactive mastery image
+        activeIcon:
+          type: string
+          description: active mastery image
+        activeEffectImage:
+          type: string
+          description: active mastery or tattoo background image
+        masteryEffects:
+          type: array
+          items:
+            type: object
+            properties:
+              effect:
+                type: integer
+                format: uint32
+                description: effect hash
+              stats:
+                type: array
+                items:
+                  type: string
+                description: stat descriptions
+              reminderText:
+                type: array
+                items:
+                  type: string
+            required:
+            - effect
+            - stats
+        isBlighted:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        isTattoo:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        isProxy:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        isJewelSocket:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        expansionJewel:
+          type: object
+          properties:
+            size:
+              type: integer
+              format: uint32
+            index:
+              type: integer
+              format: uint32
+            proxy:
+              type: integer
+              format: uint32
+              description: the proxy node identifier
+            parent:
+              type: integer
+              format: uint32
+              description: the parent node identifier
+          description: cluster jewel information
+        recipe:
+          type: array
+          items:
+            type: string
+          description: "components required for Blight crafting this node.\n     \
+            \       each string is one of ClearOil, SepiaOil, AmberOil, VerdantOil,\n\
+            TealOil, AzureOil, IndigoOil, VioletOil, CrimsonOil,\nBlackOil, OpalescentOil,\
+            \ SilverOil, GoldenOil, or PrismaticOil"
+        grantedStrength:
+          type: integer
+          format: uint32
+          description: sum of stats on this node that grant strength
+        grantedDexterity:
+          type: integer
+          format: uint32
+          description: sum of stats on this node that grant dexterity
+        grantedIntelligence:
+          type: integer
+          format: uint32
+          description: sum of stats on this node that grant intelligence
+        ascendancyName:
+          type: string
+        isAscendancyStart:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        isMultipleChoice:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        isMultipleChoiceOption:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        grantedPassivePoints:
+          type: integer
+          format: uint32
+        stats:
+          type: array
+          items:
+            type: string
+          description: stat descriptions
+        reminderText:
+          type: array
+          items:
+            type: string
+        flavourText:
+          type: array
+          items:
+            type: string
+        classStartIndex:
+          type: integer
+          format: uint32
+        group:
+          type: string
+          description: the key value to look up in the groups table
+        orbit:
+          type: integer
+          format: uint32
+          description: the orbit this node occupies within it's group
+        orbitIndex:
+          type: integer
+          format: uint32
+          description: the index of this node in the group's orbit
+        out:
+          type: array
+          items:
+            type: string
+          description: node identifiers of nodes this one connects to
+        in:
+          type: array
+          items:
+            type: string
+          description: node identifiers of nodes connected to this one
+      required:
+      - in
+      - out
+    CrucibleNode:
+      type: object
+      properties:
+        skill:
+          type: integer
+          format: uint32
+          description: mod hash
+        tier:
+          type: integer
+          format: uint32
+          description: mod tier
+        icon:
+          type: string
+        allocated:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        isNotable:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        isReward:
+          type: boolean
+          enum:
+          - true
+          description: always true if present
+        stats:
+          type: array
+          items:
+            type: string
+          description: stat descriptions
+        reminderText:
+          type: array
+          items:
+            type: string
+        orbit:
+          type: integer
+          format: uint32
+          description: the column this node occupies
+        orbitIndex:
+          type: integer
+          format: uint32
+          description: the node's position within the column
+        out:
+          type: array
+          items:
+            type: string
+          description: node identifiers of nodes this one connects to
+        in:
+          type: array
+          items:
+            type: string
+          description: node identifiers of nodes connected to this one
+      required:
+      - in
+      - out
+    GemTab:
+      type: object
+      properties:
+        name:
+          type: string
+        pages:
+          type: array
+          items:
+            $ref: '#/components/schemas/GemPage'
+      required:
+      - pages
+    GemPage:
+      type: object
+      properties:
+        skillName:
+          type: string
+        description:
+          type: string
+        properties:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemProperty'
+        stats:
+          type: array
+          items:
+            type: string
+  securitySchemes:
+    service:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://www.pathofexile.com/oauth/token
+          scopes:
+            service:leagues: for fetching leagues.
+            service:leagues:ladder: for fetching league ladders.
+            service:pvp_matches: for fetching PvP matches.
+            service:pvp_matches:ladder: for fetching PvP match ladders.
+            service:psapi: for access to the Public Stash API.
+    account:
+      type: oauth2
+      flows:
+        authorizationCode:
+          tokenUrl: https://www.pathofexile.com/oauth/token
+          authorizationUrl: https://www.pathofexile.com/oauth/authorize
+          scopes:
+            account:profile: for access to the account's basic profile information.
+            account:leagues: for viewing the account's available leagues (including
+              private leagues).
+            account:stashes: for viewing the account's stashes and items.
+            account:characters: for viewing the account's characters and inventories.
+            account:league_accounts: for viewing the account's allocated atlas passives.
+            account:item_filter: for managing the account's item filters.
+    bearerAuth:
+      type: http
+      scheme: bearer
+tags:
+- name: Account Profile
+- name: Account Item Filters
+- name: Leagues
+- name: PvP Matches (PoE1 only)
+- name: Account Leagues (PoE1 only)
+- name: Account Characters
+- name: Account Stashes (PoE1 only)
+- name: League Accounts (PoE1 only)
+- name: Guild Stashes (PoE1 only)
+- name: Public Stashes (PoE1 only)
