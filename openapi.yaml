@@ -127,8 +127,6 @@ paths:
                   description: either Normal or Ruthless
                 public:
                   type: boolean
-                  enum:
-                  - false
                   description: defaults to false
                 filter:
                   type: string
@@ -248,8 +246,6 @@ paths:
                   description: either Normal or Ruthless
                 public:
                   type: boolean
-                  enum:
-                  - true
                   description: must be true if present
                 filter:
                   type: string
@@ -392,7 +388,8 @@ paths:
                         format: uint32
                       cached_since:
                         type: string
-                        format: date time (ISO8601)
+                        format: date-time
+                        description: date time (ISO8601)
                       entries:
                         type: array
                         items:
@@ -1213,8 +1210,6 @@ components:
               description: the league category, e.g. Affliction
             current:
               type: boolean
-              enum:
-              - true
               description: set for the active challenge leagues; always true if present
           required:
           - id
@@ -1228,8 +1223,6 @@ components:
           description: date time (ISO8601)
         event:
           type: boolean
-          enum:
-          - true
           description: always true if present
         url:
           type: string
@@ -1244,28 +1237,18 @@ components:
           description: date time (ISO8601)
         timedEvent:
           type: boolean
-          enum:
-          - true
           description: always true if present
         scoreEvent:
           type: boolean
-          enum:
-          - true
           description: always true if present
         delveEvent:
           type: boolean
-          enum:
-          - true
           description: always true if present
         ancestorEvent:
           type: boolean
-          enum:
-          - true
           description: always true if present
         leagueEvent:
           type: boolean
-          enum:
-          - true
           description: always true if present
       required:
       - id
@@ -1469,8 +1452,6 @@ components:
           type: boolean
         pvp:
           type: boolean
-          enum:
-          - true
           description: always true
         style:
           type: string
@@ -1485,18 +1466,12 @@ components:
           description: date time (ISO8601)
         complete:
           type: boolean
-          enum:
-          - true
           description: always true if present
         upcoming:
           type: boolean
-          enum:
-          - true
           description: always true if present
         inProgress:
           type: boolean
-          enum:
-          - true
           description: always true if present
       required:
       - description
@@ -1565,8 +1540,6 @@ components:
           - name
         public:
           type: boolean
-          enum:
-          - true
           description: always true if present
       required:
       - account
@@ -1579,8 +1552,6 @@ components:
           description: a unique 64 digit hexadecimal string
         public:
           type: boolean
-          enum:
-          - false
           description: if false then optional properties will be null
         accountName:
           type: string
@@ -1621,8 +1592,6 @@ components:
           type: string
         support:
           type: boolean
-          enum:
-          - true
           description: always true if present
         stackSize:
           type: integer
@@ -1647,48 +1616,30 @@ components:
           properties: {}
         elder:
           type: boolean
-          enum:
-          - true
           description: always true if present
         shaper:
           type: boolean
-          enum:
-          - true
           description: always true if present
         searing:
           type: boolean
-          enum:
-          - true
           description: always true if present
         tangled:
           type: boolean
-          enum:
-          - true
           description: always true if present
         memoryItem:
           type: boolean
-          enum:
-          - true
           description: always true if present
         abyssJewel:
           type: boolean
-          enum:
-          - true
           description: always true if present
         delve:
           type: boolean
-          enum:
-          - true
           description: always true if present
         fractured:
           type: boolean
-          enum:
-          - true
           description: always true if present
         synthesised:
           type: boolean
-          enum:
-          - true
           description: always true if present
         sockets:
           type: array
@@ -1733,48 +1684,30 @@ components:
           description: user-generated text
         lockedToCharacter:
           type: boolean
-          enum:
-          - true
           description: always true if present
         lockedToAccount:
           type: boolean
-          enum:
-          - true
           description: always true if present
         duplicated:
           type: boolean
-          enum:
-          - true
           description: always true if present
         split:
           type: boolean
-          enum:
-          - true
           description: always true if present
         corrupted:
           type: boolean
-          enum:
-          - true
           description: always true if present
         unmodifiable:
           type: boolean
-          enum:
-          - true
           description: always true if present
         cisRaceReward:
           type: boolean
-          enum:
-          - true
           description: always true if present
         seaRaceReward:
           type: boolean
-          enum:
-          - true
           description: always true if present
         thRaceReward:
           type: boolean
-          enum:
-          - true
           description: always true if present
         properties:
           type: array
@@ -1923,8 +1856,6 @@ components:
           description: random video identifier
         veiled:
           type: boolean
-          enum:
-          - true
           description: always true if present
         gemTabs:
           type: array
@@ -1957,21 +1888,15 @@ components:
           type: string
         isRelic:
           type: boolean
-          enum:
-          - true
           description: always true if present
         foilVariation:
           type: integer
           format: int32
         replica:
           type: boolean
-          enum:
-          - true
           description: always true if present
         foreseeing:
           type: boolean
-          enum:
-          - true
           description: always true if present
         incubatedItem:
           type: object
@@ -2028,8 +1953,6 @@ components:
           - nodes
         ruthless:
           type: boolean
-          enum:
-          - true
           description: always true if present
         frameType:
           type: integer
@@ -2206,23 +2129,15 @@ components:
           format: uint32
         ruthless:
           type: boolean
-          enum:
-          - true
           description: PoE1 only; always true if present
         expired:
           type: boolean
-          enum:
-          - true
           description: always true if present
         deleted:
           type: boolean
-          enum:
-          - true
           description: always true if present
         current:
           type: boolean
-          enum:
-          - true
           description: always true if present
         equipment:
           type: array
@@ -2395,13 +2310,9 @@ components:
           properties:
             public:
               type: boolean
-              enum:
-              - true
               description: always true if present
             folder:
               type: boolean
-              enum:
-              - true
               description: always true if present
             colour:
               type: string
@@ -2470,8 +2381,6 @@ components:
           description: either Normal or Ruthless
         public:
           type: boolean
-          enum:
-          - true
           description: always true if present
         filter:
           type: string
@@ -2486,7 +2395,8 @@ components:
               description: game version
             validated:
               type: string
-              format: date time (ISO8601)
+              format: date-time
+              description: date time (ISO8601)
           required:
           - valid
           description: not present when listing all filters
@@ -2511,8 +2421,6 @@ components:
             format: uint32
         isProxy:
           type: boolean
-          enum:
-          - true
           description: always true if present
         proxy:
           type: string
@@ -2540,18 +2448,12 @@ components:
           type: string
         isKeystone:
           type: boolean
-          enum:
-          - true
           description: always true if present
         isNotable:
           type: boolean
-          enum:
-          - true
           description: always true if present
         isMastery:
           type: boolean
-          enum:
-          - true
           description: always true if present
         inactiveIcon:
           type: string
@@ -2585,23 +2487,15 @@ components:
             - stats
         isBlighted:
           type: boolean
-          enum:
-          - true
           description: always true if present
         isTattoo:
           type: boolean
-          enum:
-          - true
           description: always true if present
         isProxy:
           type: boolean
-          enum:
-          - true
           description: always true if present
         isJewelSocket:
           type: boolean
-          enum:
-          - true
           description: always true if present
         expansionJewel:
           type: object
@@ -2645,18 +2539,12 @@ components:
           type: string
         isAscendancyStart:
           type: boolean
-          enum:
-          - true
           description: always true if present
         isMultipleChoice:
           type: boolean
-          enum:
-          - true
           description: always true if present
         isMultipleChoiceOption:
           type: boolean
-          enum:
-          - true
           description: always true if present
         grantedPassivePoints:
           type: integer
@@ -2716,18 +2604,12 @@ components:
           type: string
         allocated:
           type: boolean
-          enum:
-          - true
           description: always true if present
         isNotable:
           type: boolean
-          enum:
-          - true
           description: always true if present
         isReward:
           type: boolean
-          enum:
-          - true
           description: always true if present
         stats:
           type: array

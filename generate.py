@@ -56,7 +56,7 @@ def handle_type(type_name, trs: list, level: int = 0) -> tuple[dict, bool]:
     """
     Handle a type name and return its OpenAPI schema representation.
     """
-    prop = {}
+    schema = {}
     req = True
     if type_name.startswith("?"):
         req = False
@@ -68,28 +68,28 @@ def handle_type(type_name, trs: list, level: int = 0) -> tuple[dict, bool]:
 
     if " or " in type_name:
         parts = type_name.split(" or ")
-        prop["oneOf"] = []
+        schema["oneOf"] = []
         for part in parts:
             part = part.strip()
             if part.startswith("?"):
                 part = part[1:].strip()
                 req = True
             sub_prop, sub_req = handle_type(part, trs, level)
-            prop["oneOf"].append(sub_prop)
+            schema["oneOf"].append(sub_prop)
             if sub_req:
                 req = True
-        return prop, req
+        return schema, req
 
     if type_name in primitive_translations:
-        prop.update(primitive_translations[type_name])
+        schema.update(primitive_translations[type_name])
     elif type_name.startswith("array of "):
         child_type = type_name[9:].strip()
-        prop["type"] = "array"
-        pop, _ = handle_type(child_type, trs, level)
-        prop["items"] = pop
+        schema["type"] = "array"
+        child_schema, _ = handle_type(child_type, trs, level)
+        schema["items"] = child_schema
     elif type_name == "array":
-        prop["type"] = "array"
-        prop["items"] = {"oneOf": []}
+        schema["type"] = "array"
+        schema["items"] = {"oneOf": []}
         number_of_items = 0
         for tr in trs:
             cells = tr.find_all("td")
@@ -101,19 +101,19 @@ def handle_type(type_name, trs: list, level: int = 0) -> tuple[dict, bool]:
             number_of_items += 1
             key = key[2:].strip()
             value_type = " ".join([c.text.strip() for c in cells[1].children])
-            pop, r = handle_type(value_type, [])
-            prop["items"]["oneOf"].append(pop)
+            child_schema, r = handle_type(value_type, [])
+            schema["items"]["oneOf"].append(child_schema)
 
-        prop["minItems"] = number_of_items
-        prop["maxItems"] = number_of_items
+        schema["minItems"] = number_of_items
+        schema["maxItems"] = number_of_items
     elif type_name.startswith("dictionary of "):
         child_type = type_name[14:].strip()
-        prop["type"] = "object"
-        pop, _ = handle_type(child_type, trs)
-        prop["additionalProperties"] = pop
+        schema["type"] = "object"
+        child_schema, _ = handle_type(child_type, trs)
+        schema["additionalProperties"] = child_schema
     elif type_name == "object":
-        prop["type"] = "object"
-        prop["properties"] = {}
+        schema["type"] = "object"
+        schema["properties"] = {}
         required = set()
         for idx, tr in enumerate(trs):
             cells = tr.find_all("td")
@@ -124,45 +124,16 @@ def handle_type(type_name, trs: list, level: int = 0) -> tuple[dict, bool]:
                 break
             key = key.strip()[2:]
             value_type = " ".join([c.text.strip() for c in cells[1].children])
-            if len(cells) > 2:
-                enums = list(cells[2].find_all("code"))
-                if enums:
-                    if value_type.startswith("string"):
-                        prop["properties"][key] = {
-                            "type": "string",
-                            "enum": [e.text.strip() for e in enums]
-                        }
-                    elif value_type.startswith("bool"):
-                        prop["properties"][key] = {
-                            "type": "boolean",
-                            "enum": [e.text.strip().lower() == "true" for e in enums]
-                        }
-                desc = cells[2].text.strip()
-                if desc:
-                    prop["properties"][key] = {"description": desc}
-            pop, r = handle_type(value_type, trs[1 + idx:], level + 1)
-            if len(cells) > 2:
-                enums = list(cells[2].find_all("code"))
-                if enums and "e.g." not in cells[2].text:
-                    if pop.get("type") == "string":
-                        pop["enum"] = [e.text.strip() for e in enums]
-                    elif pop.get("type") == "boolean":
-                        pop["enum"] = [
-                            e.text.strip().lower() == "true" for e in enums]
-                desc = cells[2].text.strip()
-                if desc == "date time (ISO8601)":
-                    pop["format"] = cells[2].text.strip()
-                elif desc:
-                    pop["description"] = desc
-
-            prop["properties"][key] = pop
+            child_schema, r = handle_type(value_type, trs[1 + idx:], level + 1)
+            parse_third_column(cells, child_schema)
+            schema["properties"][key] = child_schema
             if r:
                 required.add(key)
         if required:
-            prop["required"] = sorted(required)
+            schema["required"] = sorted(required)
     else:
-        prop["$ref"] = f"#/components/schemas/{type_name}"
-    return prop, req
+        schema["$ref"] = f"#/components/schemas/{type_name}"
+    return schema, req
 
 
 def parse_table(table):
@@ -178,27 +149,32 @@ def parse_table(table):
         if key.startswith("↳"):
             continue
         value_type = " ".join([c.text.strip() for c in cells[1].children])
-        t, req = handle_type(value_type, trs[i+1:])
-        properties[key] = t
-        if len(cells) > 2:
-            if cells[2].text.strip() == "date time (ISO8601)":
-                properties[key]["format"] = "date-time"
-            enums = list(cells[2].find_all("code"))
-            if enums:
-                if t.get("type") == "string":
-                    properties[key]["enum"] = [e.text.strip() for e in enums]
-                elif t.get("type") == "boolean":
-                    properties[key]["enum"] = [
-                        e.text.strip().lower() == "true" for e in enums]
-            desc = cells[2].text.strip()
-            if desc:
-                properties[key]["description"] = desc
+        schema, req = handle_type(value_type, trs[i+1:])
+        parse_third_column(cells, schema)
+        properties[key] = schema
         if req:
             required.add(key)
     schema["properties"] = properties
     if required:
         schema["required"] = sorted(required)
     return schema
+
+
+def parse_third_column(cells, schema):
+    if len(cells) > 2:
+        if cells[2].text.strip() == "date time (ISO8601)":
+            schema["format"] = "date-time"
+        enums = list(cells[2].find_all("code"))
+        if enums and "e.g." not in cells[2].text:
+            if schema.get("type") == "string":
+                schema["enum"] = [e.text.strip() for e in enums]
+            elif schema.get("type") == "boolean":
+                pass
+                # properties[key]["enum"] = [
+                #     e.text.strip().lower() == "true" for e in enums]
+        description = cells[2].text.strip()
+        if description:
+            schema["description"] = description
 
 
 def parse_html_to_openapi(url):

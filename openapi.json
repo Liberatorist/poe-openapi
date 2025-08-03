@@ -199,9 +199,6 @@
                   },
                   "public": {
                     "type": "boolean",
-                    "enum": [
-                      false
-                    ],
                     "description": "defaults to false"
                   },
                   "filter": {
@@ -388,9 +385,6 @@
                   },
                   "public": {
                     "type": "boolean",
-                    "enum": [
-                      true
-                    ],
                     "description": "must be true if present"
                   },
                   "filter": {
@@ -608,7 +602,8 @@
                         },
                         "cached_since": {
                           "type": "string",
-                          "format": "date time (ISO8601)"
+                          "format": "date-time",
+                          "description": "date time (ISO8601)"
                         },
                         "entries": {
                           "type": "array",
@@ -2301,9 +2296,6 @@
               },
               "current": {
                 "type": "boolean",
-                "enum": [
-                  true
-                ],
                 "description": "set for the active challenge leagues; always true if present"
               }
             },
@@ -2324,9 +2316,6 @@
           },
           "event": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "url": {
@@ -2345,37 +2334,22 @@
           },
           "timedEvent": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "scoreEvent": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "delveEvent": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "ancestorEvent": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "leagueEvent": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           }
         },
@@ -2662,9 +2636,6 @@
           },
           "pvp": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true"
           },
           "style": {
@@ -2683,23 +2654,14 @@
           },
           "complete": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "upcoming": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "inProgress": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           }
         },
@@ -2793,9 +2755,6 @@
           },
           "public": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           }
         },
@@ -2813,9 +2772,6 @@
           },
           "public": {
             "type": "boolean",
-            "enum": [
-              false
-            ],
             "description": "if false then optional properties will be null"
           },
           "accountName": {
@@ -2872,9 +2828,6 @@
           },
           "support": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "stackSize": {
@@ -2908,65 +2861,38 @@
           },
           "elder": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "shaper": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "searing": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "tangled": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "memoryItem": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "abyssJewel": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "delve": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "fractured": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "synthesised": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "sockets": {
@@ -3027,65 +2953,38 @@
           },
           "lockedToCharacter": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "lockedToAccount": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "duplicated": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "split": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "corrupted": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "unmodifiable": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "cisRaceReward": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "seaRaceReward": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "thRaceReward": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "properties": {
@@ -3298,9 +3197,6 @@
           },
           "veiled": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "gemTabs": {
@@ -3350,9 +3246,6 @@
           },
           "isRelic": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "foilVariation": {
@@ -3361,16 +3254,10 @@
           },
           "replica": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "foreseeing": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "incubatedItem": {
@@ -3448,9 +3335,6 @@
           },
           "ruthless": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "frameType": {
@@ -3689,30 +3573,18 @@
           },
           "ruthless": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "PoE1 only; always true if present"
           },
           "expired": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "deleted": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "current": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "equipment": {
@@ -3941,16 +3813,10 @@
             "properties": {
               "public": {
                 "type": "boolean",
-                "enum": [
-                  true
-                ],
                 "description": "always true if present"
               },
               "folder": {
                 "type": "boolean",
-                "enum": [
-                  true
-                ],
                 "description": "always true if present"
               },
               "colour": {
@@ -4052,9 +3918,6 @@
           },
           "public": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "filter": {
@@ -4073,7 +3936,8 @@
               },
               "validated": {
                 "type": "string",
-                "format": "date time (ISO8601)"
+                "format": "date-time",
+                "description": "date time (ISO8601)"
               }
             },
             "required": [
@@ -4109,9 +3973,6 @@
           },
           "isProxy": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "proxy": {
@@ -4149,23 +4010,14 @@
           },
           "isKeystone": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "isNotable": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "isMastery": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "inactiveIcon": {
@@ -4212,30 +4064,18 @@
           },
           "isBlighted": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "isTattoo": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "isProxy": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "isJewelSocket": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "expansionJewel": {
@@ -4289,23 +4129,14 @@
           },
           "isAscendancyStart": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "isMultipleChoice": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "isMultipleChoiceOption": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "grantedPassivePoints": {
@@ -4387,23 +4218,14 @@
           },
           "allocated": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "isNotable": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "isReward": {
             "type": "boolean",
-            "enum": [
-              true
-            ],
             "description": "always true if present"
           },
           "stats": {
