@@ -183,54 +183,68 @@ def parse_html_to_openapi(url):
     })
     soup = BeautifulSoup(response.text, "html.parser")
     openapi = {
-        "openapi": "3.0.0",
-        "info": {"title": "Path of Exile API", "version": "3.26.0"},
-        "paths": {},
-        "servers": [
-            {
-                "url": "https://api.pathofexile.com"
-            }
-        ],
-        "components": {"schemas": {}, "securitySchemes": {
-            "service": {
-                "type": "oauth2",
-                "flows": {
-                    "clientCredentials": {
-                        "tokenUrl": "https://www.pathofexile.com/oauth/token",
-                        "scopes": {
-                            "service:leagues": "for fetching leagues.",
-                            "service:leagues:ladder": "for fetching league ladders.",
-                            "service:pvp_matches": "for fetching PvP matches.",
-                            "service:pvp_matches:ladder": "for fetching PvP match ladders.",
-                            "service:psapi": "for access to the Public Stash API.",
-                        }
-                    }
+            "openapi": "3.1.0",
+            "info": {"title": "Path of Exile API", "version": "3.26.0"},
+            "paths": {},
+            "servers": [
+                {
+                    "url": "https://api.pathofexile.com"
                 }
-            },
-            "account": {
-                "type": "oauth2",
-                "flows": {
-                    "authorizationCode": {
-                        "tokenUrl": "https://www.pathofexile.com/oauth/token",
-                        "authorizationUrl": "https://www.pathofexile.com/oauth/authorize",
-                        "scopes": {
-                            "account:profile": "for access to the account's basic profile information.",
-                            "account:leagues": "for viewing the account's available leagues (including private leagues).",
-                            "account:stashes": "for viewing the account's stashes and items.",
-                            "account:characters": "for viewing the account's characters and inventories.",
-                            "account:league_accounts": "for viewing the account's allocated atlas passives.",
-                            "account:item_filter": "for managing the account's item filters.",
+            ],
+            "components": {
+                "schemas": {},
+                "securitySchemes": {
+                    "service": {
+                        "type": "oauth2",
+                        "flows": {
+                            "clientCredentials": {
+                                "tokenUrl": "https://www.pathofexile.com/oauth/token",
+                                "scopes": {
+                                    "service:leagues": "for fetching leagues.",
+                                    "service:leagues:ladder": "for fetching league ladders.",
+                                    "service:pvp_matches": "for fetching PvP matches.",
+                                    "service:pvp_matches:ladder": "for fetching PvP match ladders.",
+                                    "service:psapi": "for access to the Public Stash API.",
+                                }
+                            }
                         }
+                    },
+                    "account": {
+                        "type": "oauth2",
+                        "flows": {
+                            "authorizationCode": {
+                                "tokenUrl": "https://www.pathofexile.com/oauth/token",
+                                "authorizationUrl": "https://www.pathofexile.com/oauth/authorize",
+                                "scopes": {
+                                    "account:profile": "for access to the account's basic profile information.",
+                                    "account:leagues": "for viewing the account's available leagues (including private leagues).",
+                                    "account:stashes": "for viewing the account's stashes and items.",
+                                    "account:characters": "for viewing the account's characters and inventories.",
+                                    "account:league_accounts": "for viewing the account's allocated atlas passives.",
+                                    "account:item_filter": "for managing the account's item filters.",
+                                }
+                            }
+                        }
+                    },
+                    "bearerAuth": {
+                        "type": "http",
+                        "scheme": "bearer",
                     }
-                }
+                },
             },
-            "bearerAuth": {
-                "type": "http",
-                "scheme": "bearer",
-            }
-        }},
-        "tags": []
-    }
+            "parameters": [
+                {
+                    "name": "User-Agent",
+                    "in": "header",
+                    "required": True,
+                    "schema": {
+                        "type": "string"
+                    },
+                    "description": "format: OAuth {$clientId}/{$version} (contact: {$contact})"
+                }
+            ],
+            "tags": []
+        }
     h2s = soup.find_all("h2")
     schemas = openapi["components"]["schemas"]
     tags = openapi["tags"] = []
@@ -269,15 +283,31 @@ def parse_endpoint(openapi, tag, scope, h3):
     if not verbmatch:
         return
     http_verb = verbmatch[0]
-    parameters = [
-        {
-            "name": "User-Agent",
-            "in": "header",
-            "required": True,
-            "schema": {"type": "string"},
-            "description": "format: OAuth {$clientId}/{$version} (contact: {$contact})"
-        }
-    ]
+    parameters = []
+    optional_path_params = []
+    pathParts = []
+    param_names = []
+    # Parse the endpoint path and fill pathParts and optional_path_params
+    path = endpoint_text[len(http_verb):].strip()
+    for part in path.split("/"):
+        part = part.strip().replace("[", "")
+        if part.startswith("<") and part.endswith(">"):
+            pname = part[1:-1]
+            pathParts.append("{" + pname + "}")
+            parameters.append({
+                "name": pname,
+                "in": "path",
+                "required": True,
+                "schema": {"type": "string"}
+            })
+            param_names.append(pname)
+        elif part.endswith("]"):
+            pname = part[1:-2]
+            optional_path_params.append(pname)
+            pathParts.append("{" + pname + "}")
+            param_names.append(pname)
+        else:
+            pathParts.append(part)
     returnDef = find_next_before(
         h3, "h4", "h3", "Returns:")
     bodyDef = find_next_before(
@@ -315,10 +345,10 @@ def parse_endpoint(openapi, tag, scope, h3):
             for child in children[1:]:
                 description.append(child.text.strip())
             if description:
-                param["description"] = " ".join(
-                    description).strip().replace("=", "")
+                param["description"] = " ".join(description).strip().replace("=", "")
             parameters.append(param)
 
+    # Build the operation definition before assigning to paths
     definition = {
         "summary": summary,
         "operationId": toCamelCase(summary),
@@ -345,35 +375,9 @@ def parse_endpoint(openapi, tag, scope, h3):
         }
     if scope:
         if "service" in scope:
-            definition["security"].append(
-                {"service": [scope]})
+            definition["security"].append({"service": [scope]})
         elif "account" in scope:
-            definition["security"].append(
-                {"account": [scope]})
-
-    optional_path_params = []
-    pathParts = []
-    path = endpoint_text[len(http_verb):].strip()
-    param_names = []
-    for part in path.split("/"):
-        part = part.strip().replace("[", "")
-        if part.startswith("<") and part.endswith(">"):
-            pname = part[1:-1]
-            pathParts.append("{" + pname + "}")
-            parameters.append({
-                "name": pname,
-                "in": "path",
-                "required": True,
-                "schema": {"type": "string"}
-            })
-            param_names.append(pname)
-        elif part.endswith("]"):
-            pname = part[1:-2]
-            optional_path_params.append(pname)
-            pathParts.append("{" + pname + "}")
-            param_names.append(pname)
-        else:
-            pathParts.append(part)
+            definition["security"].append({"account": [scope]})
 
     # Generate all combinations of optional path params (powerset, except empty set)
     n = len(optional_path_params)
