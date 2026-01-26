@@ -137,7 +137,7 @@ def handle_type(type_name, trs: list, level: int = 0) -> tuple[dict, bool]:
 
 
 def parse_table(table):
-    schema = {"type": "object"}
+    table_schema = {"type": "object"}
     properties = {}
     required = set()
     trs = list(table.find_all("tr"))
@@ -149,15 +149,15 @@ def parse_table(table):
         if key.startswith("↳"):
             continue
         value_type = " ".join([c.text.strip() for c in cells[1].children])
-        schema, req = handle_type(value_type, trs[i+1:])
-        parse_third_column(cells, schema)
-        properties[key] = schema
+        field_schema, req = handle_type(value_type, trs[i+1:])
+        parse_third_column(cells, field_schema)
+        properties[key] = field_schema
         if req:
             required.add(key)
-    schema["properties"] = properties
+    table_schema["properties"] = properties
     if required:
-        schema["required"] = sorted(required)
-    return schema
+        table_schema["required"] = sorted(required)
+    return table_schema
 
 
 def parse_third_column(cells, schema):

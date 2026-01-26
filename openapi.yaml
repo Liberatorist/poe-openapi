@@ -1183,6 +1183,123 @@ paths:
         required: true
         schema:
           type: string
+  /currency-exchange:
+    get:
+      summary: Get Exchange Markets
+      operationId: GetExchangeMarkets
+      responses: &id028
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  next_change_id:
+                    type: integer
+                    format: uint32
+                    description: unix timestamp truncated to the hour
+                  markets:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        league:
+                          type: string
+                        market_id:
+                          type: string
+                          enum:
+                          - chaos|divine
+                          description: 'common currency code for each pair separated
+                            by a pipe. Example: chaos|divine'
+                        volume_traded:
+                          type: object
+                          additionalProperties:
+                            type: integer
+                            format: uint32
+                          description: 'the keys are the market currencies. Example:
+                            chaos'
+                        lowest_stock:
+                          type: object
+                          additionalProperties:
+                            type: integer
+                            format: uint32
+                        highest_stock:
+                          type: object
+                          additionalProperties:
+                            type: integer
+                            format: uint32
+                        lowest_ratio:
+                          type: object
+                          additionalProperties:
+                            type: integer
+                            format: uint32
+                        highest_ratio:
+                          type: object
+                          additionalProperties:
+                            type: integer
+                            format: uint32
+                      required:
+                      - highest_ratio
+                      - highest_stock
+                      - league
+                      - lowest_ratio
+                      - lowest_stock
+                      - market_id
+                      - volume_traded
+                required:
+                - markets
+                - next_change_id
+      security: &id029
+      - bearerAuth: []
+      - service:
+        - service:cxapi
+      tags: &id030
+      - Currency Exchange
+  /currency-exchange/{id}:
+    get:
+      summary: 'Get Exchange Markets (with optional: id)'
+      operationId: GetExchangeMarketsId
+      responses: *id028
+      security: *id029
+      tags: *id030
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+  /currency-exchange/{realm}:
+    get:
+      summary: 'Get Exchange Markets (with optional: realm)'
+      operationId: GetExchangeMarketsRealm
+      responses: *id028
+      security: *id029
+      tags: *id030
+      parameters:
+      - name: realm
+        in: path
+        required: true
+        schema:
+          type: string
+  /currency-exchange/{realm}/{id}:
+    get:
+      summary: 'Get Exchange Markets (with optional: realm, id)'
+      operationId: GetExchangeMarketsRealmId
+      responses: *id028
+      security: *id029
+      tags: *id030
+      parameters:
+      - name: realm
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
 servers:
 - url: https://api.pathofexile.com
 components:
@@ -1192,7 +1309,6 @@ components:
       properties:
         id:
           type: string
-          description: the league's name
         realm:
           type: string
           enum:
@@ -1200,6 +1316,9 @@ components:
           - xbox
           - sony
           description: pc, xbox, or sony
+        name:
+          type: string
+          description: the league's name
         description:
           type: string
         category:
@@ -1224,6 +1343,8 @@ components:
         event:
           type: boolean
           description: always true if present
+        goal:
+          type: string
         url:
           type: string
           description: a url link to a Path of Exile forum thread
@@ -1601,6 +1722,9 @@ components:
           format: int32
         stackSizeText:
           type: string
+        iconTierText:
+          type: string
+          description: usually roman numerals
         league:
           type: string
         id:
@@ -1629,6 +1753,9 @@ components:
         memoryItem:
           type: boolean
           description: always true if present
+        mutated:
+          type: boolean
+          description: 'PoE1: true on Foulborn Uniques, PoE2: true on all Vaal Uniques'
         abyssJewel:
           type: boolean
           description: always true if present
@@ -1697,7 +1824,16 @@ components:
         corrupted:
           type: boolean
           description: always true if present
+        doubleCorrupted:
+          type: boolean
+          description: PoE2 only; always true if present
+        sanctified:
+          type: boolean
+          description: PoE2 only; always true if present
         unmodifiable:
+          type: boolean
+          description: always true if present
+        unmodifiableExceptChaos:
           type: boolean
           description: always true if present
         cisRaceReward:
@@ -1832,6 +1968,11 @@ components:
           type: array
           items:
             type: string
+        bondedMods:
+          type: array
+          items:
+            type: string
+          description: PoE2 only
         craftedMods:
           type: array
           items:
@@ -1840,6 +1981,11 @@ components:
           type: array
           items:
             type: string
+        mutatedMods:
+          type: array
+          items:
+            type: string
+          description: 'PoE1: Foulborn Unique mods, PoE2: Vaal Unique mods'
         crucibleMods:
           type: array
           items:
@@ -1857,6 +2003,14 @@ components:
         veiled:
           type: boolean
           description: always true if present
+        desecratedMods:
+          type: array
+          items:
+            type: string
+          description: PoE2 only
+        desecrated:
+          type: boolean
+          description: PoE2 only; always true if present
         gemTabs:
           type: array
           items:
@@ -1874,13 +2028,6 @@ components:
           type: array
           items:
             type: string
-        flavourTextParsed:
-          oneOf:
-          - type: array
-            items:
-              type: string
-          - type: object
-            properties: {}
         flavourTextNote:
           type: string
           description: user-generated text
@@ -2009,7 +2156,6 @@ components:
           description: S, D, I, or G
       required:
       - baseType
-      - flavourTextParsed
       - h
       - icon
       - identified
@@ -2152,10 +2298,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Item'
+          description: PoE1 only
         rucksack:
           type: array
           items:
             $ref: '#/components/schemas/Item'
+          description: PoE1 only
         jewels:
           type: array
           items:
@@ -2188,7 +2336,7 @@ components:
                 items:
                   type: integer
                   format: int32
-              description: PoE2 only; the keys are set1, set2, and shapeshift
+              description: PoE2 only; the keys are set1, set2, and set3
             skill_overrides:
               type: object
               additionalProperties:
@@ -2230,13 +2378,14 @@ components:
                 $ref: '#/components/schemas/ItemJewelData'
               description: the key is the string value of the x property of an item
                 from the jewels array in this request
+            quest_stats:
+              type: array
+              items:
+                type: string
+              description: PoE2 only; passives granted via quests
             alternate_ascendancy:
               type: string
-              enum:
-              - Warden
-              - Warlock
-              - Primalist
-              description: PoE1 only; Warden, Warlock, or Primalist
+              description: PoE1 only; Bloodline class name
           required:
           - hashes
           - hashes_ex
@@ -2298,6 +2447,9 @@ components:
         parent:
           type: string
           description: a 10 digit hexadecimal string
+        folder:
+          type: string
+          description: a 10 digit hexadecimal string
         name:
           type: string
         type:
@@ -2317,6 +2469,10 @@ components:
             colour:
               type: string
               description: 6 digit hex colour
+            map:
+              type: object
+              properties: {}
+              description: various game specific properties
         children:
           type: array
           items:
@@ -2707,3 +2863,4 @@ tags:
 - name: League Accounts (PoE1 only)
 - name: Guild Stashes (PoE1 only)
 - name: Public Stashes (PoE1 only)
+- name: Currency Exchange
