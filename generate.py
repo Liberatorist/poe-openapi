@@ -184,7 +184,7 @@ def parse_html_to_openapi(url):
     soup = BeautifulSoup(response.text, "html.parser")
     openapi = {
             "openapi": "3.1.0",
-            "info": {"title": "Path of Exile API", "version": "3.26.0"},
+            "info": {"title": "Path of Exile API", "version": "3.27.0"},
             "paths": {},
             "servers": [
                 {
