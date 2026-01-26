@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Path of Exile API
-  version: 3.26.0
+  version: 3.27.0
 paths:
   /profile:
     get:
@@ -2778,16 +2778,13 @@ components:
     bearerAuth:
       type: http
       scheme: bearer
-  parameters:
-    UserAgentHeader:
-      name: User-Agent
-      in: header
-      required: true
-      schema:
-        type: string
-      description: 'format: OAuth {$clientId}/{$version} (contact: {$contact})'
 parameters:
-- $ref: '#/components/parameters/UserAgentHeader'
+- name: User-Agent
+  in: header
+  required: true
+  schema:
+    type: string
+  description: 'format: OAuth {$clientId}/{$version} (contact: {$contact})'
 tags:
 - name: Account Profile
 - name: Account Item Filters
