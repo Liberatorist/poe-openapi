@@ -2491,6 +2491,14 @@ components:
           type: array
           items:
             type: string
+  parameters:
+    UserAgent:
+      name: User-Agent
+      in: header
+      required: true
+      schema:
+        type: string
+      description: 'format: OAuth {$clientId}/{$version} (contact: {$contact})'
   securitySchemes:
     service:
       type: oauth2
@@ -2520,13 +2528,6 @@ components:
     bearerAuth:
       type: http
       scheme: bearer
-parameters:
-- name: User-Agent
-  in: header
-  required: true
-  schema:
-    type: string
-  description: 'format: OAuth {$clientId}/{$version} (contact: {$contact})'
 tags:
 - name: Account Profile
 - name: Account Item Filters

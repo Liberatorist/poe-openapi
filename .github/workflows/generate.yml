@@ -36,6 +36,11 @@ jobs:
           mkdir -p out
           python generate.py
 
+      - name: Validate specs
+        run: |
+          pip install openapi-spec-validator
+          openapi-spec-validator out/*.json out/*.yaml
+
       - name: Commit changes if any
         run: |
           git add out/*.json out/*.yaml

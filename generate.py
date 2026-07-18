@@ -226,6 +226,17 @@ def build_openapi(soup, realm):
             ],
             "components": {
                 "schemas": {},
+                "parameters": {
+                    "UserAgent": {
+                        "name": "User-Agent",
+                        "in": "header",
+                        "required": True,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "format: OAuth {$clientId}/{$version} (contact: {$contact})"
+                    }
+                },
                 "securitySchemes": {
                     "service": {
                         "type": "oauth2",
@@ -265,17 +276,6 @@ def build_openapi(soup, realm):
                     }
                 },
             },
-            "parameters": [
-                {
-                    "name": "User-Agent",
-                    "in": "header",
-                    "required": True,
-                    "schema": {
-                        "type": "string"
-                    },
-                    "description": "format: OAuth {$clientId}/{$version} (contact: {$contact})"
-                }
-            ],
             "tags": []
         }
     h2s = soup.find_all("h2")
