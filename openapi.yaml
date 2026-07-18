@@ -368,20 +368,20 @@ paths:
         required: true
         schema:
           type: string
-      - description: can be pc (default), xbox , or sony
+      - description: can be pc (default), xbox , sony , or poe2
         name: realm
         in: query
         required: false
         schema:
           type: string
-      - description: "sort can be one of the following: xp sorts the ladder by experience\n\
-          depth sorts the ladder by Delve depth\ndepthsolo sorts the ladder by Delve\
-          \ (Solo) depth\nancestor sorts the ladder by Ancestor rank\ntime sorts the\
-          \ ladder by objective finish time\nscore sorts the ladder by objective score\n\
-          \nclass returns characters of a specific class sorted by experience. Use\
-          \ class to set the class. Options are:\n                \nscion\nmarauder\n\
-          ranger\nwitch\nduelist\ntemplar\nshadow  The default sort type will either\
-          \ be xp or time depending on the league."
+      - description: "sort (PoE1 only) can be one of the following: xp sorts the ladder\
+          \ by experience\ndepth sorts the ladder by Delve depth\ndepthsolo sorts\
+          \ the ladder by Delve (Solo) depth\nancestor sorts the ladder by Ancestor\
+          \ rank\ntime sorts the ladder by objective finish time\nscore sorts the\
+          \ ladder by objective score\n\nclass returns characters of a specific class\
+          \ sorted by experience. Use class to set the class. Options are:\n     \
+          \           \nscion\nmarauder\nranger\nwitch\nduelist\ntemplar\nshadow \
+          \ The default sort type will either be xp or time depending on the league."
         name: sort
         in: query
         required: false
@@ -1682,6 +1682,14 @@ components:
         mutated:
           type: boolean
           description: 'PoE1: true on Foulborn Uniques, PoE2: true on all Vaal Uniques'
+        builtInSupport:
+          type: string
+          description: PoE1 only; Supported by level 1 x
+        monsterLevel:
+          type: integer
+          format: int32
+          description: PoE1 only; used for items that always display their monster
+            level
         abyssJewel:
           type: boolean
           description: always true if present
@@ -1797,6 +1805,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ItemProperty'
+        tamedBeastProperties:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemProperty'
+          description: PoE2 only
         nextLevelRequirements:
           type: array
           items:
@@ -2030,6 +2043,9 @@ components:
         frameType:
           type: integer
           format: uint32
+          description: deprecated; use frameTypeId
+        frameTypeId:
+          type: string
         artFilename:
           type: string
         hybrid:
@@ -2079,9 +2095,14 @@ components:
           - D
           - I
           - G
-          description: S, D, I, or G
+          description: PoE1 only; S, D, I, or G
+        socketedIcon:
+          type: string
+          description: PoE2 only; an image URL to use when this item is in the socket
+            of another item
       required:
       - baseType
+      - frameTypeId
       - h
       - icon
       - identified
