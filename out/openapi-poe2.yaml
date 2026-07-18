@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Path of Exile 2 API
-  version: 0.4.0
+  version: 0.5.0
 paths:
   /profile:
     get:
@@ -2126,11 +2126,5 @@ tags:
 - name: Account Profile
 - name: Account Item Filters
 - name: Leagues
-- name: PvP Matches (PoE1 only)
-- name: Account Leagues (PoE1 only)
 - name: Account Characters
-- name: Account Stashes (PoE1 only)
-- name: League Accounts (PoE1 only)
-- name: Guild Stashes (PoE1 only)
-- name: Public Stashes (PoE1 only)
 - name: Currency Exchange

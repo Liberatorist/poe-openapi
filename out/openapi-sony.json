@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Path of Exile API (Sony)",
-    "version": "3.27.0"
+    "version": "3.28.0"
   },
   "paths": {
     "/profile": {
@@ -767,7 +767,7 @@
           }
         ],
         "tags": [
-          "PvP Matches (PoE1 only)"
+          "PvP Matches"
         ],
         "parameters": [
           {
@@ -826,7 +826,7 @@
           }
         ],
         "tags": [
-          "PvP Matches (PoE1 only)"
+          "PvP Matches"
         ],
         "parameters": [
           {
@@ -907,7 +907,7 @@
           }
         ],
         "tags": [
-          "PvP Matches (PoE1 only)"
+          "PvP Matches"
         ],
         "parameters": [
           {
@@ -989,7 +989,7 @@
           }
         ],
         "tags": [
-          "Account Leagues (PoE1 only)"
+          "Account Leagues"
         ]
       }
     },
@@ -1119,7 +1119,7 @@
           }
         ],
         "tags": [
-          "Account Stashes (PoE1 only)"
+          "Account Stashes"
         ],
         "parameters": [
           {
@@ -1165,7 +1165,7 @@
           }
         ],
         "tags": [
-          "Account Stashes (PoE1 only)"
+          "Account Stashes"
         ],
         "parameters": [
           {
@@ -1219,7 +1219,7 @@
           }
         ],
         "tags": [
-          "Account Stashes (PoE1 only)"
+          "Account Stashes"
         ],
         "parameters": [
           {
@@ -1284,7 +1284,7 @@
           }
         ],
         "tags": [
-          "League Accounts (PoE1 only)"
+          "League Accounts"
         ],
         "parameters": [
           {
@@ -1336,7 +1336,7 @@
           }
         ],
         "tags": [
-          "Guild Stashes (PoE1 only)"
+          "Guild Stashes"
         ],
         "parameters": [
           {
@@ -1382,7 +1382,7 @@
           }
         ],
         "tags": [
-          "Guild Stashes (PoE1 only)"
+          "Guild Stashes"
         ],
         "parameters": [
           {
@@ -1436,7 +1436,7 @@
           }
         ],
         "tags": [
-          "Guild Stashes (PoE1 only)"
+          "Guild Stashes"
         ],
         "parameters": [
           {
@@ -1509,7 +1509,7 @@
           }
         ],
         "tags": [
-          "Public Stashes (PoE1 only)"
+          "Public Stashes"
         ],
         "parameters": [
           {
@@ -3931,25 +3931,25 @@
       "name": "Leagues"
     },
     {
-      "name": "PvP Matches (PoE1 only)"
+      "name": "PvP Matches"
     },
     {
-      "name": "Account Leagues (PoE1 only)"
+      "name": "Account Leagues"
     },
     {
       "name": "Account Characters"
     },
     {
-      "name": "Account Stashes (PoE1 only)"
+      "name": "Account Stashes"
     },
     {
-      "name": "League Accounts (PoE1 only)"
+      "name": "League Accounts"
     },
     {
-      "name": "Guild Stashes (PoE1 only)"
+      "name": "Guild Stashes"
     },
     {
-      "name": "Public Stashes (PoE1 only)"
+      "name": "Public Stashes"
     },
     {
       "name": "Currency Exchange"

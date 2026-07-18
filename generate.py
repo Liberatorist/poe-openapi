@@ -1,4 +1,5 @@
 import json
+import re
 import yaml
 from bs4 import BeautifulSoup
 from itertools import product
@@ -26,12 +27,26 @@ realms = {
     "poe2": "poe2",
 }
 
-realm_info = {
-    "pc": {"title": "Path of Exile API", "version": "3.27.0"},
-    "xbox": {"title": "Path of Exile API (Xbox)", "version": "3.27.0"},
-    "sony": {"title": "Path of Exile API (Sony)", "version": "3.27.0"},
-    "poe2": {"title": "Path of Exile 2 API", "version": "0.4.0"},
-}
+def fetch_latest_versions() -> tuple[str, str]:
+    """
+    Fetch the latest PoE1 and PoE2 versions from the top entries of the changelog.
+    Entries look like "3.28.0:" for PoE1 and "PoE2 EA - 0.5.0:" for PoE2.
+    """
+    soup = fetch_soup("https://www.pathofexile.com/developer/docs/changelog")
+    poe1_version = poe2_version = None
+    for h3 in soup.find_all("h3"):
+        match = re.match(r"^(PoE2 EA - )?(\d+\.\d+(?:\.\d+)?):", h3.text.strip())
+        if not match:
+            continue
+        if match.group(1):
+            poe2_version = poe2_version or match.group(2)
+        else:
+            poe1_version = poe1_version or match.group(2)
+        if poe1_version and poe2_version:
+            break
+    if not poe1_version or not poe2_version:
+        raise RuntimeError("Could not determine latest versions from changelog")
+    return poe1_version, poe2_version
 
 
 def toCamelCase(string: str) -> str:
@@ -269,23 +284,28 @@ def build_openapi(soup, realm):
     for h2 in h2s:
         tag = ""
         scope = ""
+        section_title = h2.text.strip()
+        poe1_only = "(PoE1 only)" in section_title
+        section_title = section_title.replace("(PoE1 only)", "").strip()
+        skip_endpoints = poe1_only and realm == "poe2"
         scopedivs = find_all_before(h2, "div", "h2")
         if scopedivs:
             if "scope" in scopedivs[0].text.lower():
                 x = scopedivs[0].find_next("a")
                 if x:
                     scope = x.text.strip()
-                tag = h2.text.strip()
-                tags.append({
-                    "name": h2.text.strip(),
-                })
+                tag = section_title
+                if not skip_endpoints:
+                    tags.append({
+                        "name": section_title,
+                    })
         for h3 in find_all_before(h2, "h3", "h2"):
             text = h3.text.strip()
             if text.startswith("object"):
                 table = h3.find_next("table")
                 if table:
                     schemas[text.split(" ")[1]] = parse_table(table)
-            else:
+            elif not skip_endpoints:
                 parse_endpoint(openapi, tag, scope, h3, realm)
 
     return openapi
@@ -479,6 +499,14 @@ def parse_endpoint(openapi, tag, scope, h3, realm):
             openapi["paths"][new_path][http_verb.lower()
                                        ] = def_copy
 
+
+poe1_version, poe2_version = fetch_latest_versions()
+realm_info = {
+    "pc": {"title": "Path of Exile API", "version": poe1_version},
+    "xbox": {"title": "Path of Exile API (Xbox)", "version": poe1_version},
+    "sony": {"title": "Path of Exile API (Sony)", "version": poe1_version},
+    "poe2": {"title": "Path of Exile 2 API", "version": poe2_version},
+}
 
 soup = fetch_soup("https://www.pathofexile.com/developer/docs/reference")
 

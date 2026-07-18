@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Path of Exile API
-  version: 3.27.0
+  version: 3.28.0
 paths:
   /profile:
     get:
@@ -460,7 +460,7 @@ paths:
       - service:
         - service:pvp_matches
       tags:
-      - PvP Matches (PoE1 only)
+      - PvP Matches
       parameters:
       - description: 'type can be one of the following: upcoming retrieves upcoming
           matches (default)
@@ -494,7 +494,7 @@ paths:
       - service:
         - service:pvp_matches
       tags:
-      - PvP Matches (PoE1 only)
+      - PvP Matches
       parameters:
       - name: match
         in: path
@@ -536,7 +536,7 @@ paths:
       - service:
         - service:pvp_matches
       tags:
-      - PvP Matches (PoE1 only)
+      - PvP Matches
       parameters:
       - name: match
         in: path
@@ -579,7 +579,7 @@ paths:
       - account:
         - account:leagues
       tags:
-      - Account Leagues (PoE1 only)
+      - Account Leagues
   /character:
     get:
       summary: List Characters
@@ -653,7 +653,7 @@ paths:
       - account:
         - account:stashes
       tags:
-      - Account Stashes (PoE1 only)
+      - Account Stashes
       parameters:
       - name: league
         in: path
@@ -679,7 +679,7 @@ paths:
       - account:
         - account:stashes
       tags: &id003
-      - Account Stashes (PoE1 only)
+      - Account Stashes
       parameters:
       - name: league
         in: path
@@ -735,7 +735,7 @@ paths:
       - account:
         - account:league_accounts
       tags:
-      - League Accounts (PoE1 only)
+      - League Accounts
       parameters:
       - name: league
         in: path
@@ -765,7 +765,7 @@ paths:
       - account:
         - account:guild:stashes
       tags:
-      - Guild Stashes (PoE1 only)
+      - Guild Stashes
       parameters:
       - name: league
         in: path
@@ -791,7 +791,7 @@ paths:
       - account:
         - account:guild:stashes
       tags: &id006
-      - Guild Stashes (PoE1 only)
+      - Guild Stashes
       parameters:
       - name: league
         in: path
@@ -853,7 +853,7 @@ paths:
       - service:
         - service:psapi
       tags:
-      - Public Stashes (PoE1 only)
+      - Public Stashes
       parameters:
       - description: is a pagination code received from this endpoint
         name: id
@@ -2531,11 +2531,11 @@ tags:
 - name: Account Profile
 - name: Account Item Filters
 - name: Leagues
-- name: PvP Matches (PoE1 only)
-- name: Account Leagues (PoE1 only)
+- name: PvP Matches
+- name: Account Leagues
 - name: Account Characters
-- name: Account Stashes (PoE1 only)
-- name: League Accounts (PoE1 only)
-- name: Guild Stashes (PoE1 only)
-- name: Public Stashes (PoE1 only)
+- name: Account Stashes
+- name: League Accounts
+- name: Guild Stashes
+- name: Public Stashes
 - name: Currency Exchange
