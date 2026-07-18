@@ -18,6 +18,21 @@ primitive_translations = {
 
 http_verbs = {"GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"}
 
+# realm -> path segment (None means the realm is omitted from the path)
+realms = {
+    "pc": None,
+    "xbox": "xbox",
+    "sony": "sony",
+    "poe2": "poe2",
+}
+
+realm_info = {
+    "pc": {"title": "Path of Exile API", "version": "3.27.0"},
+    "xbox": {"title": "Path of Exile API (Xbox)", "version": "3.27.0"},
+    "sony": {"title": "Path of Exile API (Sony)", "version": "3.27.0"},
+    "poe2": {"title": "Path of Exile 2 API", "version": "0.4.0"},
+}
+
 
 def toCamelCase(string: str) -> str:
     """
@@ -177,14 +192,17 @@ def parse_third_column(cells, schema):
             schema["description"] = description
 
 
-def parse_html_to_openapi(url):
+def fetch_soup(url):
     response = requests.get(url, headers={
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
     })
-    soup = BeautifulSoup(response.text, "html.parser")
+    return BeautifulSoup(response.text, "html.parser")
+
+
+def build_openapi(soup, realm):
     openapi = {
             "openapi": "3.1.0",
-            "info": {"title": "Path of Exile API", "version": "3.27.0"},
+            "info": dict(realm_info[realm]),
             "paths": {},
             "servers": [
                 {
@@ -268,12 +286,12 @@ def parse_html_to_openapi(url):
                 if table:
                     schemas[text.split(" ")[1]] = parse_table(table)
             else:
-                parse_endpoint(openapi, tag, scope, h3)
+                parse_endpoint(openapi, tag, scope, h3, realm)
 
     return openapi
 
 
-def parse_endpoint(openapi, tag, scope, h3):
+def parse_endpoint(openapi, tag, scope, h3, realm):
     endpoint = h3.find_next("code")
     if not endpoint:
         return
@@ -289,10 +307,20 @@ def parse_endpoint(openapi, tag, scope, h3):
     param_names = []
     # Parse the endpoint path and fill pathParts and optional_path_params
     path = endpoint_text[len(http_verb):].strip()
+    has_realm = "<realm>" in path
+    if has_realm and realm != "pc":
+        # skip endpoints that don't support this realm
+        realm_li = find_next_before(h3, "li", "h3", "realm")
+        if realm_li and realms[realm] not in realm_li.get_text():
+            return
     for part in path.split("/"):
         part = part.strip().replace("[", "")
         if part.startswith("<") and part.endswith(">"):
             pname = part[1:-1]
+            if pname == "realm":
+                if realms[realm]:
+                    pathParts.append(realms[realm])
+                continue
             pathParts.append("{" + pname + "}")
             parameters.append({
                 "name": pname,
@@ -303,6 +331,10 @@ def parse_endpoint(openapi, tag, scope, h3):
             param_names.append(pname)
         elif part.endswith("]"):
             pname = part[1:-2]
+            if pname == "realm":
+                if realms[realm]:
+                    pathParts.append(realms[realm])
+                continue
             optional_path_params.append(pname)
             pathParts.append("{" + pname + "}")
             param_names.append(pname)
@@ -342,6 +374,15 @@ def parse_endpoint(openapi, tag, scope, h3):
             param["in"] = "query"
             param["required"] = False
             param["schema"] = {"type": "string"}
+            if param["name"] == "realm":
+                if realm == "pc":
+                    # pc is the default realm, no need for the parameter
+                    continue
+                if realms[realm] not in li.get_text():
+                    # endpoint does not support this realm
+                    return
+                param["required"] = True
+                param["schema"] = {"type": "string", "enum": [realms[realm]]}
             for child in children[1:]:
                 description.append(child.text.strip())
             if description:
@@ -439,11 +480,14 @@ def parse_endpoint(openapi, tag, scope, h3):
                                        ] = def_copy
 
 
-openapi = parse_html_to_openapi(
-    "https://www.pathofexile.com/developer/docs/reference")
+soup = fetch_soup("https://www.pathofexile.com/developer/docs/reference")
 
-with open("openapi.json", "w", encoding="utf-8") as f:
-    json.dump(openapi, f, indent=2, ensure_ascii=False)
+for realm in realms:
+    openapi = build_openapi(soup, realm)
+    suffix = "-poe1" if realm == "pc" else f"-{realm}"
 
-with open("openapi.yaml", "w", encoding="utf-8") as f:
-    yaml.dump(openapi, f, allow_unicode=True, sort_keys=False)
+    with open(f"out/openapi{suffix}.json", "w", encoding="utf-8") as f:
+        json.dump(openapi, f, indent=2, ensure_ascii=False)
+
+    with open(f"out/openapi{suffix}.yaml", "w", encoding="utf-8") as f:
+        yaml.dump(openapi, f, allow_unicode=True, sort_keys=False)

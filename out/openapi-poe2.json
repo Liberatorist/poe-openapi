@@ -1,0 +1,3152 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Path of Exile 2 API",
+    "version": "0.4.0"
+  },
+  "paths": {
+    "/profile": {
+      "get": {
+        "summary": "Get Profile",
+        "operationId": "GetProfile",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "uuid": {
+                      "type": "string",
+                      "description": "UUIDv4 in canonical format"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "locale": {
+                      "type": "string"
+                    },
+                    "twitch": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name"
+                      ],
+                      "description": "present if the account is Twitch-linked"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "uuid"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "account": [
+              "account:profile"
+            ]
+          }
+        ],
+        "tags": [
+          "Account Profile"
+        ]
+      }
+    },
+    "/item-filter": {
+      "get": {
+        "summary": "Get Item Filters",
+        "operationId": "GetItemFilters",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "filters": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ItemFilter"
+                      }
+                    }
+                  },
+                  "required": [
+                    "filters"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "account": [
+              "account:item_filter"
+            ]
+          }
+        ],
+        "tags": [
+          "Account Item Filters"
+        ]
+      },
+      "post": {
+        "summary": "Create Item Filter",
+        "operationId": "CreateItemFilter",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "filter": {
+                      "$ref": "#/components/schemas/ItemFilter"
+                    }
+                  },
+                  "required": [
+                    "filter"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "account": [
+              "account:item_filter"
+            ]
+          }
+        ],
+        "tags": [
+          "Account Item Filters"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "filter_name": {
+                    "type": "string"
+                  },
+                  "realm": {
+                    "type": "string",
+                    "enum": [
+                      "pc",
+                      "xbox",
+                      "sony",
+                      "poe2"
+                    ],
+                    "description": "pc, xbox, sony, or poe2"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "version": {
+                    "type": "string"
+                  },
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "Normal",
+                      "Ruthless"
+                    ],
+                    "description": "either Normal or Ruthless"
+                  },
+                  "public": {
+                    "type": "boolean",
+                    "description": "defaults to false"
+                  },
+                  "filter": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "filter",
+                  "filter_name",
+                  "realm"
+                ]
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "description": "set to true to validate the filter against the current game version",
+            "name": "validate",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/item-filter/{id}": {
+      "get": {
+        "summary": "Get Item Filter",
+        "operationId": "GetItemFilter",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "filter": {
+                      "$ref": "#/components/schemas/ItemFilter"
+                    }
+                  },
+                  "required": [
+                    "filter"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "account": [
+              "account:item_filter"
+            ]
+          }
+        ],
+        "tags": [
+          "Account Item Filters"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      },
+      "post": {
+        "summary": "Update Item Filter",
+        "operationId": "UpdateItemFilter",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "filter": {
+                      "$ref": "#/components/schemas/ItemFilter"
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "integer",
+                          "enum": [
+                            200,
+                            202,
+                            400,
+                            404,
+                            429,
+                            500
+                          ]
+                        },
+                        "message": {
+                          "type": "string"
+                        }
+                      },
+                      "description": "an \"Accepted\" error object"
+                    }
+                  },
+                  "required": [
+                    "filter"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "account": [
+              "account:item_filter"
+            ]
+          }
+        ],
+        "tags": [
+          "Account Item Filters"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "filter_name": {
+                    "type": "string"
+                  },
+                  "realm": {
+                    "type": "string",
+                    "enum": [
+                      "pc",
+                      "xbox",
+                      "sony",
+                      "poe2"
+                    ],
+                    "description": "pc, xbox, sony, or poe2"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "version": {
+                    "type": "string"
+                  },
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "Normal",
+                      "Ruthless"
+                    ],
+                    "description": "either Normal or Ruthless"
+                  },
+                  "public": {
+                    "type": "boolean",
+                    "description": "must be true if present"
+                  },
+                  "filter": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "set to true to validate the filter against the current game version",
+            "name": "validate",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/league": {
+      "get": {
+        "summary": "List Leagues",
+        "operationId": "ListLeagues",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "leagues": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/League"
+                      }
+                    }
+                  },
+                  "required": [
+                    "leagues"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "service": [
+              "service:leagues"
+            ]
+          }
+        ],
+        "tags": [
+          "Leagues"
+        ],
+        "parameters": [
+          {
+            "description": "can be pc (default), xbox , sony , or poe2",
+            "name": "realm",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "poe2"
+              ]
+            }
+          },
+          {
+            "description": "type can be one of the following: main retrieves permanent and current challenge leagues (default)\nevent retrieves current event leagues\nseason (PoE1 only) retrieves leagues in a particular season. Use season to set the season to query",
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "restricts the amount of results returned. Maximum is 50 (default)",
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "can be used with limit above to scroll through the list",
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/league/{league}": {
+      "get": {
+        "summary": "Get League",
+        "operationId": "GetLeague",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "league": {
+                      "$ref": "#/components/schemas/League"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "service": [
+              "service:leagues"
+            ]
+          }
+        ],
+        "tags": [
+          "Leagues"
+        ],
+        "parameters": [
+          {
+            "name": "league",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "can be pc (default), xbox , sony , or poe2",
+            "name": "realm",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "poe2"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "/league/{league}/ladder": {
+      "get": {
+        "summary": "Get League Ladder",
+        "operationId": "GetLeagueLadder",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "league": {
+                      "$ref": "#/components/schemas/League"
+                    },
+                    "ladder": {
+                      "type": "object",
+                      "properties": {
+                        "total": {
+                          "type": "integer",
+                          "format": "uint32"
+                        },
+                        "cached_since": {
+                          "type": "string",
+                          "format": "date-time",
+                          "description": "date time (ISO8601)"
+                        },
+                        "entries": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/LadderEntry"
+                          }
+                        }
+                      },
+                      "required": [
+                        "entries",
+                        "total"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "ladder",
+                    "league"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "service": [
+              "service:leagues"
+            ]
+          }
+        ],
+        "tags": [
+          "Leagues"
+        ],
+        "parameters": [
+          {
+            "name": "league",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "can be pc (default), xbox , sony , or poe2",
+            "name": "realm",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "poe2"
+              ]
+            }
+          },
+          {
+            "description": "sort (PoE1 only) can be one of the following: xp sorts the ladder by experience\ndepth sorts the ladder by Delve depth\ndepthsolo sorts the ladder by Delve (Solo) depth\nancestor sorts the ladder by Ancestor rank\ntime sorts the ladder by objective finish time\nscore sorts the ladder by objective score\n\nclass returns characters of a specific class sorted by experience. Use class to set the class. Options are:\n                \nscion\nmarauder\nranger\nwitch\nduelist\ntemplar\nshadow  The default sort type will either be xp or time depending on the league.",
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "restricts the amount of results returned. Default is 20. Maximum is 500",
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "can be used with limit above to scroll through the list",
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/character/poe2": {
+      "get": {
+        "summary": "List Characters",
+        "operationId": "ListCharacters",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "characters": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Character"
+                      }
+                    }
+                  },
+                  "required": [
+                    "characters"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "account": [
+              "account:characters"
+            ]
+          }
+        ],
+        "tags": [
+          "Account Characters"
+        ]
+      }
+    },
+    "/character/poe2/{name}": {
+      "get": {
+        "summary": "Get Character",
+        "operationId": "GetCharacter",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "character": {
+                      "$ref": "#/components/schemas/Character"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "account": [
+              "account:characters"
+            ]
+          }
+        ],
+        "tags": [
+          "Account Characters"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/currency-exchange/poe2": {
+      "get": {
+        "summary": "Get Exchange Markets",
+        "operationId": "GetExchangeMarkets",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "next_change_id": {
+                      "type": "integer",
+                      "format": "uint32",
+                      "description": "unix timestamp truncated to the hour"
+                    },
+                    "markets": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "league": {
+                            "type": "string"
+                          },
+                          "market_id": {
+                            "type": "string",
+                            "enum": [
+                              "chaos|divine"
+                            ],
+                            "description": "common currency code for each pair separated by a pipe. Example: chaos|divine"
+                          },
+                          "volume_traded": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "integer",
+                              "format": "uint32"
+                            },
+                            "description": "the keys are the market currencies. Example: chaos"
+                          },
+                          "lowest_stock": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "integer",
+                              "format": "uint32"
+                            }
+                          },
+                          "highest_stock": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "integer",
+                              "format": "uint32"
+                            }
+                          },
+                          "lowest_ratio": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "integer",
+                              "format": "uint32"
+                            }
+                          },
+                          "highest_ratio": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "integer",
+                              "format": "uint32"
+                            }
+                          }
+                        },
+                        "required": [
+                          "highest_ratio",
+                          "highest_stock",
+                          "league",
+                          "lowest_ratio",
+                          "lowest_stock",
+                          "market_id",
+                          "volume_traded"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "markets",
+                    "next_change_id"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "service": [
+              "service:cxapi"
+            ]
+          }
+        ],
+        "tags": [
+          "Currency Exchange"
+        ]
+      }
+    },
+    "/currency-exchange/poe2/{id}": {
+      "get": {
+        "summary": "Get Exchange Markets (with optional: id)",
+        "operationId": "GetExchangeMarketsId",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "next_change_id": {
+                      "type": "integer",
+                      "format": "uint32",
+                      "description": "unix timestamp truncated to the hour"
+                    },
+                    "markets": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "league": {
+                            "type": "string"
+                          },
+                          "market_id": {
+                            "type": "string",
+                            "enum": [
+                              "chaos|divine"
+                            ],
+                            "description": "common currency code for each pair separated by a pipe. Example: chaos|divine"
+                          },
+                          "volume_traded": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "integer",
+                              "format": "uint32"
+                            },
+                            "description": "the keys are the market currencies. Example: chaos"
+                          },
+                          "lowest_stock": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "integer",
+                              "format": "uint32"
+                            }
+                          },
+                          "highest_stock": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "integer",
+                              "format": "uint32"
+                            }
+                          },
+                          "lowest_ratio": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "integer",
+                              "format": "uint32"
+                            }
+                          },
+                          "highest_ratio": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "integer",
+                              "format": "uint32"
+                            }
+                          }
+                        },
+                        "required": [
+                          "highest_ratio",
+                          "highest_stock",
+                          "league",
+                          "lowest_ratio",
+                          "lowest_stock",
+                          "market_id",
+                          "volume_traded"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "markets",
+                    "next_change_id"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "service": [
+              "service:cxapi"
+            ]
+          }
+        ],
+        "tags": [
+          "Currency Exchange"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.pathofexile.com"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "League": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "realm": {
+            "type": "string",
+            "enum": [
+              "pc",
+              "xbox",
+              "sony"
+            ],
+            "description": "pc, xbox, or sony"
+          },
+          "name": {
+            "type": "string",
+            "description": "the league's name"
+          },
+          "description": {
+            "type": "string"
+          },
+          "category": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "the league category, e.g. Affliction"
+              },
+              "current": {
+                "type": "boolean",
+                "description": "set for the active challenge leagues; always true if present"
+              }
+            },
+            "required": [
+              "id"
+            ]
+          },
+          "rules": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LeagueRule"
+            }
+          },
+          "registerAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "date time (ISO8601)"
+          },
+          "event": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "goal": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "description": "a url link to a Path of Exile forum thread"
+          },
+          "startAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "date time (ISO8601)"
+          },
+          "endAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "date time (ISO8601)"
+          },
+          "timedEvent": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "scoreEvent": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "delveEvent": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "ancestorEvent": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "leagueEvent": {
+            "type": "boolean",
+            "description": "always true if present"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "LeagueRule": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "enum": [
+              "Hardcore",
+              "NoParties"
+            ],
+            "description": "examples: Hardcore, NoParties (SSF)"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      },
+      "LadderEntry": {
+        "type": "object",
+        "properties": {
+          "rank": {
+            "type": "integer",
+            "format": "uint32"
+          },
+          "dead": {
+            "type": "boolean"
+          },
+          "retired": {
+            "type": "boolean"
+          },
+          "ineligible": {
+            "type": "boolean"
+          },
+          "public": {
+            "type": "boolean"
+          },
+          "character": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "a unique 64 digit hexadecimal string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "level": {
+                "type": "integer",
+                "format": "uint32"
+              },
+              "class": {
+                "type": "string"
+              },
+              "time": {
+                "type": "integer",
+                "format": "uint32",
+                "description": "time taken to complete the league objective in seconds"
+              },
+              "score": {
+                "type": "integer",
+                "format": "uint32",
+                "description": "count of league objective completions"
+              },
+              "progress": {
+                "type": "object",
+                "properties": {},
+                "description": "the values of this depend on the league objective"
+              },
+              "experience": {
+                "type": "integer",
+                "format": "uint32"
+              },
+              "depth": {
+                "type": "object",
+                "properties": {
+                  "default": {
+                    "type": "integer",
+                    "format": "uint32"
+                  },
+                  "solo": {
+                    "type": "integer",
+                    "format": "uint32"
+                  }
+                },
+                "description": "deepest Delve depth completed"
+              }
+            },
+            "required": [
+              "class",
+              "id",
+              "level",
+              "name"
+            ]
+          },
+          "account": {
+            "$ref": "#/components/schemas/Account"
+          }
+        },
+        "required": [
+          "character",
+          "rank"
+        ]
+      },
+      "EventLadderEntry": {
+        "type": "object",
+        "properties": {
+          "rank": {
+            "type": "integer",
+            "format": "uint32"
+          },
+          "ineligible": {
+            "type": "boolean"
+          },
+          "time": {
+            "type": "integer",
+            "format": "uint32",
+            "description": "time taken to complete the league objective in seconds"
+          },
+          "private_league": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string",
+                "description": "a url link to a Path of Exile Private League"
+              }
+            },
+            "required": [
+              "name",
+              "url"
+            ]
+          }
+        },
+        "required": [
+          "private_league",
+          "rank"
+        ]
+      },
+      "Account": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "realm": {
+            "type": "string",
+            "enum": [
+              "pc",
+              "xbox",
+              "sony"
+            ],
+            "description": "pc, xbox, or sony"
+          },
+          "guild": {
+            "$ref": "#/components/schemas/Guild"
+          },
+          "challenges": {
+            "type": "object",
+            "properties": {
+              "set": {
+                "type": "string",
+                "description": "the challenge set"
+              },
+              "completed": {
+                "type": "integer",
+                "format": "uint32"
+              },
+              "max": {
+                "type": "integer",
+                "format": "uint32"
+              }
+            },
+            "required": [
+              "completed",
+              "max",
+              "set"
+            ]
+          },
+          "twitch": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "stream": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "image": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "image",
+                  "name",
+                  "status"
+                ]
+              }
+            },
+            "required": [
+              "name"
+            ]
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "Guild": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "uint32"
+          },
+          "name": {
+            "type": "string"
+          },
+          "tag": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "tag"
+        ]
+      },
+      "PvPMatch": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "the match's name"
+          },
+          "realm": {
+            "type": "string",
+            "enum": [
+              "pc",
+              "xbox",
+              "sony"
+            ],
+            "description": "pc, xbox, or sony"
+          },
+          "startAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "date time (ISO8601)"
+          },
+          "endAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "date time (ISO8601)"
+          },
+          "url": {
+            "type": "string",
+            "description": "a url link to a Path of Exile forum thread"
+          },
+          "description": {
+            "type": "string"
+          },
+          "glickoRatings": {
+            "type": "boolean"
+          },
+          "pvp": {
+            "type": "boolean",
+            "description": "always true"
+          },
+          "style": {
+            "type": "string",
+            "enum": [
+              "Blitz",
+              "Swiss",
+              "Arena"
+            ],
+            "description": "Blitz, Swiss, or Arena"
+          },
+          "registerAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "date time (ISO8601)"
+          },
+          "complete": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "upcoming": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "inProgress": {
+            "type": "boolean",
+            "description": "always true if present"
+          }
+        },
+        "required": [
+          "description",
+          "glickoRatings",
+          "id",
+          "pvp",
+          "style"
+        ]
+      },
+      "PvPLadderTeamEntry": {
+        "type": "object",
+        "properties": {
+          "rank": {
+            "type": "integer",
+            "format": "uint32"
+          },
+          "rating": {
+            "type": "integer",
+            "format": "uint32",
+            "description": "only present if the PvP Match uses Glicko ratings"
+          },
+          "points": {
+            "type": "integer",
+            "format": "uint32"
+          },
+          "games_played": {
+            "type": "integer",
+            "format": "uint32"
+          },
+          "cumulative_opponent_points": {
+            "type": "integer",
+            "format": "uint32"
+          },
+          "last_game_time": {
+            "type": "string",
+            "format": "date-time",
+            "description": "date time (ISO8601)"
+          },
+          "members": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PvPLadderTeamMember"
+            }
+          }
+        },
+        "required": [
+          "members",
+          "rank"
+        ]
+      },
+      "PvPLadderTeamMember": {
+        "type": "object",
+        "properties": {
+          "account": {
+            "$ref": "#/components/schemas/Account"
+          },
+          "character": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "a unique 64 digit hexadecimal string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "level": {
+                "type": "integer",
+                "format": "uint32"
+              },
+              "class": {
+                "type": "string"
+              },
+              "league": {
+                "type": "string"
+              },
+              "score": {
+                "type": "integer",
+                "format": "uint32",
+                "description": "count of league objective completions"
+              }
+            },
+            "required": [
+              "class",
+              "id",
+              "level",
+              "name"
+            ]
+          },
+          "public": {
+            "type": "boolean",
+            "description": "always true if present"
+          }
+        },
+        "required": [
+          "account",
+          "character"
+        ]
+      },
+      "PublicStashChange": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "a unique 64 digit hexadecimal string"
+          },
+          "public": {
+            "type": "boolean",
+            "description": "if false then optional properties will be null"
+          },
+          "accountName": {
+            "type": "string"
+          },
+          "stash": {
+            "type": "string",
+            "description": "the name of the stash"
+          },
+          "stashType": {
+            "type": "string"
+          },
+          "league": {
+            "type": "string",
+            "description": "the league's name"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Item"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "items",
+          "public",
+          "stashType"
+        ]
+      },
+      "Item": {
+        "type": "object",
+        "properties": {
+          "realm": {
+            "type": "string",
+            "enum": [
+              "poe2"
+            ],
+            "description": "always poe2 if present"
+          },
+          "verified": {
+            "type": "boolean"
+          },
+          "w": {
+            "type": "integer",
+            "format": "uint32"
+          },
+          "h": {
+            "type": "integer",
+            "format": "uint32"
+          },
+          "icon": {
+            "type": "string"
+          },
+          "support": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "stackSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "maxStackSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "stackSizeText": {
+            "type": "string"
+          },
+          "iconTierText": {
+            "type": "string",
+            "description": "usually roman numerals"
+          },
+          "league": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "description": "a unique 64 digit hexadecimal string"
+          },
+          "gemSockets": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "PoE2 only; string is always W"
+          },
+          "influences": {
+            "type": "object",
+            "properties": {}
+          },
+          "elder": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "shaper": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "searing": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "tangled": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "memoryItem": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "mutated": {
+            "type": "boolean",
+            "description": "PoE1: true on Foulborn Uniques, PoE2: true on all Vaal Uniques"
+          },
+          "builtInSupport": {
+            "type": "string",
+            "description": "PoE1 only; Supported by level 1 x"
+          },
+          "monsterLevel": {
+            "type": "integer",
+            "format": "int32",
+            "description": "PoE1 only; used for items that always display their monster level"
+          },
+          "abyssJewel": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "delve": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "fractured": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "synthesised": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "sockets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemSocket"
+            }
+          },
+          "socketedItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Item"
+            }
+          },
+          "name": {
+            "type": "string"
+          },
+          "typeLine": {
+            "type": "string"
+          },
+          "baseType": {
+            "type": "string"
+          },
+          "rarity": {
+            "type": "string",
+            "enum": [
+              "Normal",
+              "Magic",
+              "Rare",
+              "Unique"
+            ],
+            "description": "Normal, Magic, Rare, or Unique"
+          },
+          "identified": {
+            "type": "boolean"
+          },
+          "itemLevel": {
+            "type": "integer",
+            "format": "int32",
+            "description": "used for items that always display their item level"
+          },
+          "unidentifiedTier": {
+            "type": "integer",
+            "format": "int32",
+            "description": "PoE2 only"
+          },
+          "ilvl": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "note": {
+            "type": "string",
+            "description": "user-generated text"
+          },
+          "forum_note": {
+            "type": "string",
+            "description": "user-generated text"
+          },
+          "lockedToCharacter": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "lockedToAccount": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "duplicated": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "split": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "corrupted": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "doubleCorrupted": {
+            "type": "boolean",
+            "description": "PoE2 only; always true if present"
+          },
+          "sanctified": {
+            "type": "boolean",
+            "description": "PoE2 only; always true if present"
+          },
+          "unmodifiable": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "unmodifiableExceptChaos": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "cisRaceReward": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "seaRaceReward": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "thRaceReward": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "properties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemProperty"
+            }
+          },
+          "notableProperties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemProperty"
+            }
+          },
+          "requirements": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemProperty"
+            }
+          },
+          "weaponRequirements": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemProperty"
+            },
+            "description": "PoE2 only"
+          },
+          "supportGemRequirements": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemProperty"
+            },
+            "description": "PoE2 only"
+          },
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemProperty"
+            }
+          },
+          "tamedBeastProperties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemProperty"
+            },
+            "description": "PoE2 only"
+          },
+          "nextLevelRequirements": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemProperty"
+            }
+          },
+          "grantedSkills": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemProperty"
+            },
+            "description": "PoE2 only"
+          },
+          "talismanTier": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rewards": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string"
+                },
+                "rewards": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "description": "the key is a string representing the type of reward. The value is the amount"
+                }
+              },
+              "required": [
+                "label",
+                "rewards"
+              ]
+            }
+          },
+          "secDescrText": {
+            "type": "string"
+          },
+          "utilityMods": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "logbookMods": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "area name"
+                },
+                "faction": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "enum": [
+                        "Faction1",
+                        "Faction2",
+                        "Faction3",
+                        "Faction4"
+                      ],
+                      "description": "Faction1, Faction2, Faction3, or Faction4"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name"
+                  ]
+                }
+              },
+              "required": [
+                "faction",
+                "name"
+              ]
+            }
+          },
+          "enchantMods": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "runeMods": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "PoE2 only"
+          },
+          "scourgeMods": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "implicitMods": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "ultimatumMods": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "description": "text used to display ultimatum icons"
+                },
+                "tier": {
+                  "type": "integer",
+                  "format": "uint32"
+                }
+              },
+              "required": [
+                "tier",
+                "type"
+              ]
+            }
+          },
+          "explicitMods": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "bondedMods": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "PoE2 only"
+          },
+          "craftedMods": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "fracturedMods": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "mutatedMods": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "PoE1: Foulborn Unique mods, PoE2: Vaal Unique mods"
+          },
+          "crucibleMods": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "only allocated mods are included"
+          },
+          "cosmeticMods": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "veiledMods": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "random video identifier"
+          },
+          "veiled": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "desecratedMods": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "PoE2 only"
+          },
+          "desecrated": {
+            "type": "boolean",
+            "description": "PoE2 only; always true if present"
+          },
+          "gemTabs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GemTab"
+            },
+            "description": "PoE2 only"
+          },
+          "gemBackground": {
+            "type": "string",
+            "description": "PoE2 only"
+          },
+          "gemSkill": {
+            "type": "string",
+            "description": "PoE2 only"
+          },
+          "descrText": {
+            "type": "string"
+          },
+          "flavourText": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "flavourTextNote": {
+            "type": "string",
+            "description": "user-generated text"
+          },
+          "prophecyText": {
+            "type": "string"
+          },
+          "isRelic": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "foilVariation": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "replica": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "foreseeing": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "incubatedItem": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "level": {
+                "type": "integer",
+                "format": "uint32",
+                "description": "monster level required to progress"
+              },
+              "progress": {
+                "type": "integer",
+                "format": "uint32"
+              },
+              "total": {
+                "type": "integer",
+                "format": "uint32"
+              }
+            },
+            "required": [
+              "level",
+              "name",
+              "progress",
+              "total"
+            ]
+          },
+          "scourged": {
+            "type": "object",
+            "properties": {
+              "tier": {
+                "type": "integer",
+                "format": "uint32",
+                "description": "1-3 for items, 1-10 for maps"
+              },
+              "level": {
+                "type": "integer",
+                "format": "uint32",
+                "description": "monster level required to progress"
+              },
+              "progress": {
+                "type": "integer",
+                "format": "uint32"
+              },
+              "total": {
+                "type": "integer",
+                "format": "uint32"
+              }
+            },
+            "required": [
+              "tier"
+            ]
+          },
+          "crucible": {
+            "type": "object",
+            "properties": {
+              "layout": {
+                "type": "string",
+                "description": "URL to an image of the tree layout"
+              },
+              "nodes": {
+                "type": "object",
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/CrucibleNode"
+                },
+                "description": "the key is the string value of the node index"
+              }
+            },
+            "required": [
+              "layout",
+              "nodes"
+            ]
+          },
+          "ruthless": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "frameType": {
+            "type": "integer",
+            "format": "uint32",
+            "description": "deprecated; use frameTypeId"
+          },
+          "frameTypeId": {
+            "type": "string"
+          },
+          "artFilename": {
+            "type": "string"
+          },
+          "hybrid": {
+            "type": "object",
+            "properties": {
+              "isVaalGem": {
+                "type": "boolean"
+              },
+              "baseTypeName": {
+                "type": "string"
+              },
+              "properties": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ItemProperty"
+                }
+              },
+              "explicitMods": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "secDescrText": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "baseTypeName"
+            ]
+          },
+          "extended": {
+            "type": "object",
+            "properties": {
+              "prefixes": {
+                "type": "integer",
+                "format": "uint32"
+              },
+              "suffixes": {
+                "type": "integer",
+                "format": "uint32"
+              }
+            },
+            "description": "only present in the Public Stash API"
+          },
+          "x": {
+            "type": "integer",
+            "format": "uint32"
+          },
+          "y": {
+            "type": "integer",
+            "format": "uint32"
+          },
+          "inventoryId": {
+            "type": "string"
+          },
+          "socket": {
+            "type": "integer",
+            "format": "uint32"
+          },
+          "colour": {
+            "type": "string",
+            "enum": [
+              "S",
+              "D",
+              "I",
+              "G"
+            ],
+            "description": "PoE1 only; S, D, I, or G"
+          },
+          "socketedIcon": {
+            "type": "string",
+            "description": "PoE2 only; an image URL to use when this item is in the socket of another item"
+          }
+        },
+        "required": [
+          "baseType",
+          "frameTypeId",
+          "h",
+          "icon",
+          "identified",
+          "ilvl",
+          "name",
+          "typeLine",
+          "verified",
+          "w"
+        ]
+      },
+      "ItemSocket": {
+        "type": "object",
+        "properties": {
+          "group": {
+            "type": "integer",
+            "format": "uint32"
+          },
+          "attr": {
+            "type": "string",
+            "enum": [
+              "S",
+              "D",
+              "I",
+              "G",
+              "A",
+              "DV"
+            ],
+            "description": "PoE1 only; S, D, I, G, A, or DV"
+          },
+          "sColour": {
+            "type": "string",
+            "enum": [
+              "R",
+              "G",
+              "B",
+              "W",
+              "A",
+              "DV"
+            ],
+            "description": "PoE1 only; R, G, B, W, A, or DV"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "gem",
+              "jewel",
+              "rune"
+            ],
+            "description": "PoE2 only; gem, jewel, or rune"
+          },
+          "item": {
+            "type": "string",
+            "enum": [
+              "emerald",
+              "sapphire",
+              "ruby",
+              "rune",
+              "soulcore",
+              "primaltalisman",
+              "vividtalisman",
+              "wildtalisman",
+              "sacredtalisman",
+              "activegem",
+              "supportgem"
+            ],
+            "description": "PoE2 only; emerald, sapphire, ruby, rune, soulcore, primaltalisman, vividtalisman, wildtalisman, sacredtalisman, activegem, or supportgem"
+          }
+        },
+        "required": [
+          "group"
+        ]
+      },
+      "ItemProperty": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "values": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer",
+                    "format": "uint32"
+                  }
+                ]
+              },
+              "minItems": 2,
+              "maxItems": 2
+            }
+          },
+          "displayMode": {
+            "type": "integer",
+            "format": "uint32"
+          },
+          "progress": {
+            "type": "number",
+            "format": "double",
+            "description": "rounded to 2 decimal places"
+          },
+          "type": {
+            "type": "integer",
+            "format": "uint32"
+          },
+          "suffix": {
+            "type": "string"
+          },
+          "icon": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "values"
+        ]
+      },
+      "Character": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "a unique 64 digit hexadecimal string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "realm": {
+            "type": "string",
+            "enum": [
+              "pc",
+              "xbox",
+              "sony"
+            ],
+            "description": "pc, xbox, or sony"
+          },
+          "class": {
+            "type": "string"
+          },
+          "league": {
+            "type": "string"
+          },
+          "level": {
+            "type": "integer",
+            "format": "uint32"
+          },
+          "experience": {
+            "type": "integer",
+            "format": "uint32"
+          },
+          "ruthless": {
+            "type": "boolean",
+            "description": "PoE1 only; always true if present"
+          },
+          "expired": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "deleted": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "current": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "equipment": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Item"
+            }
+          },
+          "skills": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Item"
+            },
+            "description": "PoE2 only"
+          },
+          "inventory": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Item"
+            },
+            "description": "PoE1 only"
+          },
+          "rucksack": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Item"
+            },
+            "description": "PoE1 only"
+          },
+          "jewels": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Item"
+            }
+          },
+          "passives": {
+            "type": "object",
+            "properties": {
+              "hashes": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "uint32"
+                }
+              },
+              "hashes_ex": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "uint32"
+                },
+                "description": "PoE1 only"
+              },
+              "mastery_effects": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "description": "PoE1 only; the key is the string value of the mastery node skill hash and the value is the selected effect hash"
+              },
+              "specialisations": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "format": "int32"
+                  }
+                },
+                "description": "PoE2 only; the keys are set1, set2, and set3"
+              },
+              "skill_overrides": {
+                "type": "object",
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/PassiveNode"
+                },
+                "description": "the key is the string value of the node identifier being replaced"
+              },
+              "bandit_choice": {
+                "type": "string",
+                "enum": [
+                  "Kraityn",
+                  "Alira",
+                  "Oak",
+                  "Eramir"
+                ],
+                "description": "PoE1 only; one of Kraityn, Alira, Oak, or Eramir"
+              },
+              "pantheon_major": {
+                "type": "string",
+                "enum": [
+                  "TheBrineKing",
+                  "Arakaali",
+                  "Solaris",
+                  "Lunaris"
+                ],
+                "description": "PoE1 only; one of TheBrineKing, Arakaali, Solaris, or Lunaris"
+              },
+              "pantheon_minor": {
+                "type": "string",
+                "enum": [
+                  "Abberath",
+                  "Gruthkul",
+                  "Yugul",
+                  "Shakari",
+                  "Tukohama",
+                  "Ralakesh",
+                  "Garukhan",
+                  "Ryslatha"
+                ],
+                "description": "PoE1 only; one of Abberath, Gruthkul, Yugul, Shakari, Tukohama, Ralakesh, Garukhan, or Ryslatha"
+              },
+              "jewel_data": {
+                "type": "object",
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/ItemJewelData"
+                },
+                "description": "the key is the string value of the x property of an item from the jewels array in this request"
+              },
+              "quest_stats": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "PoE2 only; passives granted via quests"
+              },
+              "alternate_ascendancy": {
+                "type": "string",
+                "description": "PoE1 only; Bloodline class name"
+              }
+            },
+            "required": [
+              "hashes",
+              "hashes_ex",
+              "jewel_data",
+              "mastery_effects",
+              "skill_overrides",
+              "specialisations"
+            ]
+          },
+          "metadata": {
+            "type": "object",
+            "properties": {
+              "version": {
+                "type": "string",
+                "description": "game version for the character's realm"
+              }
+            }
+          }
+        },
+        "required": [
+          "class",
+          "experience",
+          "id",
+          "level",
+          "name",
+          "realm"
+        ]
+      },
+      "ItemJewelData": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "radius": {
+            "type": "integer",
+            "format": "uint32"
+          },
+          "radiusMin": {
+            "type": "integer",
+            "format": "uint32"
+          },
+          "radiusVisual": {
+            "type": "string"
+          },
+          "subgraph": {
+            "type": "object",
+            "properties": {
+              "groups": {
+                "type": "object",
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/PassiveGroup"
+                },
+                "description": "the key is the string value of the group id"
+              },
+              "nodes": {
+                "type": "object",
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/PassiveNode"
+                },
+                "description": "the key is the string value of the node identifier"
+              }
+            },
+            "required": [
+              "groups",
+              "nodes"
+            ],
+            "description": "only present on cluster jewels"
+          }
+        },
+        "required": [
+          "type"
+        ]
+      },
+      "StashTab": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "a 10 digit hexadecimal string"
+          },
+          "parent": {
+            "type": "string",
+            "description": "a 10 digit hexadecimal string"
+          },
+          "folder": {
+            "type": "string",
+            "description": "a 10 digit hexadecimal string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "index": {
+            "type": "integer",
+            "format": "uint32"
+          },
+          "metadata": {
+            "type": "object",
+            "properties": {
+              "public": {
+                "type": "boolean",
+                "description": "always true if present"
+              },
+              "folder": {
+                "type": "boolean",
+                "description": "always true if present"
+              },
+              "colour": {
+                "type": "string",
+                "description": "6 digit hex colour"
+              },
+              "map": {
+                "type": "object",
+                "properties": {},
+                "description": "various game specific properties"
+              }
+            }
+          },
+          "children": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StashTab"
+            }
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Item"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "metadata",
+          "name",
+          "type"
+        ]
+      },
+      "LeagueAccount": {
+        "type": "object",
+        "properties": {
+          "atlas_passives": {
+            "type": "object",
+            "properties": {
+              "hashes": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "uint32"
+                }
+              }
+            },
+            "required": [
+              "hashes"
+            ]
+          },
+          "atlas_passive_trees": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "hashes": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "format": "uint32"
+                  }
+                }
+              },
+              "required": [
+                "hashes",
+                "name"
+              ]
+            }
+          }
+        },
+        "required": [
+          "atlas_passive_trees"
+        ]
+      },
+      "ItemFilter": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "filter_name": {
+            "type": "string"
+          },
+          "realm": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "Normal",
+              "Ruthless"
+            ],
+            "description": "either Normal or Ruthless"
+          },
+          "public": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "filter": {
+            "type": "string",
+            "description": "not present when listing all filters"
+          },
+          "validation": {
+            "type": "object",
+            "properties": {
+              "valid": {
+                "type": "boolean"
+              },
+              "version": {
+                "type": "string",
+                "description": "game version"
+              },
+              "validated": {
+                "type": "string",
+                "format": "date-time",
+                "description": "date time (ISO8601)"
+              }
+            },
+            "required": [
+              "valid"
+            ],
+            "description": "not present when listing all filters"
+          }
+        },
+        "required": [
+          "description",
+          "filter_name",
+          "id",
+          "realm",
+          "type",
+          "version"
+        ]
+      },
+      "PassiveGroup": {
+        "type": "object",
+        "properties": {
+          "x": {
+            "type": "number"
+          },
+          "y": {
+            "type": "number"
+          },
+          "orbits": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "uint32"
+            }
+          },
+          "isProxy": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "proxy": {
+            "type": "string",
+            "description": "identifier of the placeholder node"
+          },
+          "nodes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "the node identifiers associated with this group"
+          }
+        },
+        "required": [
+          "nodes",
+          "orbits",
+          "x",
+          "y"
+        ]
+      },
+      "PassiveNode": {
+        "type": "object",
+        "properties": {
+          "skill": {
+            "type": "integer",
+            "format": "uint32",
+            "description": "skill hash"
+          },
+          "name": {
+            "type": "string"
+          },
+          "icon": {
+            "type": "string"
+          },
+          "isKeystone": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "isNotable": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "isMastery": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "inactiveIcon": {
+            "type": "string",
+            "description": "inactive mastery image"
+          },
+          "activeIcon": {
+            "type": "string",
+            "description": "active mastery image"
+          },
+          "activeEffectImage": {
+            "type": "string",
+            "description": "active mastery or tattoo background image"
+          },
+          "masteryEffects": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "effect": {
+                  "type": "integer",
+                  "format": "uint32",
+                  "description": "effect hash"
+                },
+                "stats": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "stat descriptions"
+                },
+                "reminderText": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "effect",
+                "stats"
+              ]
+            }
+          },
+          "isBlighted": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "isTattoo": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "isProxy": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "isJewelSocket": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "expansionJewel": {
+            "type": "object",
+            "properties": {
+              "size": {
+                "type": "integer",
+                "format": "uint32"
+              },
+              "index": {
+                "type": "integer",
+                "format": "uint32"
+              },
+              "proxy": {
+                "type": "integer",
+                "format": "uint32",
+                "description": "the proxy node identifier"
+              },
+              "parent": {
+                "type": "integer",
+                "format": "uint32",
+                "description": "the parent node identifier"
+              }
+            },
+            "description": "cluster jewel information"
+          },
+          "recipe": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "components required for Blight crafting this node.\n            each string is one of ClearOil, SepiaOil, AmberOil, VerdantOil,\nTealOil, AzureOil, IndigoOil, VioletOil, CrimsonOil,\nBlackOil, OpalescentOil, SilverOil, GoldenOil, or PrismaticOil"
+          },
+          "grantedStrength": {
+            "type": "integer",
+            "format": "uint32",
+            "description": "sum of stats on this node that grant strength"
+          },
+          "grantedDexterity": {
+            "type": "integer",
+            "format": "uint32",
+            "description": "sum of stats on this node that grant dexterity"
+          },
+          "grantedIntelligence": {
+            "type": "integer",
+            "format": "uint32",
+            "description": "sum of stats on this node that grant intelligence"
+          },
+          "ascendancyName": {
+            "type": "string"
+          },
+          "isAscendancyStart": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "isMultipleChoice": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "isMultipleChoiceOption": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "grantedPassivePoints": {
+            "type": "integer",
+            "format": "uint32"
+          },
+          "stats": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "stat descriptions"
+          },
+          "reminderText": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "flavourText": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "classStartIndex": {
+            "type": "integer",
+            "format": "uint32"
+          },
+          "group": {
+            "type": "string",
+            "description": "the key value to look up in the groups table"
+          },
+          "orbit": {
+            "type": "integer",
+            "format": "uint32",
+            "description": "the orbit this node occupies within it's group"
+          },
+          "orbitIndex": {
+            "type": "integer",
+            "format": "uint32",
+            "description": "the index of this node in the group's orbit"
+          },
+          "out": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "node identifiers of nodes this one connects to"
+          },
+          "in": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "node identifiers of nodes connected to this one"
+          }
+        },
+        "required": [
+          "in",
+          "out"
+        ]
+      },
+      "CrucibleNode": {
+        "type": "object",
+        "properties": {
+          "skill": {
+            "type": "integer",
+            "format": "uint32",
+            "description": "mod hash"
+          },
+          "tier": {
+            "type": "integer",
+            "format": "uint32",
+            "description": "mod tier"
+          },
+          "icon": {
+            "type": "string"
+          },
+          "allocated": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "isNotable": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "isReward": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "stats": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "stat descriptions"
+          },
+          "reminderText": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "orbit": {
+            "type": "integer",
+            "format": "uint32",
+            "description": "the column this node occupies"
+          },
+          "orbitIndex": {
+            "type": "integer",
+            "format": "uint32",
+            "description": "the node's position within the column"
+          },
+          "out": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "node identifiers of nodes this one connects to"
+          },
+          "in": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "node identifiers of nodes connected to this one"
+          }
+        },
+        "required": [
+          "in",
+          "out"
+        ]
+      },
+      "GemTab": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "pages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GemPage"
+            }
+          }
+        },
+        "required": [
+          "pages"
+        ]
+      },
+      "GemPage": {
+        "type": "object",
+        "properties": {
+          "skillName": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "properties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemProperty"
+            }
+          },
+          "stats": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "service": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://www.pathofexile.com/oauth/token",
+            "scopes": {
+              "service:leagues": "for fetching leagues.",
+              "service:leagues:ladder": "for fetching league ladders.",
+              "service:pvp_matches": "for fetching PvP matches.",
+              "service:pvp_matches:ladder": "for fetching PvP match ladders.",
+              "service:psapi": "for access to the Public Stash API."
+            }
+          }
+        }
+      },
+      "account": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "tokenUrl": "https://www.pathofexile.com/oauth/token",
+            "authorizationUrl": "https://www.pathofexile.com/oauth/authorize",
+            "scopes": {
+              "account:profile": "for access to the account's basic profile information.",
+              "account:leagues": "for viewing the account's available leagues (including private leagues).",
+              "account:stashes": "for viewing the account's stashes and items.",
+              "account:characters": "for viewing the account's characters and inventories.",
+              "account:league_accounts": "for viewing the account's allocated atlas passives.",
+              "account:item_filter": "for managing the account's item filters."
+            }
+          }
+        }
+      },
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  },
+  "parameters": [
+    {
+      "name": "User-Agent",
+      "in": "header",
+      "required": true,
+      "schema": {
+        "type": "string"
+      },
+      "description": "format: OAuth {$clientId}/{$version} (contact: {$contact})"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Account Profile"
+    },
+    {
+      "name": "Account Item Filters"
+    },
+    {
+      "name": "Leagues"
+    },
+    {
+      "name": "PvP Matches (PoE1 only)"
+    },
+    {
+      "name": "Account Leagues (PoE1 only)"
+    },
+    {
+      "name": "Account Characters"
+    },
+    {
+      "name": "Account Stashes (PoE1 only)"
+    },
+    {
+      "name": "League Accounts (PoE1 only)"
+    },
+    {
+      "name": "Guild Stashes (PoE1 only)"
+    },
+    {
+      "name": "Public Stashes (PoE1 only)"
+    },
+    {
+      "name": "Currency Exchange"
+    }
+  ]
+}

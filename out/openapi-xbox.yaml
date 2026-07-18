@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: Path of Exile API
+  title: Path of Exile API (Xbox)
   version: 3.27.0
 paths:
   /profile:
@@ -263,9 +263,11 @@ paths:
       - description: can be pc (default), xbox , sony , or poe2
         name: realm
         in: query
-        required: false
+        required: true
         schema:
           type: string
+          enum:
+          - xbox
       - description: 'type can be one of the following: main retrieves permanent and
           current challenge leagues (default)
 
@@ -319,9 +321,11 @@ paths:
       - description: can be pc (default), xbox , sony , or poe2
         name: realm
         in: query
-        required: false
+        required: true
         schema:
           type: string
+          enum:
+          - xbox
   /league/{league}/ladder:
     get:
       summary: Get League Ladder
@@ -371,9 +375,11 @@ paths:
       - description: can be pc (default), xbox , sony , or poe2
         name: realm
         in: query
-        required: false
+        required: true
         schema:
           type: string
+          enum:
+          - xbox
       - description: "sort (PoE1 only) can be one of the following: xp sorts the ladder\
           \ by experience\ndepth sorts the ladder by Delve depth\ndepthsolo sorts\
           \ the ladder by Delve (Solo) depth\nancestor sorts the ladder by Ancestor\
@@ -445,9 +451,11 @@ paths:
       - description: can be pc (default), xbox , or sony
         name: realm
         in: query
-        required: false
+        required: true
         schema:
           type: string
+          enum:
+          - xbox
       - description: restricts the amount of results returned. Default is 20. Maximum
           is 500
         name: limit
@@ -489,9 +497,11 @@ paths:
       - description: can be pc (default), xbox , or sony
         name: realm
         in: query
-        required: false
+        required: true
         schema:
           type: string
+          enum:
+          - xbox
       - description: 'type can be one of the following: upcoming retrieves upcoming
           matches (default)
 
@@ -534,9 +544,11 @@ paths:
       - description: can be pc (default), xbox , or sony
         name: realm
         in: query
-        required: false
+        required: true
         schema:
           type: string
+          enum:
+          - xbox
   /pvp-match/{match}/ladder:
     get:
       summary: Get PvP Match Ladder
@@ -582,9 +594,11 @@ paths:
       - description: can be pc (default), xbox , or sony
         name: realm
         in: query
-        required: false
+        required: true
         schema:
           type: string
+          enum:
+          - xbox
       - description: restricts the amount of results returned. Default is 20. Maximum
           is 200
         name: limit
@@ -598,11 +612,11 @@ paths:
         required: false
         schema:
           type: string
-  /account/leagues:
+  /account/leagues/xbox:
     get:
       summary: Get Leagues
       operationId: GetLeagues
-      responses: &id001
+      responses:
         '200':
           description: Successful response
           content:
@@ -616,30 +630,17 @@ paths:
                       $ref: '#/components/schemas/League'
                 required:
                 - leagues
-      security: &id002
+      security:
       - bearerAuth: []
       - account:
         - account:leagues
-      tags: &id003
+      tags:
       - Account Leagues (PoE1 only)
-  /account/leagues/{realm}:
-    get:
-      summary: 'Get Leagues (with optional: realm)'
-      operationId: GetLeaguesRealm
-      responses: *id001
-      security: *id002
-      tags: *id003
-      parameters:
-      - name: realm
-        in: path
-        required: true
-        schema:
-          type: string
-  /character:
+  /character/xbox:
     get:
       summary: List Characters
       operationId: ListCharacters
-      responses: &id004
+      responses:
         '200':
           description: Successful response
           content:
@@ -653,30 +654,17 @@ paths:
                       $ref: '#/components/schemas/Character'
                 required:
                 - characters
-      security: &id005
+      security:
       - bearerAuth: []
       - account:
         - account:characters
-      tags: &id006
+      tags:
       - Account Characters
-  /character/{realm}:
-    get:
-      summary: 'List Characters (with optional: realm)'
-      operationId: ListCharactersRealm
-      responses: *id004
-      security: *id005
-      tags: *id006
-      parameters:
-      - name: realm
-        in: path
-        required: true
-        schema:
-          type: string
-  /character/{name}:
+  /character/xbox/{name}:
     get:
       summary: Get Character
       operationId: GetCharacter
-      responses: &id007
+      responses:
         '200':
           description: Successful response
           content:
@@ -686,11 +674,11 @@ paths:
                 properties:
                   character:
                     $ref: '#/components/schemas/Character'
-      security: &id008
+      security:
       - bearerAuth: []
       - account:
         - account:characters
-      tags: &id009
+      tags:
       - Account Characters
       parameters:
       - name: name
@@ -698,29 +686,11 @@ paths:
         required: true
         schema:
           type: string
-  /character/{realm}/{name}:
-    get:
-      summary: 'Get Character (with optional: realm)'
-      operationId: GetCharacterRealm
-      responses: *id007
-      security: *id008
-      tags: *id009
-      parameters:
-      - name: realm
-        in: path
-        required: true
-        schema:
-          type: string
-      - name: name
-        in: path
-        required: true
-        schema:
-          type: string
-  /stash/{league}:
+  /stash/xbox/{league}:
     get:
       summary: List Stashes
       operationId: ListStashes
-      responses: &id010
+      responses:
         '200':
           description: Successful response
           content:
@@ -734,11 +704,11 @@ paths:
                       $ref: '#/components/schemas/StashTab'
                 required:
                 - stashes
-      security: &id011
+      security:
       - bearerAuth: []
       - account:
         - account:stashes
-      tags: &id012
+      tags:
       - Account Stashes (PoE1 only)
       parameters:
       - name: league
@@ -746,29 +716,11 @@ paths:
         required: true
         schema:
           type: string
-  /stash/{realm}/{league}:
-    get:
-      summary: 'List Stashes (with optional: realm)'
-      operationId: ListStashesRealm
-      responses: *id010
-      security: *id011
-      tags: *id012
-      parameters:
-      - name: realm
-        in: path
-        required: true
-        schema:
-          type: string
-      - name: league
-        in: path
-        required: true
-        schema:
-          type: string
-  /stash/{league}/{stash_id}:
+  /stash/xbox/{league}/{stash_id}:
     get:
       summary: Get Stash
       operationId: GetStash
-      responses: &id013
+      responses: &id001
         '200':
           description: Successful response
           content:
@@ -778,11 +730,11 @@ paths:
                 properties:
                   stash:
                     $ref: '#/components/schemas/StashTab'
-      security: &id014
+      security: &id002
       - bearerAuth: []
       - account:
         - account:stashes
-      tags: &id015
+      tags: &id003
       - Account Stashes (PoE1 only)
       parameters:
       - name: league
@@ -795,13 +747,13 @@ paths:
         required: true
         schema:
           type: string
-  /stash/{league}/{stash_id}/{substash_id}:
+  /stash/xbox/{league}/{stash_id}/{substash_id}:
     get:
       summary: 'Get Stash (with optional: substash_id)'
       operationId: GetStashSubstash_id
-      responses: *id013
-      security: *id014
-      tags: *id015
+      responses: *id001
+      security: *id002
+      tags: *id003
       parameters:
       - name: league
         in: path
@@ -818,62 +770,11 @@ paths:
         required: true
         schema:
           type: string
-  /stash/{realm}/{league}/{stash_id}:
-    get:
-      summary: 'Get Stash (with optional: realm)'
-      operationId: GetStashRealm
-      responses: *id013
-      security: *id014
-      tags: *id015
-      parameters:
-      - name: realm
-        in: path
-        required: true
-        schema:
-          type: string
-      - name: league
-        in: path
-        required: true
-        schema:
-          type: string
-      - name: stash_id
-        in: path
-        required: true
-        schema:
-          type: string
-  /stash/{realm}/{league}/{stash_id}/{substash_id}:
-    get:
-      summary: 'Get Stash (with optional: realm, substash_id)'
-      operationId: GetStashRealmSubstash_id
-      responses: *id013
-      security: *id014
-      tags: *id015
-      parameters:
-      - name: realm
-        in: path
-        required: true
-        schema:
-          type: string
-      - name: league
-        in: path
-        required: true
-        schema:
-          type: string
-      - name: stash_id
-        in: path
-        required: true
-        schema:
-          type: string
-      - name: substash_id
-        in: path
-        required: true
-        schema:
-          type: string
-  /league-account/{league}:
+  /league-account/xbox/{league}:
     get:
       summary: Get League Account
       operationId: GetLeagueAccount
-      responses: &id016
+      responses:
         '200':
           description: Successful response
           content:
@@ -885,11 +786,11 @@ paths:
                     $ref: '#/components/schemas/LeagueAccount'
                 required:
                 - league_account
-      security: &id017
+      security:
       - bearerAuth: []
       - account:
         - account:league_accounts
-      tags: &id018
+      tags:
       - League Accounts (PoE1 only)
       parameters:
       - name: league
@@ -897,29 +798,11 @@ paths:
         required: true
         schema:
           type: string
-  /league-account/{realm}/{league}:
-    get:
-      summary: 'Get League Account (with optional: realm)'
-      operationId: GetLeagueAccountRealm
-      responses: *id016
-      security: *id017
-      tags: *id018
-      parameters:
-      - name: realm
-        in: path
-        required: true
-        schema:
-          type: string
-      - name: league
-        in: path
-        required: true
-        schema:
-          type: string
-  /guild/stash/{league}:
+  /guild/xbox/stash/{league}:
     get:
       summary: List Guild Stashes
       operationId: ListGuildStashes
-      responses: &id019
+      responses:
         '200':
           description: Successful response
           content:
@@ -933,11 +816,11 @@ paths:
                       $ref: '#/components/schemas/StashTab'
                 required:
                 - stashes
-      security: &id020
+      security:
       - bearerAuth: []
       - account:
         - account:guild:stashes
-      tags: &id021
+      tags:
       - Guild Stashes (PoE1 only)
       parameters:
       - name: league
@@ -945,29 +828,11 @@ paths:
         required: true
         schema:
           type: string
-  /guild/{realm}/stash/{league}:
-    get:
-      summary: 'List Guild Stashes (with optional: realm)'
-      operationId: ListGuildStashesRealm
-      responses: *id019
-      security: *id020
-      tags: *id021
-      parameters:
-      - name: realm
-        in: path
-        required: true
-        schema:
-          type: string
-      - name: league
-        in: path
-        required: true
-        schema:
-          type: string
-  /guild/stash/{league}/{stash_id}:
+  /guild/xbox/stash/{league}/{stash_id}:
     get:
       summary: Get Guild Stash
       operationId: GetGuildStash
-      responses: &id022
+      responses: &id004
         '200':
           description: Successful response
           content:
@@ -977,11 +842,11 @@ paths:
                 properties:
                   stash:
                     $ref: '#/components/schemas/StashTab'
-      security: &id023
+      security: &id005
       - bearerAuth: []
       - account:
         - account:guild:stashes
-      tags: &id024
+      tags: &id006
       - Guild Stashes (PoE1 only)
       parameters:
       - name: league
@@ -994,13 +859,13 @@ paths:
         required: true
         schema:
           type: string
-  /guild/stash/{league}/{stash_id}/{substash_id}:
+  /guild/xbox/stash/{league}/{stash_id}/{substash_id}:
     get:
       summary: 'Get Guild Stash (with optional: substash_id)'
       operationId: GetGuildStashSubstash_id
-      responses: *id022
-      security: *id023
-      tags: *id024
+      responses: *id004
+      security: *id005
+      tags: *id006
       parameters:
       - name: league
         in: path
@@ -1017,62 +882,11 @@ paths:
         required: true
         schema:
           type: string
-  /guild/{realm}/stash/{league}/{stash_id}:
-    get:
-      summary: 'Get Guild Stash (with optional: realm)'
-      operationId: GetGuildStashRealm
-      responses: *id022
-      security: *id023
-      tags: *id024
-      parameters:
-      - name: realm
-        in: path
-        required: true
-        schema:
-          type: string
-      - name: league
-        in: path
-        required: true
-        schema:
-          type: string
-      - name: stash_id
-        in: path
-        required: true
-        schema:
-          type: string
-  /guild/{realm}/stash/{league}/{stash_id}/{substash_id}:
-    get:
-      summary: 'Get Guild Stash (with optional: realm, substash_id)'
-      operationId: GetGuildStashRealmSubstash_id
-      responses: *id022
-      security: *id023
-      tags: *id024
-      parameters:
-      - name: realm
-        in: path
-        required: true
-        schema:
-          type: string
-      - name: league
-        in: path
-        required: true
-        schema:
-          type: string
-      - name: stash_id
-        in: path
-        required: true
-        schema:
-          type: string
-      - name: substash_id
-        in: path
-        required: true
-        schema:
-          type: string
-  /public-stash-tabs:
+  /public-stash-tabs/xbox:
     get:
       summary: Get Public Stashes
       operationId: GetPublicStashes
-      responses: &id025
+      responses:
         '200':
           description: Successful response
           content:
@@ -1090,30 +904,24 @@ paths:
                 required:
                 - next_change_id
                 - stashes
-      security: &id026
+      security:
       - bearerAuth: []
       - service:
         - service:psapi
-      tags: &id027
+      tags:
       - Public Stashes (PoE1 only)
-  /public-stash-tabs/{realm}:
-    get:
-      summary: 'Get Public Stashes (with optional: realm)'
-      operationId: GetPublicStashesRealm
-      responses: *id025
-      security: *id026
-      tags: *id027
       parameters:
-      - name: realm
-        in: path
-        required: true
+      - description: is a pagination code received from this endpoint
+        name: id
+        in: query
+        required: false
         schema:
           type: string
-  /currency-exchange:
+  /currency-exchange/xbox:
     get:
       summary: Get Exchange Markets
       operationId: GetExchangeMarkets
-      responses: &id028
+      responses: &id007
         '200':
           description: Successful response
           content:
@@ -1176,51 +984,20 @@ paths:
                 required:
                 - markets
                 - next_change_id
-      security: &id029
+      security: &id008
       - bearerAuth: []
       - service:
         - service:cxapi
-      tags: &id030
+      tags: &id009
       - Currency Exchange
-  /currency-exchange/{id}:
+  /currency-exchange/xbox/{id}:
     get:
       summary: 'Get Exchange Markets (with optional: id)'
       operationId: GetExchangeMarketsId
-      responses: *id028
-      security: *id029
-      tags: *id030
+      responses: *id007
+      security: *id008
+      tags: *id009
       parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-  /currency-exchange/{realm}:
-    get:
-      summary: 'Get Exchange Markets (with optional: realm)'
-      operationId: GetExchangeMarketsRealm
-      responses: *id028
-      security: *id029
-      tags: *id030
-      parameters:
-      - name: realm
-        in: path
-        required: true
-        schema:
-          type: string
-  /currency-exchange/{realm}/{id}:
-    get:
-      summary: 'Get Exchange Markets (with optional: realm, id)'
-      operationId: GetExchangeMarketsRealmId
-      responses: *id028
-      security: *id029
-      tags: *id030
-      parameters:
-      - name: realm
-        in: path
-        required: true
-        schema:
-          type: string
       - name: id
         in: path
         required: true

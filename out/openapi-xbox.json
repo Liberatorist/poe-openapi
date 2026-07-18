@@ -1,7 +1,7 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "Path of Exile API",
+    "title": "Path of Exile API (Xbox)",
     "version": "3.27.0"
   },
   "paths": {
@@ -421,9 +421,12 @@
             "description": "can be pc (default), xbox , sony , or poe2",
             "name": "realm",
             "in": "query",
-            "required": false,
+            "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "xbox"
+              ]
             }
           },
           {
@@ -503,9 +506,12 @@
             "description": "can be pc (default), xbox , sony , or poe2",
             "name": "realm",
             "in": "query",
-            "required": false,
+            "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "xbox"
+              ]
             }
           }
         ]
@@ -586,9 +592,12 @@
             "description": "can be pc (default), xbox , sony , or poe2",
             "name": "realm",
             "in": "query",
-            "required": false,
+            "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "xbox"
+              ]
             }
           },
           {
@@ -691,9 +700,12 @@
             "description": "can be pc (default), xbox , or sony",
             "name": "realm",
             "in": "query",
-            "required": false,
+            "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "xbox"
+              ]
             }
           },
           {
@@ -762,9 +774,12 @@
             "description": "can be pc (default), xbox , or sony",
             "name": "realm",
             "in": "query",
-            "required": false,
+            "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "xbox"
+              ]
             }
           },
           {
@@ -826,9 +841,12 @@
             "description": "can be pc (default), xbox , or sony",
             "name": "realm",
             "in": "query",
-            "required": false,
+            "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "xbox"
+              ]
             }
           }
         ]
@@ -904,9 +922,12 @@
             "description": "can be pc (default), xbox , or sony",
             "name": "realm",
             "in": "query",
-            "required": false,
+            "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "xbox"
+              ]
             }
           },
           {
@@ -930,7 +951,7 @@
         ]
       }
     },
-    "/account/leagues": {
+    "/account/leagues/xbox": {
       "get": {
         "summary": "Get Leagues",
         "operationId": "GetLeagues",
@@ -972,59 +993,7 @@
         ]
       }
     },
-    "/account/leagues/{realm}": {
-      "get": {
-        "summary": "Get Leagues (with optional: realm)",
-        "operationId": "GetLeaguesRealm",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "leagues": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/League"
-                      }
-                    }
-                  },
-                  "required": [
-                    "leagues"
-                  ]
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          },
-          {
-            "account": [
-              "account:leagues"
-            ]
-          }
-        ],
-        "tags": [
-          "Account Leagues (PoE1 only)"
-        ],
-        "parameters": [
-          {
-            "name": "realm",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ]
-      }
-    },
-    "/character": {
+    "/character/xbox": {
       "get": {
         "summary": "List Characters",
         "operationId": "ListCharacters",
@@ -1066,59 +1035,7 @@
         ]
       }
     },
-    "/character/{realm}": {
-      "get": {
-        "summary": "List Characters (with optional: realm)",
-        "operationId": "ListCharactersRealm",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "characters": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/Character"
-                      }
-                    }
-                  },
-                  "required": [
-                    "characters"
-                  ]
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          },
-          {
-            "account": [
-              "account:characters"
-            ]
-          }
-        ],
-        "tags": [
-          "Account Characters"
-        ],
-        "parameters": [
-          {
-            "name": "realm",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ]
-      }
-    },
-    "/character/{name}": {
+    "/character/xbox/{name}": {
       "get": {
         "summary": "Get Character",
         "operationId": "GetCharacter",
@@ -1164,61 +1081,7 @@
         ]
       }
     },
-    "/character/{realm}/{name}": {
-      "get": {
-        "summary": "Get Character (with optional: realm)",
-        "operationId": "GetCharacterRealm",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "character": {
-                      "$ref": "#/components/schemas/Character"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          },
-          {
-            "account": [
-              "account:characters"
-            ]
-          }
-        ],
-        "tags": [
-          "Account Characters"
-        ],
-        "parameters": [
-          {
-            "name": "realm",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "name",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ]
-      }
-    },
-    "/stash/{league}": {
+    "/stash/xbox/{league}": {
       "get": {
         "summary": "List Stashes",
         "operationId": "ListStashes",
@@ -1270,67 +1133,7 @@
         ]
       }
     },
-    "/stash/{realm}/{league}": {
-      "get": {
-        "summary": "List Stashes (with optional: realm)",
-        "operationId": "ListStashesRealm",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "stashes": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/StashTab"
-                      }
-                    }
-                  },
-                  "required": [
-                    "stashes"
-                  ]
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          },
-          {
-            "account": [
-              "account:stashes"
-            ]
-          }
-        ],
-        "tags": [
-          "Account Stashes (PoE1 only)"
-        ],
-        "parameters": [
-          {
-            "name": "realm",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "league",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ]
-      }
-    },
-    "/stash/{league}/{stash_id}": {
+    "/stash/xbox/{league}/{stash_id}": {
       "get": {
         "summary": "Get Stash",
         "operationId": "GetStash",
@@ -1384,7 +1187,7 @@
         ]
       }
     },
-    "/stash/{league}/{stash_id}/{substash_id}": {
+    "/stash/xbox/{league}/{stash_id}/{substash_id}": {
       "get": {
         "summary": "Get Stash (with optional: substash_id)",
         "operationId": "GetStashSubstash_id",
@@ -1446,139 +1249,7 @@
         ]
       }
     },
-    "/stash/{realm}/{league}/{stash_id}": {
-      "get": {
-        "summary": "Get Stash (with optional: realm)",
-        "operationId": "GetStashRealm",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "stash": {
-                      "$ref": "#/components/schemas/StashTab"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          },
-          {
-            "account": [
-              "account:stashes"
-            ]
-          }
-        ],
-        "tags": [
-          "Account Stashes (PoE1 only)"
-        ],
-        "parameters": [
-          {
-            "name": "realm",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "league",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "stash_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ]
-      }
-    },
-    "/stash/{realm}/{league}/{stash_id}/{substash_id}": {
-      "get": {
-        "summary": "Get Stash (with optional: realm, substash_id)",
-        "operationId": "GetStashRealmSubstash_id",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "stash": {
-                      "$ref": "#/components/schemas/StashTab"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          },
-          {
-            "account": [
-              "account:stashes"
-            ]
-          }
-        ],
-        "tags": [
-          "Account Stashes (PoE1 only)"
-        ],
-        "parameters": [
-          {
-            "name": "realm",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "league",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "stash_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "substash_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ]
-      }
-    },
-    "/league-account/{league}": {
+    "/league-account/xbox/{league}": {
       "get": {
         "summary": "Get League Account",
         "operationId": "GetLeagueAccount",
@@ -1627,64 +1298,7 @@
         ]
       }
     },
-    "/league-account/{realm}/{league}": {
-      "get": {
-        "summary": "Get League Account (with optional: realm)",
-        "operationId": "GetLeagueAccountRealm",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "league_account": {
-                      "$ref": "#/components/schemas/LeagueAccount"
-                    }
-                  },
-                  "required": [
-                    "league_account"
-                  ]
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          },
-          {
-            "account": [
-              "account:league_accounts"
-            ]
-          }
-        ],
-        "tags": [
-          "League Accounts (PoE1 only)"
-        ],
-        "parameters": [
-          {
-            "name": "realm",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "league",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ]
-      }
-    },
-    "/guild/stash/{league}": {
+    "/guild/xbox/stash/{league}": {
       "get": {
         "summary": "List Guild Stashes",
         "operationId": "ListGuildStashes",
@@ -1736,67 +1350,7 @@
         ]
       }
     },
-    "/guild/{realm}/stash/{league}": {
-      "get": {
-        "summary": "List Guild Stashes (with optional: realm)",
-        "operationId": "ListGuildStashesRealm",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "stashes": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/StashTab"
-                      }
-                    }
-                  },
-                  "required": [
-                    "stashes"
-                  ]
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          },
-          {
-            "account": [
-              "account:guild:stashes"
-            ]
-          }
-        ],
-        "tags": [
-          "Guild Stashes (PoE1 only)"
-        ],
-        "parameters": [
-          {
-            "name": "realm",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "league",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ]
-      }
-    },
-    "/guild/stash/{league}/{stash_id}": {
+    "/guild/xbox/stash/{league}/{stash_id}": {
       "get": {
         "summary": "Get Guild Stash",
         "operationId": "GetGuildStash",
@@ -1850,7 +1404,7 @@
         ]
       }
     },
-    "/guild/stash/{league}/{stash_id}/{substash_id}": {
+    "/guild/xbox/stash/{league}/{stash_id}/{substash_id}": {
       "get": {
         "summary": "Get Guild Stash (with optional: substash_id)",
         "operationId": "GetGuildStashSubstash_id",
@@ -1912,139 +1466,7 @@
         ]
       }
     },
-    "/guild/{realm}/stash/{league}/{stash_id}": {
-      "get": {
-        "summary": "Get Guild Stash (with optional: realm)",
-        "operationId": "GetGuildStashRealm",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "stash": {
-                      "$ref": "#/components/schemas/StashTab"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          },
-          {
-            "account": [
-              "account:guild:stashes"
-            ]
-          }
-        ],
-        "tags": [
-          "Guild Stashes (PoE1 only)"
-        ],
-        "parameters": [
-          {
-            "name": "realm",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "league",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "stash_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ]
-      }
-    },
-    "/guild/{realm}/stash/{league}/{stash_id}/{substash_id}": {
-      "get": {
-        "summary": "Get Guild Stash (with optional: realm, substash_id)",
-        "operationId": "GetGuildStashRealmSubstash_id",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "stash": {
-                      "$ref": "#/components/schemas/StashTab"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          },
-          {
-            "account": [
-              "account:guild:stashes"
-            ]
-          }
-        ],
-        "tags": [
-          "Guild Stashes (PoE1 only)"
-        ],
-        "parameters": [
-          {
-            "name": "realm",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "league",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "stash_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "substash_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ]
-      }
-    },
-    "/public-stash-tabs": {
+    "/public-stash-tabs/xbox": {
       "get": {
         "summary": "Get Public Stashes",
         "operationId": "GetPublicStashes",
@@ -2088,59 +1510,13 @@
         ],
         "tags": [
           "Public Stashes (PoE1 only)"
-        ]
-      }
-    },
-    "/public-stash-tabs/{realm}": {
-      "get": {
-        "summary": "Get Public Stashes (with optional: realm)",
-        "operationId": "GetPublicStashesRealm",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "next_change_id": {
-                      "type": "string",
-                      "description": "pagination code"
-                    },
-                    "stashes": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/PublicStashChange"
-                      }
-                    }
-                  },
-                  "required": [
-                    "next_change_id",
-                    "stashes"
-                  ]
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          },
-          {
-            "service": [
-              "service:psapi"
-            ]
-          }
-        ],
-        "tags": [
-          "Public Stashes (PoE1 only)"
         ],
         "parameters": [
           {
-            "name": "realm",
-            "in": "path",
-            "required": true,
+            "description": "is a pagination code received from this endpoint",
+            "name": "id",
+            "in": "query",
+            "required": false,
             "schema": {
               "type": "string"
             }
@@ -2148,7 +1524,7 @@
         ]
       }
     },
-    "/currency-exchange": {
+    "/currency-exchange/xbox": {
       "get": {
         "summary": "Get Exchange Markets",
         "operationId": "GetExchangeMarkets",
@@ -2253,7 +1629,7 @@
         ]
       }
     },
-    "/currency-exchange/{id}": {
+    "/currency-exchange/xbox/{id}": {
       "get": {
         "summary": "Get Exchange Markets (with optional: id)",
         "operationId": "GetExchangeMarketsId",
@@ -2357,244 +1733,6 @@
           "Currency Exchange"
         ],
         "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ]
-      }
-    },
-    "/currency-exchange/{realm}": {
-      "get": {
-        "summary": "Get Exchange Markets (with optional: realm)",
-        "operationId": "GetExchangeMarketsRealm",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "next_change_id": {
-                      "type": "integer",
-                      "format": "uint32",
-                      "description": "unix timestamp truncated to the hour"
-                    },
-                    "markets": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "league": {
-                            "type": "string"
-                          },
-                          "market_id": {
-                            "type": "string",
-                            "enum": [
-                              "chaos|divine"
-                            ],
-                            "description": "common currency code for each pair separated by a pipe. Example: chaos|divine"
-                          },
-                          "volume_traded": {
-                            "type": "object",
-                            "additionalProperties": {
-                              "type": "integer",
-                              "format": "uint32"
-                            },
-                            "description": "the keys are the market currencies. Example: chaos"
-                          },
-                          "lowest_stock": {
-                            "type": "object",
-                            "additionalProperties": {
-                              "type": "integer",
-                              "format": "uint32"
-                            }
-                          },
-                          "highest_stock": {
-                            "type": "object",
-                            "additionalProperties": {
-                              "type": "integer",
-                              "format": "uint32"
-                            }
-                          },
-                          "lowest_ratio": {
-                            "type": "object",
-                            "additionalProperties": {
-                              "type": "integer",
-                              "format": "uint32"
-                            }
-                          },
-                          "highest_ratio": {
-                            "type": "object",
-                            "additionalProperties": {
-                              "type": "integer",
-                              "format": "uint32"
-                            }
-                          }
-                        },
-                        "required": [
-                          "highest_ratio",
-                          "highest_stock",
-                          "league",
-                          "lowest_ratio",
-                          "lowest_stock",
-                          "market_id",
-                          "volume_traded"
-                        ]
-                      }
-                    }
-                  },
-                  "required": [
-                    "markets",
-                    "next_change_id"
-                  ]
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          },
-          {
-            "service": [
-              "service:cxapi"
-            ]
-          }
-        ],
-        "tags": [
-          "Currency Exchange"
-        ],
-        "parameters": [
-          {
-            "name": "realm",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ]
-      }
-    },
-    "/currency-exchange/{realm}/{id}": {
-      "get": {
-        "summary": "Get Exchange Markets (with optional: realm, id)",
-        "operationId": "GetExchangeMarketsRealmId",
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "next_change_id": {
-                      "type": "integer",
-                      "format": "uint32",
-                      "description": "unix timestamp truncated to the hour"
-                    },
-                    "markets": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "league": {
-                            "type": "string"
-                          },
-                          "market_id": {
-                            "type": "string",
-                            "enum": [
-                              "chaos|divine"
-                            ],
-                            "description": "common currency code for each pair separated by a pipe. Example: chaos|divine"
-                          },
-                          "volume_traded": {
-                            "type": "object",
-                            "additionalProperties": {
-                              "type": "integer",
-                              "format": "uint32"
-                            },
-                            "description": "the keys are the market currencies. Example: chaos"
-                          },
-                          "lowest_stock": {
-                            "type": "object",
-                            "additionalProperties": {
-                              "type": "integer",
-                              "format": "uint32"
-                            }
-                          },
-                          "highest_stock": {
-                            "type": "object",
-                            "additionalProperties": {
-                              "type": "integer",
-                              "format": "uint32"
-                            }
-                          },
-                          "lowest_ratio": {
-                            "type": "object",
-                            "additionalProperties": {
-                              "type": "integer",
-                              "format": "uint32"
-                            }
-                          },
-                          "highest_ratio": {
-                            "type": "object",
-                            "additionalProperties": {
-                              "type": "integer",
-                              "format": "uint32"
-                            }
-                          }
-                        },
-                        "required": [
-                          "highest_ratio",
-                          "highest_stock",
-                          "league",
-                          "lowest_ratio",
-                          "lowest_stock",
-                          "market_id",
-                          "volume_traded"
-                        ]
-                      }
-                    }
-                  },
-                  "required": [
-                    "markets",
-                    "next_change_id"
-                  ]
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          },
-          {
-            "service": [
-              "service:cxapi"
-            ]
-          }
-        ],
-        "tags": [
-          "Currency Exchange"
-        ],
-        "parameters": [
-          {
-            "name": "realm",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "id",
             "in": "path",
