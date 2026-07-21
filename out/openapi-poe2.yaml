@@ -456,7 +456,7 @@ paths:
         required: true
         schema:
           type: string
-  /currency-exchange/poe2:
+  /https:/web.poecdn.com/api/currency-exchange/poe2:
     get:
       summary: Get Exchange Markets
       operationId: GetExchangeMarkets
@@ -482,16 +482,21 @@ paths:
                         market_id:
                           type: string
                           enum:
-                          - chaos|divine
-                          description: 'common currency code for each pair separated
-                            by a pipe. Example: chaos|divine'
+                          - Metadata/Items/Currency/CurrencyRerollRare|Metadata/Items/Currency/CurrencyModValues
+                          description: 'base item ids separated by a pipe. Example:
+                            Metadata/Items/Currency/CurrencyRerollRare|Metadata/Items/Currency/CurrencyModValues'
+                        market_pair:
+                          type: array
+                          items:
+                            type: string
+                          description: base item ids
                         volume_traded:
                           type: object
                           additionalProperties:
                             type: integer
                             format: uint32
                           description: 'the keys are the market currencies. Example:
-                            chaos'
+                            Metadata/Items/Currency/CurrencyRerollRare'
                         lowest_stock:
                           type: object
                           additionalProperties:
@@ -519,23 +524,19 @@ paths:
                       - lowest_ratio
                       - lowest_stock
                       - market_id
+                      - market_pair
                       - volume_traded
                 required:
                 - markets
                 - next_change_id
       security: &id002
       - bearerAuth: []
-      - service:
-        - service:cxapi
-      tags: &id003
-      - Currency Exchange
-  /currency-exchange/poe2/{id}:
+  /https:/web.poecdn.com/api/currency-exchange/poe2/{id}:
     get:
       summary: 'Get Exchange Markets (with optional: id)'
       operationId: GetExchangeMarketsId
       responses: *id001
       security: *id002
-      tags: *id003
       parameters:
       - name: id
         in: path
@@ -967,6 +968,9 @@ components:
         iconTierText:
           type: string
           description: usually roman numerals
+        iconStackLevel:
+          type: string
+          description: describes the level of a stack of items
         league:
           type: string
         id:
@@ -998,6 +1002,9 @@ components:
         mutated:
           type: boolean
           description: 'PoE1: true on Foulborn Uniques, PoE2: true on all Vaal Uniques'
+        vestigial:
+          type: boolean
+          description: PoE1 only; always true if present
         builtInSupport:
           type: string
           description: PoE1 only; Supported by level 1 x
@@ -1204,7 +1211,7 @@ components:
         implicitMods:
           type: array
           items:
-            type: string
+            $ref: '#/components/schemas/ItemMod'
         ultimatumMods:
           type: array
           items:
@@ -1222,25 +1229,45 @@ components:
         explicitMods:
           type: array
           items:
-            type: string
+            $ref: '#/components/schemas/ItemMod'
         bondedMods:
           type: array
           items:
             type: string
           description: PoE2 only
-        craftedMods:
+        mercenarySkills:
           type: array
           items:
-            type: string
-        fracturedMods:
-          type: array
-          items:
-            type: string
-        mutatedMods:
-          type: array
-          items:
-            type: string
-          description: 'PoE1: Foulborn Unique mods, PoE2: Vaal Unique mods'
+            type: object
+            properties:
+              hash:
+                type: integer
+                format: uint32
+              icon:
+                type: string
+              name:
+                type: string
+              supports:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    hash:
+                      type: integer
+                      format: uint32
+                    name:
+                      type: string
+                    tier:
+                      type: integer
+                      format: uint32
+                  required:
+                  - hash
+                  - name
+                  - tier
+            required:
+            - hash
+            - icon
+            - name
         crucibleMods:
           type: array
           items:
@@ -1258,11 +1285,6 @@ components:
         veiled:
           type: boolean
           description: always true if present
-        desecratedMods:
-          type: array
-          items:
-            type: string
-          description: PoE2 only
         desecrated:
           type: boolean
           description: PoE2 only; always true if present
@@ -1318,6 +1340,20 @@ components:
           required:
           - level
           - name
+          - progress
+          - total
+        enshrouded:
+          type: object
+          properties:
+            unique:
+              type: string
+            progress:
+              type: integer
+              format: uint32
+            total:
+              type: integer
+              format: uint32
+          required:
           - progress
           - total
         scourged:
@@ -1478,6 +1514,31 @@ components:
             vividtalisman, wildtalisman, sacredtalisman, activegem, or supportgem
       required:
       - group
+    ItemMod:
+      type: object
+      properties:
+        description:
+          type: string
+        flags:
+          type: object
+          properties:
+            fractured:
+              type: boolean
+              description: always true if present
+            mutated:
+              type: boolean
+              description: always true if present
+            crafted:
+              type: boolean
+              description: always true if present
+            desecrated:
+              type: boolean
+              description: PoE2 only; always true if present
+            vestigial:
+              type: boolean
+              description: PoE1 only; always true if present
+      required:
+      - description
     ItemProperty:
       type: object
       properties:
@@ -1571,6 +1632,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Item'
+        guardian:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item'
+          description: PoE1 only
         passives:
           type: object
           properties:
@@ -2128,4 +2194,3 @@ tags:
 - name: Account Item Filters
 - name: Leagues
 - name: Account Characters
-- name: Currency Exchange
