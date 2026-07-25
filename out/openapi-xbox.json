@@ -2572,10 +2572,6 @@
             },
             "description": "PoE2 only"
           },
-          "talismanTier": {
-            "type": "integer",
-            "format": "int32"
-          },
           "rewards": {
             "type": "array",
             "items": {
