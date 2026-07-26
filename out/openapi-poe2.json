@@ -661,8 +661,7 @@
         "type": "object",
         "properties": {
           "rank": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           },
           "dead": {
             "type": "boolean"
@@ -692,15 +691,13 @@
         "type": "object",
         "properties": {
           "rank": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           },
           "ineligible": {
             "type": "boolean"
           },
           "time": {
             "type": "integer",
-            "format": "uint32",
             "description": "time taken to complete the league objective in seconds"
           },
           "private_league": {
@@ -740,8 +737,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           },
           "name": {
             "type": "string"
@@ -830,25 +826,20 @@
         "type": "object",
         "properties": {
           "rank": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           },
           "rating": {
             "type": "integer",
-            "format": "uint32",
             "description": "only present if the PvP Match uses Glicko ratings"
           },
           "points": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           },
           "games_played": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           },
           "cumulative_opponent_points": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           },
           "last_game_time": {
             "type": "string",
@@ -936,12 +927,10 @@
             "type": "boolean"
           },
           "w": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           },
           "h": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           },
           "icon": {
             "type": "string"
@@ -951,12 +940,10 @@
             "description": "always true if present"
           },
           "stackSize": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "maxStackSize": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "stackSizeText": {
             "type": "string"
@@ -1020,7 +1007,6 @@
           },
           "monsterLevel": {
             "type": "integer",
-            "format": "int32",
             "description": "PoE1 only; used for items that always display their monster level"
           },
           "abyssJewel": {
@@ -1075,17 +1061,14 @@
           },
           "itemLevel": {
             "type": "integer",
-            "format": "int32",
             "description": "used for items that always display their item level"
           },
           "unidentifiedTier": {
             "type": "integer",
-            "format": "int32",
             "description": "PoE2 only"
           },
           "ilvl": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "note": {
             "type": "string",
@@ -1336,8 +1319,7 @@
             "description": "always true if present"
           },
           "foilVariation": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "replica": {
             "type": "boolean",
@@ -1365,7 +1347,6 @@
           },
           "frameType": {
             "type": "integer",
-            "format": "uint32",
             "description": "deprecated; use frameTypeId"
           },
           "frameTypeId": {
@@ -1382,19 +1363,16 @@
             "description": "only present in the Public Stash API"
           },
           "x": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           },
           "y": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           },
           "inventoryId": {
             "type": "string"
           },
           "socket": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           },
           "colour": {
             "type": "string",
@@ -1428,8 +1406,7 @@
         "type": "object",
         "properties": {
           "group": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           },
           "attr": {
             "type": "string",
@@ -1513,8 +1490,7 @@
             }
           },
           "displayMode": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           },
           "progress": {
             "type": "number",
@@ -1522,8 +1498,7 @@
             "description": "rounded to 2 decimal places"
           },
           "type": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           },
           "suffix": {
             "type": "string"
@@ -1558,12 +1533,10 @@
             "type": "string"
           },
           "level": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           },
           "experience": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           },
           "ruthless": {
             "type": "boolean",
@@ -1644,12 +1617,10 @@
             "type": "string"
           },
           "radius": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           },
           "radiusMin": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           },
           "radiusVisual": {
             "type": "string"
@@ -1685,8 +1656,7 @@
             "type": "string"
           },
           "index": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           },
           "metadata": {
             "$ref": "#/components/schemas/StashTabMetadata"
@@ -1788,8 +1758,7 @@
           "orbits": {
             "type": "array",
             "items": {
-              "type": "integer",
-              "format": "uint32"
+              "type": "integer"
             }
           },
           "isProxy": {
@@ -1820,7 +1789,6 @@
         "properties": {
           "skill": {
             "type": "integer",
-            "format": "uint32",
             "description": "skill hash"
           },
           "name": {
@@ -1888,17 +1856,14 @@
           },
           "grantedStrength": {
             "type": "integer",
-            "format": "uint32",
             "description": "sum of stats on this node that grant strength"
           },
           "grantedDexterity": {
             "type": "integer",
-            "format": "uint32",
             "description": "sum of stats on this node that grant dexterity"
           },
           "grantedIntelligence": {
             "type": "integer",
-            "format": "uint32",
             "description": "sum of stats on this node that grant intelligence"
           },
           "ascendancyName": {
@@ -1917,8 +1882,7 @@
             "description": "always true if present"
           },
           "grantedPassivePoints": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           },
           "stats": {
             "type": "array",
@@ -1940,8 +1904,7 @@
             }
           },
           "classStartIndex": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           },
           "group": {
             "type": "string",
@@ -1949,12 +1912,10 @@
           },
           "orbit": {
             "type": "integer",
-            "format": "uint32",
             "description": "the orbit this node occupies within it's group"
           },
           "orbitIndex": {
             "type": "integer",
-            "format": "uint32",
             "description": "the index of this node in the group's orbit"
           },
           "out": {
@@ -1982,12 +1943,10 @@
         "properties": {
           "skill": {
             "type": "integer",
-            "format": "uint32",
             "description": "mod hash"
           },
           "tier": {
             "type": "integer",
-            "format": "uint32",
             "description": "mod tier"
           },
           "icon": {
@@ -2020,12 +1979,10 @@
           },
           "orbit": {
             "type": "integer",
-            "format": "uint32",
             "description": "the column this node occupies"
           },
           "orbitIndex": {
             "type": "integer",
-            "format": "uint32",
             "description": "the node's position within the column"
           },
           "out": {
@@ -2096,8 +2053,7 @@
               "type": "string"
             },
             {
-              "type": "integer",
-              "format": "uint32"
+              "type": "integer"
             }
           ]
         },
@@ -2129,12 +2085,10 @@
         "type": "object",
         "properties": {
           "default": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           },
           "solo": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           }
         }
       },
@@ -2149,20 +2103,17 @@
             "type": "string"
           },
           "level": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           },
           "class": {
             "type": "string"
           },
           "time": {
             "type": "integer",
-            "format": "uint32",
             "description": "time taken to complete the league objective in seconds"
           },
           "score": {
             "type": "integer",
-            "format": "uint32",
             "description": "count of league objective completions"
           },
           "progress": {
@@ -2170,8 +2121,7 @@
             "description": "the values of this depend on the league objective"
           },
           "experience": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           },
           "depth": {
             "$ref": "#/components/schemas/Depth",
@@ -2209,12 +2159,10 @@
             "description": "the challenge set"
           },
           "completed": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           },
           "max": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           }
         },
         "required": [
@@ -2267,8 +2215,7 @@
             "type": "string"
           },
           "level": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           },
           "class": {
             "type": "string"
@@ -2278,7 +2225,6 @@
           },
           "score": {
             "type": "integer",
-            "format": "uint32",
             "description": "count of league objective completions"
           }
         },
@@ -2298,8 +2244,7 @@
           "rewards": {
             "type": "object",
             "additionalProperties": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             },
             "description": "the key is a string representing the type of reward. The value is the amount"
           }
@@ -2355,8 +2300,7 @@
             "description": "text used to display ultimatum icons"
           },
           "tier": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           }
         },
         "required": [
@@ -2368,15 +2312,13 @@
         "type": "object",
         "properties": {
           "hash": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           },
           "name": {
             "type": "string"
           },
           "tier": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           }
         },
         "required": [
@@ -2389,8 +2331,7 @@
         "type": "object",
         "properties": {
           "hash": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           },
           "icon": {
             "type": "string"
@@ -2419,16 +2360,13 @@
           },
           "level": {
             "type": "integer",
-            "format": "uint32",
             "description": "monster level required to progress"
           },
           "progress": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           },
           "total": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           }
         },
         "required": [
@@ -2445,12 +2383,10 @@
             "type": "string"
           },
           "progress": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           },
           "total": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           }
         },
         "required": [
@@ -2463,21 +2399,17 @@
         "properties": {
           "tier": {
             "type": "integer",
-            "format": "uint32",
             "description": "1-3 for items, 1-10 for maps"
           },
           "level": {
             "type": "integer",
-            "format": "uint32",
             "description": "monster level required to progress"
           },
           "progress": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           },
           "total": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           }
         },
         "required": [
@@ -2537,12 +2469,10 @@
         "type": "object",
         "properties": {
           "prefixes": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           },
           "suffixes": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           }
         }
       },
@@ -2577,23 +2507,20 @@
           "hashes": {
             "type": "array",
             "items": {
-              "type": "integer",
-              "format": "uint32"
+              "type": "integer"
             }
           },
           "hashes_ex": {
             "type": "array",
             "items": {
-              "type": "integer",
-              "format": "uint32"
+              "type": "integer"
             },
             "description": "PoE1 only"
           },
           "mastery_effects": {
             "type": "object",
             "additionalProperties": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             },
             "description": "PoE1 only; the key is the string value of the mastery node skill hash and the value is the selected effect hash"
           },
@@ -2602,8 +2529,7 @@
             "additionalProperties": {
               "type": "array",
               "items": {
-                "type": "integer",
-                "format": "int32"
+                "type": "integer"
               }
             },
             "description": "PoE2 only; the keys are set1, set2, and set3"
@@ -2736,8 +2662,7 @@
           "hashes": {
             "type": "array",
             "items": {
-              "type": "integer",
-              "format": "uint32"
+              "type": "integer"
             }
           }
         },
@@ -2754,8 +2679,7 @@
           "hashes": {
             "type": "array",
             "items": {
-              "type": "integer",
-              "format": "uint32"
+              "type": "integer"
             }
           }
         },
@@ -2789,7 +2713,6 @@
         "properties": {
           "effect": {
             "type": "integer",
-            "format": "uint32",
             "description": "effect hash"
           },
           "stats": {
@@ -2815,21 +2738,17 @@
         "type": "object",
         "properties": {
           "size": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           },
           "index": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           },
           "proxy": {
             "type": "integer",
-            "format": "uint32",
             "description": "the proxy node identifier"
           },
           "parent": {
             "type": "integer",
-            "format": "uint32",
             "description": "the parent node identifier"
           }
         }
@@ -3024,8 +2943,7 @@
         "type": "object",
         "properties": {
           "total": {
-            "type": "integer",
-            "format": "uint32"
+            "type": "integer"
           },
           "cached_since": {
             "type": "string",
@@ -3104,37 +3022,32 @@
           "volume_traded": {
             "type": "object",
             "additionalProperties": {
-              "type": "integer",
-              "format": "uint32"
+              "type": "integer"
             },
             "description": "the keys are the market currencies. Example: Metadata/Items/Currency/CurrencyRerollRare"
           },
           "lowest_stock": {
             "type": "object",
             "additionalProperties": {
-              "type": "integer",
-              "format": "uint32"
+              "type": "integer"
             }
           },
           "highest_stock": {
             "type": "object",
             "additionalProperties": {
-              "type": "integer",
-              "format": "uint32"
+              "type": "integer"
             }
           },
           "lowest_ratio": {
             "type": "object",
             "additionalProperties": {
-              "type": "integer",
-              "format": "uint32"
+              "type": "integer"
             }
           },
           "highest_ratio": {
             "type": "object",
             "additionalProperties": {
-              "type": "integer",
-              "format": "uint32"
+              "type": "integer"
             }
           }
         },
@@ -3154,7 +3067,6 @@
         "properties": {
           "next_change_id": {
             "type": "integer",
-            "format": "uint32",
             "description": "unix timestamp truncated to the hour"
           },
           "markets": {

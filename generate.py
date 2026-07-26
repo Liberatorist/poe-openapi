@@ -9,11 +9,11 @@ import requests
 
 primitive_translations = {
     "string": {"type": "string"},
-    "uint": {"type": "integer", "format": "uint32"},
+    "uint": {"type": "integer"},
     "double":  {"type": "number", "format": "double"},
     "float": {"type": "number"},
     "bool": {"type": "boolean"},
-    "int": {"type": "integer", "format": "int32"},
+    "int": {"type": "integer"},
     "Error": {"type": "object", "properties": {"code":  {"type": "integer", "enum": [200, 202, 400, 404, 429, 500]}, "message": {"type": "string"}}},
 }
 
