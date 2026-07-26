@@ -1544,14 +1544,7 @@ components:
         values:
           type: array
           items:
-            type: array
-            items:
-              oneOf:
-              - type: string
-              - type: integer
-                format: uint32
-            minItems: 2
-            maxItems: 2
+            $ref: '#/components/schemas/ItemPropertyValue'
         displayMode:
           type: integer
           format: uint32
@@ -2149,6 +2142,16 @@ components:
           type: array
           items:
             type: string
+    ItemPropertyValue:
+      type: array
+      items:
+        oneOf:
+        - type: string
+        - type: integer
+          format: uint32
+      minItems: 2
+      maxItems: 2
+      x-go-type: ItemPropertyValue
   parameters:
     UserAgent:
       name: User-Agent

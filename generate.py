@@ -500,6 +500,27 @@ def parse_endpoint(openapi, tag, scope, h3, realm):
                                        ] = def_copy
 
 
+def apply_go_type_overrides(openapi):
+    """
+    oapi-codegen can't infer a Go type for fixed-size tuple arrays
+    (e.g. ItemProperty.values, whose entries are [name, value] pairs),
+    so it falls back to `interface{}`. Hoist that tuple schema into a
+    named ItemPropertyValue component tagged with x-go-type so
+    downstream oapi-codegen consumers can supply their own ItemValue
+    type instead.
+    """
+    item_property = openapi["components"]["schemas"].get("ItemProperty")
+    if not item_property:
+        return
+    values_schema = item_property.get("properties", {}).get("values")
+    if not values_schema or "items" not in values_schema:
+        return
+    tuple_schema = values_schema["items"]
+    tuple_schema["x-go-type"] = "ItemValue"
+    openapi["components"]["schemas"]["ItemPropertyValue"] = tuple_schema
+    values_schema["items"] = {"$ref": "#/components/schemas/ItemPropertyValue"}
+
+
 poe1_version, poe2_version = fetch_latest_versions()
 realm_info = {
     "pc": {"title": "Path of Exile API", "version": poe1_version},
@@ -512,6 +533,7 @@ soup = fetch_soup("https://www.pathofexile.com/developer/docs/reference")
 
 for realm in realms:
     openapi = build_openapi(soup, realm)
+    apply_go_type_overrides(openapi)
     suffix = "-poe1" if realm == "pc" else f"-{realm}"
 
     with open(f"out/openapi{suffix}.json", "w", encoding="utf-8") as f:

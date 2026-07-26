@@ -3123,20 +3123,7 @@
           "values": {
             "type": "array",
             "items": {
-              "type": "array",
-              "items": {
-                "oneOf": [
-                  {
-                    "type": "string"
-                  },
-                  {
-                    "type": "integer",
-                    "format": "uint32"
-                  }
-                ]
-              },
-              "minItems": 2,
-              "maxItems": 2
+              "$ref": "#/components/schemas/ItemPropertyValue"
             }
           },
           "displayMode": {
@@ -3956,6 +3943,23 @@
             }
           }
         }
+      },
+      "ItemPropertyValue": {
+        "type": "array",
+        "items": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer",
+              "format": "uint32"
+            }
+          ]
+        },
+        "minItems": 2,
+        "maxItems": 2,
+        "x-go-type": "ItemPropertyValue"
       }
     },
     "parameters": {
