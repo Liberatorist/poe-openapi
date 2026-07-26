@@ -521,6 +521,86 @@ def apply_go_type_overrides(openapi):
     values_schema["items"] = {"$ref": "#/components/schemas/ItemPropertyValue"}
 
 
+def hoist_object_schemas(openapi):
+    """
+    Replace inline object schemas (type: object with properties) that
+    appear nested inside other schemas or endpoint bodies with $ref
+    pointers to named schemas under components/schemas, so callers get
+    a reusable, referenceable type instead of a repeated anonymous
+    object literal (e.g. AtlasPassiveTree instead of an inline object
+    inside the atlas_passive_trees array).
+    """
+    schemas = openapi["components"]["schemas"]
+    existing_by_shape = {
+        json.dumps(schema, sort_keys=True): name for name, schema in schemas.items()
+    }
+
+    def unique_name(hint):
+        base = "".join(
+            part[:1].upper() + part[1:] for part in re.split(r"[^A-Za-z0-9]+", hint) if part
+        ) or "Object"
+        name = base
+        i = 2
+        while name in schemas:
+            name = f"{base}{i}"
+            i += 1
+        return name
+
+    def hoist(node, hint):
+        if isinstance(node, dict):
+            if "$ref" in node:
+                return
+            if "items" in node:
+                item_hint = hint[:-1] if hint.lower().endswith("s") and not hint.lower().endswith("ss") else hint
+                hoist(node["items"], item_hint)
+            if isinstance(node.get("additionalProperties"), dict):
+                hoist(node["additionalProperties"], hint)
+            if "oneOf" in node:
+                for sub in node["oneOf"]:
+                    hoist(sub, hint)
+            if "properties" in node:
+                for key, sub in node["properties"].items():
+                    hoist(sub, key)
+            if node.get("type") == "object" and "properties" in node:
+                description = node.pop("description", None)
+                key = json.dumps(node, sort_keys=True)
+                name = existing_by_shape.get(key)
+                if name is None:
+                    name = unique_name(hint)
+                    schemas[name] = dict(node)
+                    existing_by_shape[key] = name
+                node.clear()
+                node["$ref"] = f"#/components/schemas/{name}"
+                if description:
+                    node["description"] = description
+        elif isinstance(node, list):
+            for item in node:
+                hoist(item, hint)
+
+    # Hoist inline objects nested inside already-named schemas, without
+    # renaming/hoisting the named schema itself.
+    for name, schema in list(schemas.items()):
+        for key, sub in schema.get("properties", {}).items():
+            hoist(sub, f"{name} {key}")
+        if isinstance(schema.get("additionalProperties"), dict):
+            hoist(schema["additionalProperties"], name)
+        if "items" in schema:
+            hoist(schema["items"], name)
+
+    # Hoist inline objects used directly in endpoint request/response bodies.
+    for path_item in openapi["paths"].values():
+        for op in path_item.values():
+            op_id = op.get("operationId", "Body")
+            content = op.get("responses", {}).get(
+                "200", {}).get("content", {}).get("application/json")
+            if content and "schema" in content:
+                hoist(content["schema"], f"{op_id} Response")
+            request_content = op.get("requestBody", {}).get(
+                "content", {}).get("application/json")
+            if request_content and "schema" in request_content:
+                hoist(request_content["schema"], f"{op_id} Request")
+
+
 poe1_version, poe2_version = fetch_latest_versions()
 realm_info = {
     "pc": {"title": "Path of Exile API", "version": poe1_version},
@@ -534,6 +614,7 @@ soup = fetch_soup("https://www.pathofexile.com/developer/docs/reference")
 for realm in realms:
     openapi = build_openapi(soup, realm)
     apply_go_type_overrides(openapi)
+    hoist_object_schemas(openapi)
     suffix = "-poe1" if realm == "pc" else f"-{realm}"
 
     with open(f"out/openapi{suffix}.json", "w", encoding="utf-8") as f:

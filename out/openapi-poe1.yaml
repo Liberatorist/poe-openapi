@@ -13,26 +13,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  uuid:
-                    type: string
-                    description: UUIDv4 in canonical format
-                  name:
-                    type: string
-                  locale:
-                    type: string
-                  twitch:
-                    type: object
-                    properties:
-                      name:
-                        type: string
-                    required:
-                    - name
-                    description: present if the account is Twitch-linked
-                required:
-                - name
-                - uuid
+                $ref: '#/components/schemas/GetProfileResponse'
       security:
       - bearerAuth: []
       - account:
@@ -49,14 +30,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  filters:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/ItemFilter'
-                required:
-                - filters
+                $ref: '#/components/schemas/GetItemFiltersResponse'
       security:
       - bearerAuth: []
       - account:
@@ -72,12 +46,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  filter:
-                    $ref: '#/components/schemas/ItemFilter'
-                required:
-                - filter
+                $ref: '#/components/schemas/CreateItemFilterResponse'
       security:
       - bearerAuth: []
       - account:
@@ -89,37 +58,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                filter_name:
-                  type: string
-                realm:
-                  type: string
-                  enum:
-                  - pc
-                  - xbox
-                  - sony
-                  - poe2
-                  description: pc, xbox, sony, or poe2
-                description:
-                  type: string
-                version:
-                  type: string
-                type:
-                  type: string
-                  enum:
-                  - Normal
-                  - Ruthless
-                  description: either Normal or Ruthless
-                public:
-                  type: boolean
-                  description: defaults to false
-                filter:
-                  type: string
-              required:
-              - filter
-              - filter_name
-              - realm
+              $ref: '#/components/schemas/CreateItemFilterRequest'
       parameters:
       - description: set to true to validate the filter against the current game version
         name: validate
@@ -137,12 +76,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  filter:
-                    $ref: '#/components/schemas/ItemFilter'
-                required:
-                - filter
+                $ref: '#/components/schemas/CreateItemFilterResponse'
       security:
       - bearerAuth: []
       - account:
@@ -164,27 +98,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  filter:
-                    $ref: '#/components/schemas/ItemFilter'
-                  error:
-                    type: object
-                    properties:
-                      code:
-                        type: integer
-                        enum:
-                        - 200
-                        - 202
-                        - 400
-                        - 404
-                        - 429
-                        - 500
-                      message:
-                        type: string
-                    description: an "Accepted" error object
-                required:
-                - filter
+                $ref: '#/components/schemas/UpdateItemFilterResponse'
       security:
       - bearerAuth: []
       - account:
@@ -196,33 +110,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                filter_name:
-                  type: string
-                realm:
-                  type: string
-                  enum:
-                  - pc
-                  - xbox
-                  - sony
-                  - poe2
-                  description: pc, xbox, sony, or poe2
-                description:
-                  type: string
-                version:
-                  type: string
-                type:
-                  type: string
-                  enum:
-                  - Normal
-                  - Ruthless
-                  description: either Normal or Ruthless
-                public:
-                  type: boolean
-                  description: must be true if present
-                filter:
-                  type: string
+              $ref: '#/components/schemas/UpdateItemFilterRequest'
       parameters:
       - name: id
         in: path
@@ -245,14 +133,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  leagues:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/League'
-                required:
-                - leagues
+                $ref: '#/components/schemas/ListLeaguesResponse'
       security:
       - bearerAuth: []
       - service:
@@ -294,10 +175,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  league:
-                    $ref: '#/components/schemas/League'
+                $ref: '#/components/schemas/GetLeagueResponse'
       security:
       - bearerAuth: []
       - service:
@@ -320,30 +198,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  league:
-                    $ref: '#/components/schemas/League'
-                  ladder:
-                    type: object
-                    properties:
-                      total:
-                        type: integer
-                        format: uint32
-                      cached_since:
-                        type: string
-                        format: date-time
-                        description: date time (ISO8601)
-                      entries:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/LadderEntry'
-                    required:
-                    - entries
-                    - total
-                required:
-                - ladder
-                - league
+                $ref: '#/components/schemas/GetLeagueLadderResponse'
       security:
       - bearerAuth: []
       - service:
@@ -392,26 +247,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  league:
-                    $ref: '#/components/schemas/League'
-                  ladder:
-                    type: object
-                    properties:
-                      total:
-                        type: integer
-                        format: uint32
-                      entries:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/EventLadderEntry'
-                    required:
-                    - entries
-                    - total
-                required:
-                - ladder
-                - league
+                $ref: '#/components/schemas/GetLeagueEventLadderResponse'
       security:
       - bearerAuth: []
       - service:
@@ -447,14 +283,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  matches:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/PvPMatch'
-                required:
-                - matches
+                $ref: '#/components/schemas/ListPvpMatchesResponse'
       security:
       - bearerAuth: []
       - service:
@@ -485,10 +314,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  match:
-                    $ref: '#/components/schemas/PvPMatch'
+                $ref: '#/components/schemas/GetPvpMatchResponse'
       security:
       - bearerAuth: []
       - service:
@@ -511,26 +337,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  match:
-                    $ref: '#/components/schemas/PvPMatch'
-                  ladder:
-                    type: object
-                    properties:
-                      total:
-                        type: integer
-                        format: uint32
-                      entries:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/PvPLadderTeamEntry'
-                    required:
-                    - entries
-                    - total
-                required:
-                - ladder
-                - match
+                $ref: '#/components/schemas/GetPvpMatchLadderResponse'
       security:
       - bearerAuth: []
       - service:
@@ -566,14 +373,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  leagues:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/League'
-                required:
-                - leagues
+                $ref: '#/components/schemas/ListLeaguesResponse'
       security:
       - bearerAuth: []
       - account:
@@ -590,14 +390,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  characters:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Character'
-                required:
-                - characters
+                $ref: '#/components/schemas/ListCharactersResponse'
       security:
       - bearerAuth: []
       - account:
@@ -614,10 +407,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  character:
-                    $ref: '#/components/schemas/Character'
+                $ref: '#/components/schemas/GetCharacterResponse'
       security:
       - bearerAuth: []
       - account:
@@ -640,14 +430,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  stashes:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/StashTab'
-                required:
-                - stashes
+                $ref: '#/components/schemas/ListStashesResponse'
       security:
       - bearerAuth: []
       - account:
@@ -670,10 +453,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  stash:
-                    $ref: '#/components/schemas/StashTab'
+                $ref: '#/components/schemas/GetStashResponse'
       security: &id002
       - bearerAuth: []
       - account:
@@ -724,12 +504,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  league_account:
-                    $ref: '#/components/schemas/LeagueAccount'
-                required:
-                - league_account
+                $ref: '#/components/schemas/GetLeagueAccountResponse'
       security:
       - bearerAuth: []
       - account:
@@ -752,14 +527,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  stashes:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/StashTab'
-                required:
-                - stashes
+                $ref: '#/components/schemas/ListStashesResponse'
       security:
       - bearerAuth: []
       - account:
@@ -782,10 +550,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  stash:
-                    $ref: '#/components/schemas/StashTab'
+                $ref: '#/components/schemas/GetStashResponse'
       security: &id005
       - bearerAuth: []
       - account:
@@ -836,18 +601,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  next_change_id:
-                    type: string
-                    description: pagination code
-                  stashes:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/PublicStashChange'
-                required:
-                - next_change_id
-                - stashes
+                $ref: '#/components/schemas/GetPublicStashesResponse'
       security:
       - bearerAuth: []
       - service:
@@ -871,69 +625,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  next_change_id:
-                    type: integer
-                    format: uint32
-                    description: unix timestamp truncated to the hour
-                  markets:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        league:
-                          type: string
-                        market_id:
-                          type: string
-                          enum:
-                          - Metadata/Items/Currency/CurrencyRerollRare|Metadata/Items/Currency/CurrencyModValues
-                          description: 'base item ids separated by a pipe. Example:
-                            Metadata/Items/Currency/CurrencyRerollRare|Metadata/Items/Currency/CurrencyModValues'
-                        market_pair:
-                          type: array
-                          items:
-                            type: string
-                          description: base item ids
-                        volume_traded:
-                          type: object
-                          additionalProperties:
-                            type: integer
-                            format: uint32
-                          description: 'the keys are the market currencies. Example:
-                            Metadata/Items/Currency/CurrencyRerollRare'
-                        lowest_stock:
-                          type: object
-                          additionalProperties:
-                            type: integer
-                            format: uint32
-                        highest_stock:
-                          type: object
-                          additionalProperties:
-                            type: integer
-                            format: uint32
-                        lowest_ratio:
-                          type: object
-                          additionalProperties:
-                            type: integer
-                            format: uint32
-                        highest_ratio:
-                          type: object
-                          additionalProperties:
-                            type: integer
-                            format: uint32
-                      required:
-                      - highest_ratio
-                      - highest_stock
-                      - league
-                      - lowest_ratio
-                      - lowest_stock
-                      - market_id
-                      - market_pair
-                      - volume_traded
-                required:
-                - markets
-                - next_change_id
+                $ref: '#/components/schemas/GetExchangeMarketsResponse'
       security: &id008
       - bearerAuth: []
   /https:/web.poecdn.com/api/currency-exchange/{id}:
@@ -970,16 +662,7 @@ components:
         description:
           type: string
         category:
-          type: object
-          properties:
-            id:
-              type: string
-              description: the league category, e.g. Affliction
-            current:
-              type: boolean
-              description: set for the active challenge leagues; always true if present
-          required:
-          - id
+          $ref: '#/components/schemas/LeagueCategory'
         rules:
           type: array
           items:
@@ -1052,48 +735,7 @@ components:
         public:
           type: boolean
         character:
-          type: object
-          properties:
-            id:
-              type: string
-              description: a unique 64 digit hexadecimal string
-            name:
-              type: string
-            level:
-              type: integer
-              format: uint32
-            class:
-              type: string
-            time:
-              type: integer
-              format: uint32
-              description: time taken to complete the league objective in seconds
-            score:
-              type: integer
-              format: uint32
-              description: count of league objective completions
-            progress:
-              type: object
-              properties: {}
-              description: the values of this depend on the league objective
-            experience:
-              type: integer
-              format: uint32
-            depth:
-              type: object
-              properties:
-                default:
-                  type: integer
-                  format: uint32
-                solo:
-                  type: integer
-                  format: uint32
-              description: deepest Delve depth completed
-          required:
-          - class
-          - id
-          - level
-          - name
+          $ref: '#/components/schemas/LadderEntryCharacter'
         account:
           $ref: '#/components/schemas/Account'
       required:
@@ -1112,16 +754,7 @@ components:
           format: uint32
           description: time taken to complete the league objective in seconds
         private_league:
-          type: object
-          properties:
-            name:
-              type: string
-            url:
-              type: string
-              description: a url link to a Path of Exile Private League
-          required:
-          - name
-          - url
+          $ref: '#/components/schemas/EventLadderEntryPrivateLeague'
       required:
       - private_league
       - rank
@@ -1140,41 +773,9 @@ components:
         guild:
           $ref: '#/components/schemas/Guild'
         challenges:
-          type: object
-          properties:
-            set:
-              type: string
-              description: the challenge set
-            completed:
-              type: integer
-              format: uint32
-            max:
-              type: integer
-              format: uint32
-          required:
-          - completed
-          - max
-          - set
+          $ref: '#/components/schemas/AccountChallenges'
         twitch:
-          type: object
-          properties:
-            name:
-              type: string
-            stream:
-              type: object
-              properties:
-                name:
-                  type: string
-                image:
-                  type: string
-                status:
-                  type: string
-              required:
-              - image
-              - name
-              - status
-          required:
-          - name
+          $ref: '#/components/schemas/AccountTwitch'
       required:
       - name
     Guild:
@@ -1284,29 +885,7 @@ components:
         account:
           $ref: '#/components/schemas/Account'
         character:
-          type: object
-          properties:
-            id:
-              type: string
-              description: a unique 64 digit hexadecimal string
-            name:
-              type: string
-            level:
-              type: integer
-              format: uint32
-            class:
-              type: string
-            league:
-              type: string
-            score:
-              type: integer
-              format: uint32
-              description: count of league objective completions
-          required:
-          - class
-          - id
-          - level
-          - name
+          $ref: '#/components/schemas/PvPLadderTeamMemberCharacter'
         public:
           type: boolean
           description: always true if present
@@ -1387,8 +966,7 @@ components:
             type: string
           description: PoE2 only; string is always W
         influences:
-          type: object
-          properties: {}
+          $ref: '#/components/schemas/Progress'
         elder:
           type: boolean
           description: always true if present
@@ -1550,20 +1128,7 @@ components:
         rewards:
           type: array
           items:
-            type: object
-            properties:
-              label:
-                type: string
-              rewards:
-                type: object
-                additionalProperties:
-                  type: integer
-                  format: int32
-                description: the key is a string representing the type of reward.
-                  The value is the amount
-            required:
-            - label
-            - rewards
+            $ref: '#/components/schemas/ItemReward'
         secDescrText:
           type: string
         utilityMods:
@@ -1573,30 +1138,7 @@ components:
         logbookMods:
           type: array
           items:
-            type: object
-            properties:
-              name:
-                type: string
-                description: area name
-              faction:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    enum:
-                    - Faction1
-                    - Faction2
-                    - Faction3
-                    - Faction4
-                    description: Faction1, Faction2, Faction3, or Faction4
-                  name:
-                    type: string
-                required:
-                - id
-                - name
-            required:
-            - faction
-            - name
+            $ref: '#/components/schemas/ItemLogbookMod'
         enchantMods:
           type: array
           items:
@@ -1617,17 +1159,7 @@ components:
         ultimatumMods:
           type: array
           items:
-            type: object
-            properties:
-              type:
-                type: string
-                description: text used to display ultimatum icons
-              tier:
-                type: integer
-                format: uint32
-            required:
-            - tier
-            - type
+            $ref: '#/components/schemas/ItemUltimatumMod'
         explicitMods:
           type: array
           items:
@@ -1640,36 +1172,7 @@ components:
         mercenarySkills:
           type: array
           items:
-            type: object
-            properties:
-              hash:
-                type: integer
-                format: uint32
-              icon:
-                type: string
-              name:
-                type: string
-              supports:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    hash:
-                      type: integer
-                      format: uint32
-                    name:
-                      type: string
-                    tier:
-                      type: integer
-                      format: uint32
-                  required:
-                  - hash
-                  - name
-                  - tier
-            required:
-            - hash
-            - icon
-            - name
+            $ref: '#/components/schemas/ItemMercenarySkill'
         crucibleMods:
           type: array
           items:
@@ -1725,72 +1228,13 @@ components:
           type: boolean
           description: always true if present
         incubatedItem:
-          type: object
-          properties:
-            name:
-              type: string
-            level:
-              type: integer
-              format: uint32
-              description: monster level required to progress
-            progress:
-              type: integer
-              format: uint32
-            total:
-              type: integer
-              format: uint32
-          required:
-          - level
-          - name
-          - progress
-          - total
+          $ref: '#/components/schemas/ItemIncubatedItem'
         enshrouded:
-          type: object
-          properties:
-            unique:
-              type: string
-            progress:
-              type: integer
-              format: uint32
-            total:
-              type: integer
-              format: uint32
-          required:
-          - progress
-          - total
+          $ref: '#/components/schemas/ItemEnshrouded'
         scourged:
-          type: object
-          properties:
-            tier:
-              type: integer
-              format: uint32
-              description: 1-3 for items, 1-10 for maps
-            level:
-              type: integer
-              format: uint32
-              description: monster level required to progress
-            progress:
-              type: integer
-              format: uint32
-            total:
-              type: integer
-              format: uint32
-          required:
-          - tier
+          $ref: '#/components/schemas/ItemScourged'
         crucible:
-          type: object
-          properties:
-            layout:
-              type: string
-              description: URL to an image of the tree layout
-            nodes:
-              type: object
-              additionalProperties:
-                $ref: '#/components/schemas/CrucibleNode'
-              description: the key is the string value of the node index
-          required:
-          - layout
-          - nodes
+          $ref: '#/components/schemas/ItemCrucible'
         ruthless:
           type: boolean
           description: always true if present
@@ -1803,33 +1247,9 @@ components:
         artFilename:
           type: string
         hybrid:
-          type: object
-          properties:
-            isVaalGem:
-              type: boolean
-            baseTypeName:
-              type: string
-            properties:
-              type: array
-              items:
-                $ref: '#/components/schemas/ItemProperty'
-            explicitMods:
-              type: array
-              items:
-                type: string
-            secDescrText:
-              type: string
-          required:
-          - baseTypeName
+          $ref: '#/components/schemas/ItemHybrid'
         extended:
-          type: object
-          properties:
-            prefixes:
-              type: integer
-              format: uint32
-            suffixes:
-              type: integer
-              format: uint32
+          $ref: '#/components/schemas/ItemExtended'
           description: only present in the Public Stash API
         x:
           type: integer
@@ -1922,23 +1342,7 @@ components:
         description:
           type: string
         flags:
-          type: object
-          properties:
-            fractured:
-              type: boolean
-              description: always true if present
-            mutated:
-              type: boolean
-              description: always true if present
-            crafted:
-              type: boolean
-              description: always true if present
-            desecrated:
-              type: boolean
-              description: PoE2 only; always true if present
-            vestigial:
-              type: boolean
-              description: PoE1 only; always true if present
+          $ref: '#/components/schemas/ItemModFlags'
       required:
       - description
     ItemProperty:
@@ -2033,96 +1437,9 @@ components:
             $ref: '#/components/schemas/Item'
           description: PoE1 only
         passives:
-          type: object
-          properties:
-            hashes:
-              type: array
-              items:
-                type: integer
-                format: uint32
-            hashes_ex:
-              type: array
-              items:
-                type: integer
-                format: uint32
-              description: PoE1 only
-            mastery_effects:
-              type: object
-              additionalProperties:
-                type: integer
-                format: int32
-              description: PoE1 only; the key is the string value of the mastery node
-                skill hash and the value is the selected effect hash
-            specialisations:
-              type: object
-              additionalProperties:
-                type: array
-                items:
-                  type: integer
-                  format: int32
-              description: PoE2 only; the keys are set1, set2, and set3
-            skill_overrides:
-              type: object
-              additionalProperties:
-                $ref: '#/components/schemas/PassiveNode'
-              description: the key is the string value of the node identifier being
-                replaced
-            bandit_choice:
-              type: string
-              enum:
-              - Kraityn
-              - Alira
-              - Oak
-              - Eramir
-              description: PoE1 only; one of Kraityn, Alira, Oak, or Eramir
-            pantheon_major:
-              type: string
-              enum:
-              - TheBrineKing
-              - Arakaali
-              - Solaris
-              - Lunaris
-              description: PoE1 only; one of TheBrineKing, Arakaali, Solaris, or Lunaris
-            pantheon_minor:
-              type: string
-              enum:
-              - Abberath
-              - Gruthkul
-              - Yugul
-              - Shakari
-              - Tukohama
-              - Ralakesh
-              - Garukhan
-              - Ryslatha
-              description: PoE1 only; one of Abberath, Gruthkul, Yugul, Shakari, Tukohama,
-                Ralakesh, Garukhan, or Ryslatha
-            jewel_data:
-              type: object
-              additionalProperties:
-                $ref: '#/components/schemas/ItemJewelData'
-              description: the key is the string value of the x property of an item
-                from the jewels array in this request
-            quest_stats:
-              type: array
-              items:
-                type: string
-              description: PoE2 only; passives granted via quests
-            alternate_ascendancy:
-              type: string
-              description: PoE1 only; Bloodline class name
-          required:
-          - hashes
-          - hashes_ex
-          - jewel_data
-          - mastery_effects
-          - skill_overrides
-          - specialisations
+          $ref: '#/components/schemas/CharacterPassives'
         metadata:
-          type: object
-          properties:
-            version:
-              type: string
-              description: game version for the character's realm
+          $ref: '#/components/schemas/CharacterMetadata'
       required:
       - class
       - experience
@@ -2144,21 +1461,7 @@ components:
         radiusVisual:
           type: string
         subgraph:
-          type: object
-          properties:
-            groups:
-              type: object
-              additionalProperties:
-                $ref: '#/components/schemas/PassiveGroup'
-              description: the key is the string value of the group id
-            nodes:
-              type: object
-              additionalProperties:
-                $ref: '#/components/schemas/PassiveNode'
-              description: the key is the string value of the node identifier
-          required:
-          - groups
-          - nodes
+          $ref: '#/components/schemas/ItemJewelDataSubgraph'
           description: only present on cluster jewels
       required:
       - type
@@ -2182,21 +1485,7 @@ components:
           type: integer
           format: uint32
         metadata:
-          type: object
-          properties:
-            public:
-              type: boolean
-              description: always true if present
-            folder:
-              type: boolean
-              description: always true if present
-            colour:
-              type: string
-              description: 6 digit hex colour
-            map:
-              type: object
-              properties: {}
-              description: various game specific properties
+          $ref: '#/components/schemas/StashTabMetadata'
         children:
           type: array
           items:
@@ -2214,30 +1503,11 @@ components:
       type: object
       properties:
         atlas_passives:
-          type: object
-          properties:
-            hashes:
-              type: array
-              items:
-                type: integer
-                format: uint32
-          required:
-          - hashes
+          $ref: '#/components/schemas/LeagueAccountAtlasPassives'
         atlas_passive_trees:
           type: array
           items:
-            type: object
-            properties:
-              name:
-                type: string
-              hashes:
-                type: array
-                items:
-                  type: integer
-                  format: uint32
-            required:
-            - hashes
-            - name
+            $ref: '#/components/schemas/LeagueAccountAtlasPassiveTree'
       required:
       - atlas_passive_trees
     ItemFilter:
@@ -2266,19 +1536,7 @@ components:
           type: string
           description: not present when listing all filters
         validation:
-          type: object
-          properties:
-            valid:
-              type: boolean
-            version:
-              type: string
-              description: game version
-            validated:
-              type: string
-              format: date-time
-              description: date time (ISO8601)
-          required:
-          - valid
+          $ref: '#/components/schemas/ItemFilterValidation'
           description: not present when listing all filters
       required:
       - description
@@ -2347,24 +1605,7 @@ components:
         masteryEffects:
           type: array
           items:
-            type: object
-            properties:
-              effect:
-                type: integer
-                format: uint32
-                description: effect hash
-              stats:
-                type: array
-                items:
-                  type: string
-                description: stat descriptions
-              reminderText:
-                type: array
-                items:
-                  type: string
-            required:
-            - effect
-            - stats
+            $ref: '#/components/schemas/PassiveNodeMasteryEffect'
         isBlighted:
           type: boolean
           description: always true if present
@@ -2378,22 +1619,7 @@ components:
           type: boolean
           description: always true if present
         expansionJewel:
-          type: object
-          properties:
-            size:
-              type: integer
-              format: uint32
-            index:
-              type: integer
-              format: uint32
-            proxy:
-              type: integer
-              format: uint32
-              description: the proxy node identifier
-            parent:
-              type: integer
-              format: uint32
-              description: the parent node identifier
+          $ref: '#/components/schemas/PassiveNodeExpansionJewel'
           description: cluster jewel information
         recipe:
           type: array
@@ -2556,7 +1782,868 @@ components:
           format: uint32
       minItems: 2
       maxItems: 2
-      x-go-type: ItemPropertyValue
+      x-go-type: ItemValue
+    LeagueCategory:
+      type: object
+      properties:
+        id:
+          type: string
+          description: the league category, e.g. Affliction
+        current:
+          type: boolean
+          description: set for the active challenge leagues; always true if present
+      required:
+      - id
+    Progress:
+      type: object
+      properties: {}
+    Depth:
+      type: object
+      properties:
+        default:
+          type: integer
+          format: uint32
+        solo:
+          type: integer
+          format: uint32
+    LadderEntryCharacter:
+      type: object
+      properties:
+        id:
+          type: string
+          description: a unique 64 digit hexadecimal string
+        name:
+          type: string
+        level:
+          type: integer
+          format: uint32
+        class:
+          type: string
+        time:
+          type: integer
+          format: uint32
+          description: time taken to complete the league objective in seconds
+        score:
+          type: integer
+          format: uint32
+          description: count of league objective completions
+        progress:
+          $ref: '#/components/schemas/Progress'
+          description: the values of this depend on the league objective
+        experience:
+          type: integer
+          format: uint32
+        depth:
+          $ref: '#/components/schemas/Depth'
+          description: deepest Delve depth completed
+      required:
+      - class
+      - id
+      - level
+      - name
+    EventLadderEntryPrivateLeague:
+      type: object
+      properties:
+        name:
+          type: string
+        url:
+          type: string
+          description: a url link to a Path of Exile Private League
+      required:
+      - name
+      - url
+    AccountChallenges:
+      type: object
+      properties:
+        set:
+          type: string
+          description: the challenge set
+        completed:
+          type: integer
+          format: uint32
+        max:
+          type: integer
+          format: uint32
+      required:
+      - completed
+      - max
+      - set
+    Stream:
+      type: object
+      properties:
+        name:
+          type: string
+        image:
+          type: string
+        status:
+          type: string
+      required:
+      - image
+      - name
+      - status
+    AccountTwitch:
+      type: object
+      properties:
+        name:
+          type: string
+        stream:
+          $ref: '#/components/schemas/Stream'
+      required:
+      - name
+    PvPLadderTeamMemberCharacter:
+      type: object
+      properties:
+        id:
+          type: string
+          description: a unique 64 digit hexadecimal string
+        name:
+          type: string
+        level:
+          type: integer
+          format: uint32
+        class:
+          type: string
+        league:
+          type: string
+        score:
+          type: integer
+          format: uint32
+          description: count of league objective completions
+      required:
+      - class
+      - id
+      - level
+      - name
+    ItemReward:
+      type: object
+      properties:
+        label:
+          type: string
+        rewards:
+          type: object
+          additionalProperties:
+            type: integer
+            format: int32
+          description: the key is a string representing the type of reward. The value
+            is the amount
+      required:
+      - label
+      - rewards
+    Faction:
+      type: object
+      properties:
+        id:
+          type: string
+          enum:
+          - Faction1
+          - Faction2
+          - Faction3
+          - Faction4
+          description: Faction1, Faction2, Faction3, or Faction4
+        name:
+          type: string
+      required:
+      - id
+      - name
+    ItemLogbookMod:
+      type: object
+      properties:
+        name:
+          type: string
+          description: area name
+        faction:
+          $ref: '#/components/schemas/Faction'
+      required:
+      - faction
+      - name
+    ItemUltimatumMod:
+      type: object
+      properties:
+        type:
+          type: string
+          description: text used to display ultimatum icons
+        tier:
+          type: integer
+          format: uint32
+      required:
+      - tier
+      - type
+    Support:
+      type: object
+      properties:
+        hash:
+          type: integer
+          format: uint32
+        name:
+          type: string
+        tier:
+          type: integer
+          format: uint32
+      required:
+      - hash
+      - name
+      - tier
+    ItemMercenarySkill:
+      type: object
+      properties:
+        hash:
+          type: integer
+          format: uint32
+        icon:
+          type: string
+        name:
+          type: string
+        supports:
+          type: array
+          items:
+            $ref: '#/components/schemas/Support'
+      required:
+      - hash
+      - icon
+      - name
+    ItemIncubatedItem:
+      type: object
+      properties:
+        name:
+          type: string
+        level:
+          type: integer
+          format: uint32
+          description: monster level required to progress
+        progress:
+          type: integer
+          format: uint32
+        total:
+          type: integer
+          format: uint32
+      required:
+      - level
+      - name
+      - progress
+      - total
+    ItemEnshrouded:
+      type: object
+      properties:
+        unique:
+          type: string
+        progress:
+          type: integer
+          format: uint32
+        total:
+          type: integer
+          format: uint32
+      required:
+      - progress
+      - total
+    ItemScourged:
+      type: object
+      properties:
+        tier:
+          type: integer
+          format: uint32
+          description: 1-3 for items, 1-10 for maps
+        level:
+          type: integer
+          format: uint32
+          description: monster level required to progress
+        progress:
+          type: integer
+          format: uint32
+        total:
+          type: integer
+          format: uint32
+      required:
+      - tier
+    ItemCrucible:
+      type: object
+      properties:
+        layout:
+          type: string
+          description: URL to an image of the tree layout
+        nodes:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CrucibleNode'
+          description: the key is the string value of the node index
+      required:
+      - layout
+      - nodes
+    ItemHybrid:
+      type: object
+      properties:
+        isVaalGem:
+          type: boolean
+        baseTypeName:
+          type: string
+        properties:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemProperty'
+        explicitMods:
+          type: array
+          items:
+            type: string
+        secDescrText:
+          type: string
+      required:
+      - baseTypeName
+    ItemExtended:
+      type: object
+      properties:
+        prefixes:
+          type: integer
+          format: uint32
+        suffixes:
+          type: integer
+          format: uint32
+    ItemModFlags:
+      type: object
+      properties:
+        fractured:
+          type: boolean
+          description: always true if present
+        mutated:
+          type: boolean
+          description: always true if present
+        crafted:
+          type: boolean
+          description: always true if present
+        desecrated:
+          type: boolean
+          description: PoE2 only; always true if present
+        vestigial:
+          type: boolean
+          description: PoE1 only; always true if present
+    CharacterPassives:
+      type: object
+      properties:
+        hashes:
+          type: array
+          items:
+            type: integer
+            format: uint32
+        hashes_ex:
+          type: array
+          items:
+            type: integer
+            format: uint32
+          description: PoE1 only
+        mastery_effects:
+          type: object
+          additionalProperties:
+            type: integer
+            format: int32
+          description: PoE1 only; the key is the string value of the mastery node
+            skill hash and the value is the selected effect hash
+        specialisations:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: integer
+              format: int32
+          description: PoE2 only; the keys are set1, set2, and set3
+        skill_overrides:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/PassiveNode'
+          description: the key is the string value of the node identifier being replaced
+        bandit_choice:
+          type: string
+          enum:
+          - Kraityn
+          - Alira
+          - Oak
+          - Eramir
+          description: PoE1 only; one of Kraityn, Alira, Oak, or Eramir
+        pantheon_major:
+          type: string
+          enum:
+          - TheBrineKing
+          - Arakaali
+          - Solaris
+          - Lunaris
+          description: PoE1 only; one of TheBrineKing, Arakaali, Solaris, or Lunaris
+        pantheon_minor:
+          type: string
+          enum:
+          - Abberath
+          - Gruthkul
+          - Yugul
+          - Shakari
+          - Tukohama
+          - Ralakesh
+          - Garukhan
+          - Ryslatha
+          description: PoE1 only; one of Abberath, Gruthkul, Yugul, Shakari, Tukohama,
+            Ralakesh, Garukhan, or Ryslatha
+        jewel_data:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/ItemJewelData'
+          description: the key is the string value of the x property of an item from
+            the jewels array in this request
+        quest_stats:
+          type: array
+          items:
+            type: string
+          description: PoE2 only; passives granted via quests
+        alternate_ascendancy:
+          type: string
+          description: PoE1 only; Bloodline class name
+      required:
+      - hashes
+      - hashes_ex
+      - jewel_data
+      - mastery_effects
+      - skill_overrides
+      - specialisations
+    CharacterMetadata:
+      type: object
+      properties:
+        version:
+          type: string
+          description: game version for the character's realm
+    ItemJewelDataSubgraph:
+      type: object
+      properties:
+        groups:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/PassiveGroup'
+          description: the key is the string value of the group id
+        nodes:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/PassiveNode'
+          description: the key is the string value of the node identifier
+      required:
+      - groups
+      - nodes
+    StashTabMetadata:
+      type: object
+      properties:
+        public:
+          type: boolean
+          description: always true if present
+        folder:
+          type: boolean
+          description: always true if present
+        colour:
+          type: string
+          description: 6 digit hex colour
+        map:
+          $ref: '#/components/schemas/Progress'
+          description: various game specific properties
+    LeagueAccountAtlasPassives:
+      type: object
+      properties:
+        hashes:
+          type: array
+          items:
+            type: integer
+            format: uint32
+      required:
+      - hashes
+    LeagueAccountAtlasPassiveTree:
+      type: object
+      properties:
+        name:
+          type: string
+        hashes:
+          type: array
+          items:
+            type: integer
+            format: uint32
+      required:
+      - hashes
+      - name
+    ItemFilterValidation:
+      type: object
+      properties:
+        valid:
+          type: boolean
+        version:
+          type: string
+          description: game version
+        validated:
+          type: string
+          format: date-time
+          description: date time (ISO8601)
+      required:
+      - valid
+    PassiveNodeMasteryEffect:
+      type: object
+      properties:
+        effect:
+          type: integer
+          format: uint32
+          description: effect hash
+        stats:
+          type: array
+          items:
+            type: string
+          description: stat descriptions
+        reminderText:
+          type: array
+          items:
+            type: string
+      required:
+      - effect
+      - stats
+    PassiveNodeExpansionJewel:
+      type: object
+      properties:
+        size:
+          type: integer
+          format: uint32
+        index:
+          type: integer
+          format: uint32
+        proxy:
+          type: integer
+          format: uint32
+          description: the proxy node identifier
+        parent:
+          type: integer
+          format: uint32
+          description: the parent node identifier
+    Twitch:
+      type: object
+      properties:
+        name:
+          type: string
+      required:
+      - name
+    GetProfileResponse:
+      type: object
+      properties:
+        uuid:
+          type: string
+          description: UUIDv4 in canonical format
+        name:
+          type: string
+        locale:
+          type: string
+        twitch:
+          $ref: '#/components/schemas/Twitch'
+          description: present if the account is Twitch-linked
+      required:
+      - name
+      - uuid
+    GetItemFiltersResponse:
+      type: object
+      properties:
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemFilter'
+      required:
+      - filters
+    CreateItemFilterResponse:
+      type: object
+      properties:
+        filter:
+          $ref: '#/components/schemas/ItemFilter'
+      required:
+      - filter
+    CreateItemFilterRequest:
+      type: object
+      properties:
+        filter_name:
+          type: string
+        realm:
+          type: string
+          enum:
+          - pc
+          - xbox
+          - sony
+          - poe2
+          description: pc, xbox, sony, or poe2
+        description:
+          type: string
+        version:
+          type: string
+        type:
+          type: string
+          enum:
+          - Normal
+          - Ruthless
+          description: either Normal or Ruthless
+        public:
+          type: boolean
+          description: defaults to false
+        filter:
+          type: string
+      required:
+      - filter
+      - filter_name
+      - realm
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          enum:
+          - 200
+          - 202
+          - 400
+          - 404
+          - 429
+          - 500
+        message:
+          type: string
+    UpdateItemFilterResponse:
+      type: object
+      properties:
+        filter:
+          $ref: '#/components/schemas/ItemFilter'
+        error:
+          $ref: '#/components/schemas/Error'
+          description: an "Accepted" error object
+      required:
+      - filter
+    UpdateItemFilterRequest:
+      type: object
+      properties:
+        filter_name:
+          type: string
+        realm:
+          type: string
+          enum:
+          - pc
+          - xbox
+          - sony
+          - poe2
+          description: pc, xbox, sony, or poe2
+        description:
+          type: string
+        version:
+          type: string
+        type:
+          type: string
+          enum:
+          - Normal
+          - Ruthless
+          description: either Normal or Ruthless
+        public:
+          type: boolean
+          description: must be true if present
+        filter:
+          type: string
+    ListLeaguesResponse:
+      type: object
+      properties:
+        leagues:
+          type: array
+          items:
+            $ref: '#/components/schemas/League'
+      required:
+      - leagues
+    GetLeagueResponse:
+      type: object
+      properties:
+        league:
+          $ref: '#/components/schemas/League'
+    Ladder:
+      type: object
+      properties:
+        total:
+          type: integer
+          format: uint32
+        cached_since:
+          type: string
+          format: date-time
+          description: date time (ISO8601)
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/LadderEntry'
+      required:
+      - entries
+      - total
+    GetLeagueLadderResponse:
+      type: object
+      properties:
+        league:
+          $ref: '#/components/schemas/League'
+        ladder:
+          $ref: '#/components/schemas/Ladder'
+      required:
+      - ladder
+      - league
+    Ladder2:
+      type: object
+      properties:
+        total:
+          type: integer
+          format: uint32
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventLadderEntry'
+      required:
+      - entries
+      - total
+    GetLeagueEventLadderResponse:
+      type: object
+      properties:
+        league:
+          $ref: '#/components/schemas/League'
+        ladder:
+          $ref: '#/components/schemas/Ladder2'
+      required:
+      - ladder
+      - league
+    ListPvpMatchesResponse:
+      type: object
+      properties:
+        matches:
+          type: array
+          items:
+            $ref: '#/components/schemas/PvPMatch'
+      required:
+      - matches
+    GetPvpMatchResponse:
+      type: object
+      properties:
+        match:
+          $ref: '#/components/schemas/PvPMatch'
+    Ladder3:
+      type: object
+      properties:
+        total:
+          type: integer
+          format: uint32
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/PvPLadderTeamEntry'
+      required:
+      - entries
+      - total
+    GetPvpMatchLadderResponse:
+      type: object
+      properties:
+        match:
+          $ref: '#/components/schemas/PvPMatch'
+        ladder:
+          $ref: '#/components/schemas/Ladder3'
+      required:
+      - ladder
+      - match
+    ListCharactersResponse:
+      type: object
+      properties:
+        characters:
+          type: array
+          items:
+            $ref: '#/components/schemas/Character'
+      required:
+      - characters
+    GetCharacterResponse:
+      type: object
+      properties:
+        character:
+          $ref: '#/components/schemas/Character'
+    ListStashesResponse:
+      type: object
+      properties:
+        stashes:
+          type: array
+          items:
+            $ref: '#/components/schemas/StashTab'
+      required:
+      - stashes
+    GetStashResponse:
+      type: object
+      properties:
+        stash:
+          $ref: '#/components/schemas/StashTab'
+    GetLeagueAccountResponse:
+      type: object
+      properties:
+        league_account:
+          $ref: '#/components/schemas/LeagueAccount'
+      required:
+      - league_account
+    GetPublicStashesResponse:
+      type: object
+      properties:
+        next_change_id:
+          type: string
+          description: pagination code
+        stashes:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicStashChange'
+      required:
+      - next_change_id
+      - stashes
+    Market:
+      type: object
+      properties:
+        league:
+          type: string
+        market_id:
+          type: string
+          enum:
+          - Metadata/Items/Currency/CurrencyRerollRare|Metadata/Items/Currency/CurrencyModValues
+          description: 'base item ids separated by a pipe. Example: Metadata/Items/Currency/CurrencyRerollRare|Metadata/Items/Currency/CurrencyModValues'
+        market_pair:
+          type: array
+          items:
+            type: string
+          description: base item ids
+        volume_traded:
+          type: object
+          additionalProperties:
+            type: integer
+            format: uint32
+          description: 'the keys are the market currencies. Example: Metadata/Items/Currency/CurrencyRerollRare'
+        lowest_stock:
+          type: object
+          additionalProperties:
+            type: integer
+            format: uint32
+        highest_stock:
+          type: object
+          additionalProperties:
+            type: integer
+            format: uint32
+        lowest_ratio:
+          type: object
+          additionalProperties:
+            type: integer
+            format: uint32
+        highest_ratio:
+          type: object
+          additionalProperties:
+            type: integer
+            format: uint32
+      required:
+      - highest_ratio
+      - highest_stock
+      - league
+      - lowest_ratio
+      - lowest_stock
+      - market_id
+      - market_pair
+      - volume_traded
+    GetExchangeMarketsResponse:
+      type: object
+      properties:
+        next_change_id:
+          type: integer
+          format: uint32
+          description: unix timestamp truncated to the hour
+        markets:
+          type: array
+          items:
+            $ref: '#/components/schemas/Market'
+      required:
+      - markets
+      - next_change_id
   parameters:
     UserAgent:
       name: User-Agent
