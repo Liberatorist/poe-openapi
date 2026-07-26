@@ -146,9 +146,7 @@ paths:
         in: query
         required: true
         schema:
-          type: string
-          enum:
-          - poe2
+          $ref: '#/components/schemas/Realm'
       - description: 'type can be one of the following: main retrieves permanent and
           current challenge leagues (default)
 
@@ -201,9 +199,7 @@ paths:
         in: query
         required: true
         schema:
-          type: string
-          enum:
-          - poe2
+          $ref: '#/components/schemas/Realm'
   /league/{league}/ladder:
     get:
       summary: Get League Ladder
@@ -232,9 +228,7 @@ paths:
         in: query
         required: true
         schema:
-          type: string
-          enum:
-          - poe2
+          $ref: '#/components/schemas/Realm'
       - description: "sort (PoE1 only) can be one of the following: xp sorts the ladder\
           \ by experience\ndepth sorts the ladder by Delve depth\ndepthsolo sorts\
           \ the ladder by Delve (Solo) depth\nancestor sorts the ladder by Ancestor\
@@ -330,17 +324,20 @@ servers:
 - url: https://api.pathofexile.com
 components:
   schemas:
+    Realm:
+      type: string
+      enum:
+      - pc
+      - poe2
+      - sony
+      - xbox
     League:
       type: object
       properties:
         id:
           type: string
         realm:
-          type: string
-          enum:
-          - pc
-          - xbox
-          - sony
+          $ref: '#/components/schemas/Realm'
           description: pc, xbox, or sony
         name:
           type: string
@@ -450,11 +447,7 @@ components:
         name:
           type: string
         realm:
-          type: string
-          enum:
-          - pc
-          - xbox
-          - sony
+          $ref: '#/components/schemas/Realm'
           description: pc, xbox, or sony
         guild:
           $ref: '#/components/schemas/Guild'
@@ -485,11 +478,7 @@ components:
           type: string
           description: the match's name
         realm:
-          type: string
-          enum:
-          - pc
-          - xbox
-          - sony
+          $ref: '#/components/schemas/Realm'
           description: pc, xbox, or sony
         startAt:
           type: string
@@ -610,9 +599,7 @@ components:
       type: object
       properties:
         realm:
-          type: string
-          enum:
-          - poe2
+          $ref: '#/components/schemas/Realm'
           description: always poe2 if present
         verified:
           type: boolean
@@ -1066,11 +1053,7 @@ components:
         name:
           type: string
         realm:
-          type: string
-          enum:
-          - pc
-          - xbox
-          - sony
+          $ref: '#/components/schemas/Realm'
           description: pc, xbox, or sony
         class:
           type: string
@@ -1204,7 +1187,7 @@ components:
         filter_name:
           type: string
         realm:
-          type: string
+          $ref: '#/components/schemas/Realm'
         description:
           type: string
         version:
@@ -2039,12 +2022,7 @@ components:
         filter_name:
           type: string
         realm:
-          type: string
-          enum:
-          - pc
-          - xbox
-          - sony
-          - poe2
+          $ref: '#/components/schemas/Realm'
           description: pc, xbox, sony, or poe2
         description:
           type: string
@@ -2095,12 +2073,7 @@ components:
         filter_name:
           type: string
         realm:
-          type: string
-          enum:
-          - pc
-          - xbox
-          - sony
-          - poe2
+          $ref: '#/components/schemas/Realm'
           description: pc, xbox, sony, or poe2
         description:
           type: string

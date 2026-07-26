@@ -252,10 +252,7 @@
             "in": "query",
             "required": true,
             "schema": {
-              "type": "string",
-              "enum": [
-                "sony"
-              ]
+              "$ref": "#/components/schemas/Realm"
             }
           },
           {
@@ -332,10 +329,7 @@
             "in": "query",
             "required": true,
             "schema": {
-              "type": "string",
-              "enum": [
-                "sony"
-              ]
+              "$ref": "#/components/schemas/Realm"
             }
           }
         ]
@@ -385,10 +379,7 @@
             "in": "query",
             "required": true,
             "schema": {
-              "type": "string",
-              "enum": [
-                "sony"
-              ]
+              "$ref": "#/components/schemas/Realm"
             }
           },
           {
@@ -465,10 +456,7 @@
             "in": "query",
             "required": true,
             "schema": {
-              "type": "string",
-              "enum": [
-                "sony"
-              ]
+              "$ref": "#/components/schemas/Realm"
             }
           },
           {
@@ -528,10 +516,7 @@
             "in": "query",
             "required": true,
             "schema": {
-              "type": "string",
-              "enum": [
-                "sony"
-              ]
+              "$ref": "#/components/schemas/Realm"
             }
           },
           {
@@ -590,10 +575,7 @@
             "in": "query",
             "required": true,
             "schema": {
-              "type": "string",
-              "enum": [
-                "sony"
-              ]
+              "$ref": "#/components/schemas/Realm"
             }
           }
         ]
@@ -643,10 +625,7 @@
             "in": "query",
             "required": true,
             "schema": {
-              "type": "string",
-              "enum": [
-                "sony"
-              ]
+              "$ref": "#/components/schemas/Realm"
             }
           },
           {
@@ -1214,6 +1193,15 @@
   ],
   "components": {
     "schemas": {
+      "Realm": {
+        "type": "string",
+        "enum": [
+          "pc",
+          "poe2",
+          "sony",
+          "xbox"
+        ]
+      },
       "League": {
         "type": "object",
         "properties": {
@@ -1221,12 +1209,7 @@
             "type": "string"
           },
           "realm": {
-            "type": "string",
-            "enum": [
-              "pc",
-              "xbox",
-              "sony"
-            ],
+            "$ref": "#/components/schemas/Realm",
             "description": "pc, xbox, or sony"
           },
           "name": {
@@ -1381,12 +1364,7 @@
             "type": "string"
           },
           "realm": {
-            "type": "string",
-            "enum": [
-              "pc",
-              "xbox",
-              "sony"
-            ],
+            "$ref": "#/components/schemas/Realm",
             "description": "pc, xbox, or sony"
           },
           "guild": {
@@ -1431,12 +1409,7 @@
             "description": "the match's name"
           },
           "realm": {
-            "type": "string",
-            "enum": [
-              "pc",
-              "xbox",
-              "sony"
-            ],
+            "$ref": "#/components/schemas/Realm",
             "description": "pc, xbox, or sony"
           },
           "startAt": {
@@ -1601,10 +1574,7 @@
         "type": "object",
         "properties": {
           "realm": {
-            "type": "string",
-            "enum": [
-              "poe2"
-            ],
+            "$ref": "#/components/schemas/Realm",
             "description": "always poe2 if present"
           },
           "verified": {
@@ -2223,12 +2193,7 @@
             "type": "string"
           },
           "realm": {
-            "type": "string",
-            "enum": [
-              "pc",
-              "xbox",
-              "sony"
-            ],
+            "$ref": "#/components/schemas/Realm",
             "description": "pc, xbox, or sony"
           },
           "class": {
@@ -2418,7 +2383,7 @@
             "type": "string"
           },
           "realm": {
-            "type": "string"
+            "$ref": "#/components/schemas/Realm"
           },
           "description": {
             "type": "string"
@@ -3580,13 +3545,7 @@
             "type": "string"
           },
           "realm": {
-            "type": "string",
-            "enum": [
-              "pc",
-              "xbox",
-              "sony",
-              "poe2"
-            ],
+            "$ref": "#/components/schemas/Realm",
             "description": "pc, xbox, sony, or poe2"
           },
           "description": {
@@ -3658,13 +3617,7 @@
             "type": "string"
           },
           "realm": {
-            "type": "string",
-            "enum": [
-              "pc",
-              "xbox",
-              "sony",
-              "poe2"
-            ],
+            "$ref": "#/components/schemas/Realm",
             "description": "pc, xbox, sony, or poe2"
           },
           "description": {

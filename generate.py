@@ -225,7 +225,12 @@ def build_openapi(soup, realm):
                 }
             ],
             "components": {
-                "schemas": {},
+                "schemas": {
+                    "Realm": {
+                        "type": "string",
+                        "enum": sorted(realms.keys()),
+                    },
+                },
                 "parameters": {
                     "UserAgent": {
                         "name": "User-Agent",
@@ -402,7 +407,7 @@ def parse_endpoint(openapi, tag, scope, h3, realm):
                     # endpoint does not support this realm
                     return
                 param["required"] = True
-                param["schema"] = {"type": "string", "enum": [realms[realm]]}
+                param["schema"] = {"$ref": "#/components/schemas/Realm"}
             for child in children[1:]:
                 description.append(child.text.strip())
             if description:
@@ -601,6 +606,23 @@ def hoist_object_schemas(openapi):
                 hoist(request_content["schema"], f"{op_id} Request")
 
 
+def unify_realm_fields(openapi):
+    """
+    Point every object property literally named "realm" at the shared
+    Realm enum schema instead of each object's own inline (and often
+    narrower) enum, so there's a single definition of what a realm is.
+    """
+    for name, schema in openapi["components"]["schemas"].items():
+        if name == "Realm":
+            continue
+        prop = schema.get("properties", {}).get("realm")
+        if prop and prop.get("type") == "string":
+            new_prop = {"$ref": "#/components/schemas/Realm"}
+            if prop.get("description"):
+                new_prop["description"] = prop["description"]
+            schema["properties"]["realm"] = new_prop
+
+
 poe1_version, poe2_version = fetch_latest_versions()
 realm_info = {
     "pc": {"title": "Path of Exile API", "version": poe1_version},
@@ -615,6 +637,7 @@ for realm in realms:
     openapi = build_openapi(soup, realm)
     apply_go_type_overrides(openapi)
     hoist_object_schemas(openapi)
+    unify_realm_fields(openapi)
     suffix = "-poe1" if realm == "pc" else f"-{realm}"
 
     with open(f"out/openapi{suffix}.json", "w", encoding="utf-8") as f:
