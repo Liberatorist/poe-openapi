@@ -12,6 +12,7 @@ SCHEMA_OVERRIDES = {
     ("CrucibleNode", "skill"): {"type": "string"},
     ("PassiveGroup", "proxy"): {"type": "string"},
     ("PassiveNodeExpansionJewel", "proxy"): {"type": "string"},
+    ("PassiveNodeExpansionJewel", "parent"): {"type": "string"},
 }
 
 

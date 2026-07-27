@@ -2214,7 +2214,7 @@ components:
           type: string
           description: the proxy node identifier
         parent:
-          type: integer
+          type: string
           description: the parent node identifier
     Twitch:
       type: object
