@@ -6,6 +6,8 @@ from itertools import product
 from urllib.request import Request, urlopen
 import requests
 
+from overrides import apply_schema_overrides
+
 
 primitive_translations = {
     "string": {"type": "string"},
@@ -636,6 +638,7 @@ soup = fetch_soup("https://www.pathofexile.com/developer/docs/reference")
 for realm in realms:
     openapi = build_openapi(soup, realm)
     apply_go_type_overrides(openapi)
+    apply_schema_overrides(openapi)
     hoist_object_schemas(openapi)
     unify_realm_fields(openapi)
     suffix = "-poe1" if realm == "pc" else f"-{realm}"

@@ -1216,7 +1216,7 @@ components:
       type: object
       properties:
         skill:
-          type: integer
+          type: string
           description: skill hash
         name:
           type: string
@@ -1330,7 +1330,7 @@ components:
       type: object
       properties:
         skill:
-          type: integer
+          type: string
           description: mod hash
         tier:
           type: integer
