@@ -1553,7 +1553,8 @@
             "description": "PoE2 only; string is always W"
           },
           "influences": {
-            "$ref": "#/components/schemas/Progress"
+            "type": "object",
+            "properties": {}
           },
           "elder": {
             "type": "boolean",
@@ -2659,10 +2660,6 @@
           "id"
         ]
       },
-      "Progress": {
-        "type": "object",
-        "properties": {}
-      },
       "Depth": {
         "type": "object",
         "properties": {
@@ -2699,7 +2696,8 @@
             "description": "count of league objective completions"
           },
           "progress": {
-            "$ref": "#/components/schemas/Progress",
+            "type": "object",
+            "properties": {},
             "description": "the values of this depend on the league objective"
           },
           "experience": {
@@ -3233,7 +3231,8 @@
             "description": "6 digit hex colour"
           },
           "map": {
-            "$ref": "#/components/schemas/Progress",
+            "type": "object",
+            "properties": {},
             "description": "various game specific properties"
           }
         }

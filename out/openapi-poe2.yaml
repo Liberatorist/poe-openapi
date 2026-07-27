@@ -626,7 +626,8 @@ components:
             type: string
           description: PoE2 only; string is always W
         influences:
-          $ref: '#/components/schemas/Progress'
+          type: object
+          properties: {}
         elder:
           type: boolean
           description: always true if present
@@ -1419,9 +1420,6 @@ components:
           description: set for the active challenge leagues; always true if present
       required:
       - id
-    Progress:
-      type: object
-      properties: {}
     Depth:
       type: object
       properties:
@@ -1448,7 +1446,8 @@ components:
           type: integer
           description: count of league objective completions
         progress:
-          $ref: '#/components/schemas/Progress'
+          type: object
+          properties: {}
           description: the values of this depend on the league objective
         experience:
           type: integer
@@ -1828,7 +1827,8 @@ components:
           type: string
           description: 6 digit hex colour
         map:
-          $ref: '#/components/schemas/Progress'
+          type: object
+          properties: {}
           description: various game specific properties
     LeagueAccountAtlasPassives:
       type: object

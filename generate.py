@@ -566,7 +566,7 @@ def hoist_object_schemas(openapi):
             if "properties" in node:
                 for key, sub in node["properties"].items():
                     hoist(sub, key)
-            if node.get("type") == "object" and "properties" in node:
+            if node.get("type") == "object" and node.get("properties"):
                 description = node.pop("description", None)
                 key = json.dumps(node, sort_keys=True)
                 name = existing_by_shape.get(key)
