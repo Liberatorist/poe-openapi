@@ -2743,7 +2743,7 @@
             "type": "integer"
           },
           "proxy": {
-            "type": "integer",
+            "type": "string",
             "description": "the proxy node identifier"
           },
           "parent": {

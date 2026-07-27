@@ -10,6 +10,8 @@ SCHEMA_OVERRIDES = {
     # quoted strings (e.g. "12345").
     ("PassiveNode", "skill"): {"type": "string"},
     ("CrucibleNode", "skill"): {"type": "string"},
+    ("PassiveGroup", "proxy"): {"type": "string"},
+    ("PassiveNodeExpansionJewel", "proxy"): {"type": "string"},
 }
 
 
