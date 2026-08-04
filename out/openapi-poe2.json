@@ -484,7 +484,7 @@
         ]
       }
     },
-    "/https:/web.poecdn.com/api/currency-exchange/poe2": {
+    "/api/currency-exchange/poe2": {
       "get": {
         "summary": "Get Exchange Markets",
         "operationId": "GetExchangeMarkets",
@@ -504,10 +504,15 @@
           {
             "bearerAuth": []
           }
+        ],
+        "servers": [
+          {
+            "url": "https://web.poecdn.com"
+          }
         ]
       }
     },
-    "/https:/web.poecdn.com/api/currency-exchange/poe2/{id}": {
+    "/api/currency-exchange/poe2/{id}": {
       "get": {
         "summary": "Get Exchange Markets (with optional: id)",
         "operationId": "GetExchangeMarketsId",
@@ -526,6 +531,11 @@
         "security": [
           {
             "bearerAuth": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://web.poecdn.com"
           }
         ],
         "parameters": [

@@ -615,7 +615,7 @@ paths:
         required: false
         schema:
           type: string
-  /https:/web.poecdn.com/api/currency-exchange:
+  /api/currency-exchange:
     get:
       summary: Get Exchange Markets
       operationId: GetExchangeMarkets
@@ -628,12 +628,15 @@ paths:
                 $ref: '#/components/schemas/GetExchangeMarketsResponse'
       security: &id008
       - bearerAuth: []
-  /https:/web.poecdn.com/api/currency-exchange/{id}:
+      servers: &id009
+      - url: https://web.poecdn.com
+  /api/currency-exchange/{id}:
     get:
       summary: 'Get Exchange Markets (with optional: id)'
       operationId: GetExchangeMarketsId
       responses: *id007
       security: *id008
+      servers: *id009
       parameters:
       - name: id
         in: path

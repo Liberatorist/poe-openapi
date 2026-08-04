@@ -1129,7 +1129,7 @@
         ]
       }
     },
-    "/https:/web.poecdn.com/api/currency-exchange/sony": {
+    "/api/currency-exchange/sony": {
       "get": {
         "summary": "Get Exchange Markets",
         "operationId": "GetExchangeMarkets",
@@ -1149,10 +1149,15 @@
           {
             "bearerAuth": []
           }
+        ],
+        "servers": [
+          {
+            "url": "https://web.poecdn.com"
+          }
         ]
       }
     },
-    "/https:/web.poecdn.com/api/currency-exchange/sony/{id}": {
+    "/api/currency-exchange/sony/{id}": {
       "get": {
         "summary": "Get Exchange Markets (with optional: id)",
         "operationId": "GetExchangeMarketsId",
@@ -1171,6 +1176,11 @@
         "security": [
           {
             "bearerAuth": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://web.poecdn.com"
           }
         ],
         "parameters": [

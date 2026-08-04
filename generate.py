@@ -3,6 +3,7 @@ import re
 import yaml
 from bs4 import BeautifulSoup
 from itertools import product
+from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 import requests
 
@@ -334,6 +335,15 @@ def parse_endpoint(openapi, tag, scope, h3, realm):
     param_names = []
     # Parse the endpoint path and fill pathParts and optional_path_params
     path = endpoint_text[len(http_verb):].strip()
+    # Some endpoints are documented as absolute URLs on a different host
+    # (e.g. the currency exchange API lives on web.poecdn.com, not
+    # api.pathofexile.com). Split that host out into a per-operation
+    # server override and continue parsing just the path portion.
+    endpoint_servers = None
+    parsed_url = urlparse(path)
+    if parsed_url.scheme and parsed_url.netloc:
+        endpoint_servers = [{"url": f"{parsed_url.scheme}://{parsed_url.netloc}"}]
+        path = parsed_url.path
     has_realm = "<realm>" in path
     if has_realm and realm != "pc":
         # skip endpoints that don't support this realm
@@ -432,6 +442,8 @@ def parse_endpoint(openapi, tag, scope, h3, realm):
     }
     if tag:
         definition["tags"] = [tag]
+    if endpoint_servers:
+        definition["servers"] = endpoint_servers
     if requestBody:
         definition["requestBody"] = {
             "required": True,
