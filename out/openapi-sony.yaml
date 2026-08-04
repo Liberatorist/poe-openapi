@@ -489,18 +489,18 @@ paths:
     get:
       summary: Get Stash
       operationId: GetStash
-      responses: &id001
+      responses:
         '200':
           description: Successful response
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetStashResponse'
-      security: &id002
+      security:
       - bearerAuth: []
       - account:
         - account:stashes
-      tags: &id003
+      tags:
       - Account Stashes
       parameters:
       - name: league
@@ -517,9 +517,19 @@ paths:
     get:
       summary: 'Get Stash (with optional: substash_id)'
       operationId: GetStashSubstash_id
-      responses: *id001
-      security: *id002
-      tags: *id003
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetStashResponse'
+      security:
+      - bearerAuth: []
+      - account:
+        - account:stashes
+      tags:
+      - Account Stashes
       parameters:
       - name: league
         in: path
@@ -586,18 +596,18 @@ paths:
     get:
       summary: Get Guild Stash
       operationId: GetGuildStash
-      responses: &id004
+      responses:
         '200':
           description: Successful response
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetStashResponse'
-      security: &id005
+      security:
       - bearerAuth: []
       - account:
         - account:guild:stashes
-      tags: &id006
+      tags:
       - Guild Stashes
       parameters:
       - name: league
@@ -614,9 +624,19 @@ paths:
     get:
       summary: 'Get Guild Stash (with optional: substash_id)'
       operationId: GetGuildStashSubstash_id
-      responses: *id004
-      security: *id005
-      tags: *id006
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetStashResponse'
+      security:
+      - bearerAuth: []
+      - account:
+        - account:guild:stashes
+      tags:
+      - Guild Stashes
       parameters:
       - name: league
         in: path
@@ -661,24 +681,32 @@ paths:
     get:
       summary: Get Exchange Markets
       operationId: GetExchangeMarkets
-      responses: &id007
+      responses:
         '200':
           description: Successful response
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetExchangeMarketsResponse'
-      security: &id008
+      security:
       - bearerAuth: []
-      servers: &id009
+      servers:
       - url: https://web.poecdn.com
   /api/currency-exchange/sony/{id}:
     get:
       summary: 'Get Exchange Markets (with optional: id)'
       operationId: GetExchangeMarketsId
-      responses: *id007
-      security: *id008
-      servers: *id009
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetExchangeMarketsResponse'
+      security:
+      - bearerAuth: []
+      servers:
+      - url: https://web.poecdn.com
       parameters:
       - name: id
         in: path

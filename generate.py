@@ -22,6 +22,19 @@ primitive_translations = {
 
 http_verbs = {"GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"}
 
+
+class NoAliasDumper(yaml.Dumper):
+    """
+    Endpoint definitions are shallow-copied for optional-param variants, so
+    nested values (responses, security, tags, servers, ...) are the same
+    object shared across multiple operations. PyYAML would otherwise
+    compress those into &anchor/*alias references, which is confusing to
+    read even though it's valid YAML.
+    """
+
+    def ignore_aliases(self, data):
+        return True
+
 # realm -> path segment (None means the realm is omitted from the path)
 realms = {
     "pc": None,
@@ -659,4 +672,4 @@ for realm in realms:
         json.dump(openapi, f, indent=2, ensure_ascii=False)
 
     with open(f"out/openapi{suffix}.yaml", "w", encoding="utf-8") as f:
-        yaml.dump(openapi, f, allow_unicode=True, sort_keys=False)
+        yaml.dump(openapi, f, allow_unicode=True, sort_keys=False, Dumper=NoAliasDumper)

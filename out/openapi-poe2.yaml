@@ -299,24 +299,32 @@ paths:
     get:
       summary: Get Exchange Markets
       operationId: GetExchangeMarkets
-      responses: &id001
+      responses:
         '200':
           description: Successful response
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetExchangeMarketsResponse'
-      security: &id002
+      security:
       - bearerAuth: []
-      servers: &id003
+      servers:
       - url: https://web.poecdn.com
   /api/currency-exchange/poe2/{id}:
     get:
       summary: 'Get Exchange Markets (with optional: id)'
       operationId: GetExchangeMarketsId
-      responses: *id001
-      security: *id002
-      servers: *id003
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetExchangeMarketsResponse'
+      security:
+      - bearerAuth: []
+      servers:
+      - url: https://web.poecdn.com
       parameters:
       - name: id
         in: path
