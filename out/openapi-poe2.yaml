@@ -308,6 +308,8 @@ paths:
                 $ref: '#/components/schemas/GetExchangeMarketsResponse'
       security:
       - bearerAuth: []
+      tags:
+      - Currency Exchange
       servers:
       - url: https://web.poecdn.com
   /api/currency-exchange/poe2/{id}:
@@ -323,6 +325,8 @@ paths:
                 $ref: '#/components/schemas/GetExchangeMarketsResponse'
       security:
       - bearerAuth: []
+      tags:
+      - Currency Exchange
       servers:
       - url: https://web.poecdn.com
       parameters:
@@ -2174,3 +2178,4 @@ tags:
 - name: Account Item Filters
 - name: Leagues
 - name: Account Characters
+- name: Currency Exchange

@@ -690,6 +690,8 @@ paths:
                 $ref: '#/components/schemas/GetExchangeMarketsResponse'
       security:
       - bearerAuth: []
+      tags:
+      - Currency Exchange
       servers:
       - url: https://web.poecdn.com
   /api/currency-exchange/sony/{id}:
@@ -705,6 +707,8 @@ paths:
                 $ref: '#/components/schemas/GetExchangeMarketsResponse'
       security:
       - bearerAuth: []
+      tags:
+      - Currency Exchange
       servers:
       - url: https://web.poecdn.com
       parameters:
@@ -2654,3 +2658,4 @@ tags:
 - name: League Accounts
 - name: Guild Stashes
 - name: Public Stashes
+- name: Currency Exchange

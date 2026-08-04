@@ -310,17 +310,28 @@ def build_openapi(soup, realm):
         section_title = section_title.replace("(PoE1 only)", "").strip()
         skip_endpoints = poe1_only and realm == "poe2"
         scopedivs = find_all_before(h2, "div", "h2")
-        if scopedivs:
+        section_h3s = find_all_before(h2, "h3", "h2")
+        # Sections that document actual endpoints (as opposed to pure
+        # schema/reference sections like "Type Definitions") always start
+        # with a subtitle div, either "Required scope: ..." or, for
+        # endpoints that need no OAuth scope (e.g. Currency Exchange),
+        # "Public API". Only the former yields a scope; both yield a tag.
+        has_endpoint = any(
+            (code := h3.find_next("code")) and any(
+                code.text.strip().startswith(v) for v in http_verbs)
+            for h3 in section_h3s
+        )
+        if scopedivs and has_endpoint:
+            tag = section_title
+            if not skip_endpoints:
+                tags.append({
+                    "name": section_title,
+                })
             if "scope" in scopedivs[0].text.lower():
                 x = scopedivs[0].find_next("a")
                 if x:
                     scope = x.text.strip()
-                tag = section_title
-                if not skip_endpoints:
-                    tags.append({
-                        "name": section_title,
-                    })
-        for h3 in find_all_before(h2, "h3", "h2"):
+        for h3 in section_h3s:
             text = h3.text.strip()
             if text.startswith("object"):
                 table = h3.find_next("table")

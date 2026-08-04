@@ -1087,6 +1087,9 @@
             "bearerAuth": []
           }
         ],
+        "tags": [
+          "Currency Exchange"
+        ],
         "servers": [
           {
             "url": "https://web.poecdn.com"
@@ -1114,6 +1117,9 @@
           {
             "bearerAuth": []
           }
+        ],
+        "tags": [
+          "Currency Exchange"
         ],
         "servers": [
           {
@@ -3893,6 +3899,9 @@
     },
     {
       "name": "Public Stashes"
+    },
+    {
+      "name": "Currency Exchange"
     }
   ]
 }
