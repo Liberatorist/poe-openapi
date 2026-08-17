@@ -9,8 +9,6 @@ SCHEMA_OVERRIDES = {
     # Docs claim these are integers, but the API actually returns them as
     # quoted strings (e.g. "12345").
     ("PassiveNode", "skill"): {"type": "string"},
-    # ("CrucibleNode", "skill"): {"type": "string"},
-    ("PassiveGroup", "proxy"): {"type": "string"},
     ("PassiveNodeExpansionJewel", "proxy"): {"type": "string"},
     ("PassiveNodeExpansionJewel", "parent"): {"type": "string"},
 }
