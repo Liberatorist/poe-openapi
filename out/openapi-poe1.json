@@ -2541,7 +2541,7 @@
         "type": "object",
         "properties": {
           "skill": {
-            "type": "string",
+            "type": "integer",
             "description": "mod hash"
           },
           "tier": {
