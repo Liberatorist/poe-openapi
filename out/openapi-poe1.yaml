@@ -1184,7 +1184,7 @@ components:
         mercenarySkills:
           type: array
           items:
-            $ref: '#/components/schemas/ItemMercenarySkill'
+            $ref: '#/components/schemas/MercenarySkill'
         crucibleMods:
           type: array
           items:
@@ -1375,6 +1375,23 @@ components:
       required:
       - name
       - values
+    MercenarySkill:
+      type: object
+      properties:
+        hash:
+          type: integer
+        icon:
+          type: string
+        name:
+          type: string
+        supports:
+          type: array
+          items:
+            $ref: '#/components/schemas/MercenarySkillSupport'
+      required:
+      - hash
+      - icon
+      - name
     Character:
       type: object
       properties:
@@ -1433,6 +1450,9 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Item'
+          description: PoE1 only
+        active_mercenary_index:
+          type: integer
           description: PoE1 only
         passives:
           $ref: '#/components/schemas/CharacterPassives'
@@ -1497,14 +1517,17 @@ components:
     LeagueAccount:
       type: object
       properties:
-        atlas_passives:
-          $ref: '#/components/schemas/LeagueAccountAtlasPassives'
         atlas_passive_trees:
           type: array
           items:
             $ref: '#/components/schemas/LeagueAccountAtlasPassiveTree'
+        mercenaries:
+          type: array
+          items:
+            $ref: '#/components/schemas/LeagueAccountMercenarie'
       required:
       - atlas_passive_trees
+      - mercenaries
     ItemFilter:
       type: object
       properties:
@@ -1935,36 +1958,6 @@ components:
       required:
       - tier
       - type
-    Support:
-      type: object
-      properties:
-        hash:
-          type: integer
-        name:
-          type: string
-        tier:
-          type: integer
-      required:
-      - hash
-      - name
-      - tier
-    ItemMercenarySkill:
-      type: object
-      properties:
-        hash:
-          type: integer
-        icon:
-          type: string
-        name:
-          type: string
-        supports:
-          type: array
-          items:
-            $ref: '#/components/schemas/Support'
-      required:
-      - hash
-      - icon
-      - name
     ItemIncubatedItem:
       type: object
       properties:
@@ -2067,6 +2060,19 @@ components:
         vestigial:
           type: boolean
           description: PoE1 only; always true if present
+    MercenarySkillSupport:
+      type: object
+      properties:
+        hash:
+          type: integer
+        name:
+          type: string
+        tier:
+          type: integer
+      required:
+      - hash
+      - name
+      - tier
     CharacterPassives:
       type: object
       properties:
@@ -2185,15 +2191,6 @@ components:
           type: object
           properties: {}
           description: various game specific properties
-    LeagueAccountAtlasPassives:
-      type: object
-      properties:
-        hashes:
-          type: array
-          items:
-            type: integer
-      required:
-      - hashes
     LeagueAccountAtlasPassiveTree:
       type: object
       properties:
@@ -2206,6 +2203,32 @@ components:
       required:
       - hashes
       - name
+    LeagueAccountMercenarie:
+      type: object
+      properties:
+        name:
+          type: string
+        level:
+          type: integer
+        build:
+          type: string
+        build_hash:
+          type: integer
+        skills:
+          type: array
+          items:
+            $ref: '#/components/schemas/MercenarySkill'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item'
+      required:
+      - build
+      - build_hash
+      - items
+      - level
+      - name
+      - skills
     ItemFilterValidation:
       type: object
       properties:
