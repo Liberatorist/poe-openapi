@@ -2515,10 +2515,14 @@
           },
           "tier": {
             "type": "integer"
+          },
+          "icon": {
+            "type": "string"
           }
         },
         "required": [
           "hash",
+          "icon",
           "name",
           "tier"
         ]
