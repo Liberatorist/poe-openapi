@@ -3286,6 +3286,9 @@
       "LeagueAccountMercenarie": {
         "type": "object",
         "properties": {
+          "index": {
+            "type": "integer"
+          },
           "name": {
             "type": "string"
           },
@@ -3314,6 +3317,7 @@
         "required": [
           "build",
           "build_hash",
+          "index",
           "items",
           "level",
           "name",

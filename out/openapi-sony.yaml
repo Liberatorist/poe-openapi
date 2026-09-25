@@ -2251,6 +2251,8 @@ components:
     LeagueAccountMercenarie:
       type: object
       properties:
+        index:
+          type: integer
         name:
           type: string
         level:
@@ -2270,6 +2272,7 @@ components:
       required:
       - build
       - build_hash
+      - index
       - items
       - level
       - name
