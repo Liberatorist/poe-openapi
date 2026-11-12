@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Path of Exile API (Xbox)",
-    "version": "3.29.0"
+    "version": "3.30.0"
   },
   "paths": {
     "/profile": {
@@ -1726,8 +1726,7 @@
             "description": "used for items that always display their item level"
           },
           "unidentifiedTier": {
-            "type": "integer",
-            "description": "PoE2 only"
+            "type": "integer"
           },
           "ilvl": {
             "type": "integer"
@@ -1762,7 +1761,7 @@
           },
           "doubleCorrupted": {
             "type": "boolean",
-            "description": "PoE2 only; always true if present"
+            "description": "always true if present"
           },
           "sanctified": {
             "type": "boolean",
@@ -2281,6 +2280,13 @@
             },
             "description": "PoE1 only"
           },
+          "wickerman": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Item"
+            },
+            "description": "PoE1 only"
+          },
           "active_mercenary_index": {
             "type": "integer",
             "description": "PoE1 only"
@@ -2568,6 +2574,16 @@
             "type": "boolean",
             "description": "always true if present"
           },
+          "isMultipleChoiceVariant": {
+            "type": "boolean",
+            "description": "always true if present"
+          },
+          "variantEffects": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PassiveNodeMasteryEffect"
+            }
+          },
           "isMultipleChoice": {
             "type": "boolean",
             "description": "always true if present"
@@ -2626,6 +2642,13 @@
               "type": "string"
             },
             "description": "node identifiers of nodes connected to this one"
+          },
+          "connections": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PassiveNodeConnection"
+            },
+            "description": "edges from this node, including curves outside the group"
           }
         },
         "required": [
@@ -3146,6 +3169,10 @@
           "vestigial": {
             "type": "boolean",
             "description": "PoE1 only; always true if present"
+          },
+          "rareonly": {
+            "type": "boolean",
+            "description": "PoE1 only; always true if present"
           }
         }
       },
@@ -3339,11 +3366,19 @@
             "items": {
               "type": "integer"
             }
+          },
+          "variants": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "description": "the key is the string value of the variant node's skill hash and the value is the selected effect hash"
           }
         },
         "required": [
           "hashes",
-          "name"
+          "name",
+          "variants"
         ]
       },
       "LeagueAccountMercenarie": {
@@ -3451,6 +3486,31 @@
             "description": "the parent node identifier"
           }
         }
+      },
+      "PassiveNodeConnection": {
+        "type": "object",
+        "properties": {
+          "to": {
+            "type": "integer",
+            "description": "skill hash"
+          },
+          "orbit": {
+            "type": "integer",
+            "description": "the orbit of this node around a point. 0 means a straight line"
+          },
+          "orbitX": {
+            "type": "number",
+            "description": "omitted if the orbit is 0"
+          },
+          "orbitY": {
+            "type": "number",
+            "description": "omitted if the orbit is 0"
+          }
+        },
+        "required": [
+          "orbit",
+          "to"
+        ]
       },
       "Twitch": {
         "type": "object",
